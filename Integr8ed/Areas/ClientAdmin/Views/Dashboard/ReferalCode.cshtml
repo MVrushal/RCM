@@ -1,0 +1,45 @@
+﻿@model  Integr8ed.Service.Dto.GuestUserDto
+@{
+    ViewData["Title"] = "ReferalCode";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Referral Code</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                  
+                    <li class="breadcrumb-item" aria-current="page">Main Menu</li>
+                    <li class="breadcrumb-item active" aria-current="page">Referral Code</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="col-12 d-flex justify-content-end mb-2">
+                           
+                            </div>
+
+                            <div class="col-md-12">
+                             <label>@Model.ReferalLink</label>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

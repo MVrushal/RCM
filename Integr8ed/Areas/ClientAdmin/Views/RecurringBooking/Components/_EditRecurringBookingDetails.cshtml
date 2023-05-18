@@ -1,0 +1,219 @@
+﻿@model Integr8ed.Service.Dto.RecurringBookingsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="modal-content">
+    <form id="frmEditRecurringbooking">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Edit Recurring Booking</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IsView" />
+                <input type="hidden" asp-for="UserName" />
+                <input type="hidden" asp-for="RoomTypeName" />
+                <input type="hidden" asp-for="BookingDateForDisplay" />
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @if (!ViewBag.IsRoomTypeEmpty)
+                            {
+                                <label>Room Type *</label>
+
+                                @Html.DropDownListFor(x => x.RoomTypeId, ViewBag?.RoomType as IEnumerable<SelectListItem>, "Select Room Type", new { @class = "form-control form-select", @id = "RoomTypeId", @Name = "RoomTypeId", required = "Select Room Type" })
+
+                            }
+                            else
+                            {
+                                <label style="color:red">Please Add Room Type First !</label>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-4">
+                        <div class="form-group input-append date form_datetime">
+                            <label for="first-name-column">Booking Date *</label>
+                            <div class="input-group date form_date col-md-5" data-date="BookingDate" data-date-format="dd MM yyyy" data-link-field="BookingDate" data-link-format="yyyy-mm-dd">
+                                <input class="form-control" size="16" asp-for="BookingDate" autocomplete="off" name="BookingDate" id="BookingDate" type="text" readonly placeholder="Enter Booking Date here">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="demo form-group">
+                            <label>Time Start *</label>
+                            <input type="text" autocomplete="off" class="time form-control" asp-for="TimeStart" name="TimeStart" placeholder="Enter Time Start here">
+                        </div>
+                    </div>
+                    <div class="col-md-4">
+                        <div class="demo form-group">
+                            <label>Time End *</label>
+                            <input type="text" class="time form-control" autocomplete="off" asp-for="TimeEnd" name="TimeEnd" placeholder="Enter Time End here">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="button" id="btnEditDetailSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+
+<script src="~/js/jquery.timepicker.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/bundle.min.js"></script>
+
+<script type="text/javascript">
+
+
+    $(document).ready(function () {
+       
+    
+     $('.form_date').datetimepicker({
+            language: 'en',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+     });
+        //if ($("#BookingDate").val() == "") {
+        //    $(".form_date").datetimepicker("setDate", startDate);
+        //}
+
+        if ($("#BookingDateForDisplay").val() != null || $("#BookingDateForDisplay").val() != "") {
+           $("#BookingDate").val($("#BookingDateForDisplay").val());
+        }
+    });
+
+    $('#TimeStart').timepicker({
+        'show2400': true,
+        'timeFormat': 'H:i',
+        'step': 60,
+        'disableTextInput': true
+    });
+
+    $("#TimeStart").on("changeTime", function () {
+
+
+        $('#TimeEnd').timepicker({
+            'show2400': true,
+            'timeFormat': 'H:i',
+            'step': 60,
+            'disableTextInput': true,
+            'minTime': $("#TimeStart").val(),
+            'showDuration': true
+        });
+
+    });
+
+    var d = new Date();
+    var currMonth = d.getMonth();
+    var currYear = d.getFullYear();
+    var currDate = d.getDate();
+
+    var startDate = new Date(currYear, currMonth, currDate);
+
+
+
+    function CustomModalClose(modelContent, divmodal) {
+        $("#" + modelContent).html("");
+        $("#" + divmodal).modal("hide");
+
+    }
+
+    $(document).on("click", "#btnEditDetailSave", function () {
+
+
+        if ($("#Id").val() > 0) {
+
+            $.ajax({
+                url: "/ClientAdmin/RecurringBooking/EditBookingDetails",
+                data: $("#frmEditRecurringbooking").serialize(),
+                type: "POST",
+                success: function (response) {
+
+                    CustomModalClose("modalContentCustom", "divModalCustom");
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        bindRecurringBooking("#tblRecurringBooking");
+                        return false;
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        else {
+
+            var model = {
+                bookingDate: $("#BookingDate").val(),
+                dateFrom: $("#BookingDate").val(),
+                dateTo: $("#BookingDate").val(),
+                timeStart: $("#TimeStart").val(),
+                timeEnd: $("#TimeEnd").val(),
+                roomTypeId: $("#RoomTypeId").val()
+            };
+
+            CustomModalClose("modalContentCustom", "divModalCustom");
+
+            $.ajax({
+                url: "/ClientAdmin/RecurringBooking/CheckIsBookingAvailable",
+                data: model,
+                type: "POST",
+                success: function (response) {
+                    if (response.status == 1) {
+
+                        $("#tblRecurringBooking tbody ").append(`<tr data-id="${model.roomTypeId}" role="row" class="odd">
+                      <td class="booking-error invoicetitle" title="${response.message}" >${model.bookingDate} ( ${model.timeStart} - ${model.timeEnd} )</td>
+                      <td class="booking-error invoiceItem" title="${response.message}" >${roomTypeName}</td>
+                      <td class="booking-error invoiceItem" title="${response.message}" >${eventTitle}</td>
+                      <td class="booking-error invoiceItem" title="${response.message}" >${bookingType}</td>
+                      <td class="booking-error invoiceItem" title="${response.message}" ><a data-json='${JSON.stringify(model)}' class="editAsset icon_cust_button EditBookingDetail" title="Edit"><i class="far fa-edit"></i></a> | <a id="DeleteInvoiceItem" onclick="RemoveDetail();" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a></span></td>
+                      </tr>`);
+
+                        $("#btnSaveData").hide();
+
+                    }
+                    else {
+                        $("#tblRecurringBooking tbody ").append(`<tr data-id="${model.roomTypeId}" role="row" class="odd">
+                      <td class="invoicetitle">${model.bookingDate} ( ${model.timeStart} - ${model.timeEnd} )</td>
+                      <td class="invoiceItem">${roomTypeName}</td>
+                      <td class="invoiceItem">${eventTitle}</td>
+                      <td class="invoiceItem">${bookingType}</td>
+                      <td class="invoiceItem"><a id="DeleteInvoiceItem" onclick="RemoveDetail();" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a></span></td>
+                      </tr>`);
+
+                        $("#btnSaveData").show();
+
+                    }
+                    return false;
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+    });
+
+</script>

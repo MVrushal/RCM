@@ -1,0 +1,179 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@{
+    Layout = "~/Areas/SuperAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<section class="section">
+    <div class="main-content container-fluid">
+        <div class="page-title">
+            <div class="row">
+                <div class="col-12 col-md-6 order-md-1 order-first">
+                    <h3>Admin Organization</h3>
+                </div>
+                @*<div class="col-12 col-md-6 order-md-2 order-last">
+                    <nav aria-label="breadcrumb" class='breadcrumb-header'>
+                        <ol class="breadcrumb">
+                            <li class="breadcrumb-item active" aria-current="page">Admin Organization</li>
+                        </ol>
+                    </nav>
+                </div>*@
+            </div>
+            <div class="card mb-0">
+                @* Card Buttons Start *@
+                <div class="card-header d-flex justify-content-end">
+                    <a href="../Company/ViewCompanyLocation" class="btn btn-primary cust_btn mr-2">View Company Locations</a>
+                    <a class="btn btn-primary cust_btn popup" href="javascript:;" onclick="AddCompnay(0)" id="btnShowModal"><i class="fa fa-plus mr-1"></i> Add</a>
+
+                    @*<a class="btn btn-primary popup" data-url="../CompanyDetail/Detail" data-toggle="modal" data-target="#modal-detail-company" id="btnShowDetailModal"></a>*@
+                </div>
+                <div class="card-body">
+                    <div class="table-responsive">
+                        <table class='table table-bordered table-striped super_admin' id="tblCompanyDetail">
+                            <thead>
+                                <tr>
+                                    <th scope="col" class="company_code">Company Code</th>
+                                    <th scope="col" class="company_name">Company Name</th>
+                                    <th scope="col">Full Name</th>
+                                    <th scope="col">Email</th>
+                                    <th scope="col">Address</th>
+                                    <th scope="col">Mobile Number</th>
+                                    <th scope="col">Actions</th>
+                                </tr>
+                            </thead>
+                        </table>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+@section Scripts{
+    <script src="https://cdn.datatables.net/buttons/1.6.4/js/dataTables.buttons.min.js"></script>
+    <script src="https://cdn.datatables.net/buttons/1.6.4/js/buttons.print.min.js"></script>
+
+    <script type="text/javascript">
+        var TableId = "#tblCompanyDetail";
+        $(document).ready(function () {
+            bindCompnay(TableId);
+            $(document).find(".buttons-print").addClass("btn btn-primary cust_btn mr-2 btn btn-primary cust_btn mr-2");
+            $(document).find(".buttons-print").html(`<i class="fas fa-print mr-1"></i> <span class="prints_texts">Print</span>`);
+        });
+        function DeleteCompnay(id) {
+
+            Integr8ed.Confirm("Delete Company", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/SuperAdmin/Company/RemoveClientAdmin",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+                        bindCompnay(TableId);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+        function AddCompnay(id = 0, IsView = false) {
+
+            $("#modalContent").load(`/SuperAdmin/Company/_AddEditCompany?id=${id}&isView=${IsView}`, function () {
+                ShowModal();
+            });
+        }
+
+
+
+        function bindCompnay(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblCompanyDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/SuperAdmin/Company/GetCompanyList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblCompanyDetail_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblCompanyDetail_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ companies",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 companies"
+                    },
+                    "columns": [
+                        {
+                            "data": "companyCode",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "organisationName",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "fullName",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true
+                        },
+                        {
+                            "data": "email",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "address",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "telephone",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddCompnay('${row.id}');" class="editAsset icon_cust_button"><i class="far fa-edit"></i></a> | <a onclick="AddCompnay('${row.id}',true);" class="detailsAsset icon_cust_button"><i class="far fa-eye"></i></a> | <a onclick="DeleteCompnay('${row.id}');" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ],
+                    dom: 'Bfrtip',
+                    buttons: [
+                        'print'
+                    ]
+                });
+        };
+
+    </script>
+
+}

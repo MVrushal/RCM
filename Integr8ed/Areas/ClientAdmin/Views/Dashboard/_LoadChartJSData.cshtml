@@ -1,0 +1,121 @@
+﻿
+<div class="modal-header">
+    <h5 class="modal-title" id="exampleModalLongTitle">Booking Detail</h5>
+    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">×</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="table-responsive">
+        <table class='table table-bordered table-striped' id="tblchartbookingdetail">
+
+            <thead>
+                <tr>
+
+                    <th scope="col">B.NO</th>
+                    <th scope="col">Booking Date</th>
+                    <th scope="col">Booking Status</th>
+                    <th scope="col">Contact Name</th>
+                    <th scope="col">Room Type</th>
+                    <th scope="col">Meeting Types</th>
+                    <th scope="col">Type of Meeting</th>
+
+
+                </tr>
+            </thead>
+
+        </table>
+
+    </div>
+</div>
+    <script>
+        $("#tblchartbookingdetail")
+            .dataTable({
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "/ClientAdmin/Dashboard/_GetBookingCountDetail",
+                "fnServerParams": function (aoData) {
+                        aoData.push(
+                            { "name": "flag", "value": $("#BookingTypeId").val() },
+                            { "name": "startDate", "value": $("#txtdsstartDate").val() },
+                            { "name": "endDate", "value": $("#txtdsEndDate").val() },
+                            { "name": "bookingType", "value": $("#BookingTypeId").val() }
+                        );
+                    },
+                "initComplete": function (settings, json) { },
+                "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                        $("#tblchartbookingdetail_info").hide();
+                    } else {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                        $("#tblchartbookingdetail_info").show();
+                    }
+                },
+                "order": [[1, ""]],
+                "language": {
+                    "info": "Showing _START_ to _END_ of _TOTAL_ Booking Detail",
+                    "sInfoEmpty": "Showing 0 to 0 of 0 Booking Detail"
+                },
+                "columns": [
+                    {
+                        "data": "id",
+                        "orderable": true,
+                        "width": "5%",
+
+                    },
+                    {
+                        "data": "bookingDateForDisplay",
+                        "width": "22%",
+                        "searchable": false,
+                        "orderable": true,
+                        "render": function (data, type, row) {
+                            var element = row.bookingDateForDisplay + '  (' + row.startTime + ' - ' + row.finishTime + ')';
+                            return element;
+                        }
+                    },
+                    {
+                        "data": "bookingStatusName",
+
+                        "searchable": false,
+                        "orderable": true,
+
+                    },
+                    {
+                        "data": "bookingContact",
+                        "searchable": false,
+                        "orderable": true,
+                        "render": function (data, type, row) {
+                            var element = row.bookingContact + '  (' + row.mobile+  ')';
+                            return element;
+                        }
+                        
+
+                    },
+                    {
+                        "data": "roomTitle",
+                        "searchable": false,
+                        "orderable": true
+
+                    },
+                    {
+                        "data": "meetingType",
+
+                        "searchable": false,
+                        "orderable": true,
+
+                    },
+                    {
+                        "data": "meetingTitle",
+
+                        "searchable": false,
+                        "orderable": true,
+
+                    },
+                  
+
+
+                ]
+            });
+
+    </script>

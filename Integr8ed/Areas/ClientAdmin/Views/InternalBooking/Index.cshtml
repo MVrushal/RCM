@@ -1,0 +1,2377 @@
+﻿@using Microsoft.AspNetCore.Http
+@*@model Integr8ed.Service.Dto.BookingDetailsDto*@
+@inject IHttpContextAccessor HttpContextAccessor
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Internal/External Booking";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Internal/External Booking</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="#">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                    <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="form">
+
+                                <div class="row justify-content-between px-2">
+                                    <div class="col-lg-2 col-md-6">
+                                        <div class="form-group">
+                                            <label for="first-name-column">Booking Id</label>
+                                            <input type="text" id="BookingDetailId" name="BookingDetailId" readonly class="form-control">
+                                            <input type="hidden" id="selectedFromDiaryId" value="@Model" />
+                                        </div>
+                                    </div>
+
+                                    <div class="col-lg-2 col-md-6 col-sm-6">
+                                        <div class="form-group">
+                                            <label for="first-name-column">User Name</label>
+                                            <input type="text" class="form-control" id="BookingContact" readonly name="BookingContact">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 col-sm-6 ">
+                                        <div class="form-group">
+                                            <label for="first-name-column">Date Requested</label>
+                                            <input type="text" class="form-control" id="BookingDateFromSent" readonly name="BookingDateFromSent">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 col-sm-6 ">
+                                        <div class="form-group">
+                                            <label for="first-name-column">Booked By</label>
+                                            <input type="text" class="form-control" id="Bookedby" readonly name="Bookedby">
+                                        </div>
+                                    </div>
+                                    <div class="col-lg-2 col-md-6 col-sm-6 ">
+                                        <div class="form-group">
+                                            <label for="first-name-column">Created Date</label>
+                                            <input type="text" class="form-control" id="BookingCreatedDate" readonly name="BookingCreatedDate">
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="dashbord_panel">
+
+                                    <div class="row">
+
+                                        <div class="cust_col" id="RoomTypeList">
+                                        </div>
+
+                                        <div class="cust_col" id="StatusList">
+                                        </div>
+
+                                        <div class="cust_col" id="userList">
+                                        </div>
+
+                                        <div class="cust_col">
+                                            <div class="form-group ml-3">
+                                                <label>Start Date</label>
+                                                @*<input type="text" class="form-control form_date" id="txtdsstartDate" name="txtdsstartDate" placeholder="mm-dd-yyyy" />*@
+                                                <input class="form-control" size="16" id="txtdsstartDate" autocomplete="off" name="txtdsstartDate" type="text" placeholder="yyyy-mm-dd"/>
+                                            </div>
+
+                                            <!--<div class="form-group input-append date form_datetime">
+                                                <label for="first-name-column">Start Date </label>
+                                               @*@{
+                                                    var startdateFormate = DateTime.UtcNow.ToString("yyyy-mm-dd");
+                                                    var enddateFormate = DateTime.UtcNow.ToString("yyyy-mm-dd");
+                                                }*@
+
+                                                <div class="input-group date form_date col-md-3" data-date="txtdsstartDate" data-link-field="txtdsstartDate" data-link-format="dd-M-yyyy">
+                                                    @*@Html.TextBox("StartDate", startdateFormate, new { @class = "form-control", @type = "text", placeholder = "Enter date", @id = "txtdsstartDate" })*@-->
+                                            @*<input class="form-control" size="16" asp-for="txtdsstartDate" autocomplete="off" name="txtdsstartDate" id="txtdsstartDate" type="text" readonly placeholder="Enter start Date here">*@
+                                            <!--<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+
+
+                                            </div>-->
+
+                                        </div>
+                                        <div class="cust_col">
+
+                                            <div class="form-group ml-3">
+                                                <label>End Date</label>
+                                                @*<input type="text" class="form-control" id="txtdsstartDate" name="txtdsEndDate" placeholder="yyyy-mm-dd" />*@
+                                                <input class="form-control" size="16" id="txtdsEndDate" autocomplete="off" name="txtdsEndDate" type="text" placeholder="yyyy-mm-dd" />
+                                            </div>
+
+                                            <!--<div class="form-group input-append date form_datetime">
+                                                <label for="first-name-column">End Date </label>
+                                                <div class="input-group date form_date col-md-3" data-date="txtdsEndDate" data-link-field="txtdsEndDate" data-link-format="dd-M-yyyy">
+                                                    @*@Html.TextBox("EndDate", enddateFormate, new { @class = "form-control", @type = "text", placeholder = "Enter date", @id = "txtdsEndDate" })*@-->
+                                            @*   <input class="form-control" size="16" asp-for="txtdsEndDate" autocomplete="off" name="txtdsEndDate" id="txtdsEndDate" type="text" readonly placeholder="Enter End Date here">*@
+                                            <!--<span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>-->
+                                        </div>
+                                        <div class="cust_col_btn">
+                                            <button type="button" class="btn btn-primary" onclick="btnsearchbookingdetails()" id="btnSearchbookingdetails">Search</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </form>
+                            <div class="form_tab_section custom_tabs">
+                                <div class="container">
+                                    <!-- New Tab section -->
+                                    <div class="row">
+                                        <div class="col-xs-12 p-0">
+                                            <nav>
+                                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" data-toggle="tab" href="#room-type-detail" role="tab" aria-controls="room-type-detail" aria-selected="true">Booking Detail</a>
+                                                    <a class="nav-item nav-link" data-toggle="tab" href="#catering-detail" role="tab" aria-controls="standard-equipment" aria-selected="false">Catering Requirements</a>
+                                                    <a class="nav-item nav-link" data-toggle="tab" href="#invoice-detail" role="tab" aria-controls="room-type-detail" aria-selected="true">Invoice Details</a>
+                                                    <a class="nav-item nav-link" id="security-detail-tab" data-toggle="tab" href="#security-detail" role="tab" aria-controls="standard-equipment" aria-selected="false">Security</a>
+                                                    <a class="nav-item nav-link" data-toggle="tab" href="#contact-detail" role="tab" aria-controls="room-type-detail" aria-selected="true">Contact Details</a>
+                                                    <a class="nav-item nav-link" id="delegates-tab" data-toggle="tab" href="#delegates-details" role="tab" aria-controls="standard-equipment" aria-selected="false">Visitor</a>
+                                                    <a class="nav-item nav-link" id="note-detail-tab" data-toggle="tab" href="#notes-detail" role="tab" aria-controls="room-type-detail" aria-selected="true">Notes</a>
+                                                    <a class="nav-item nav-link" data-toggle="tab" href="#standard-equipment" role="tab" aria-controls="standard-equipment" aria-selected="false">Equipment Req.</a>
+                                                    <a class="nav-item nav-link" data-toggle="tab" href="#call-login" role="tab" aria-controls="standard-equipment" aria-selected="false">Call Logging</a>
+
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content" id="nav-tabContent">
+                                                <div class="tab-pane fade active show" id="room-type-detail" role="tabpanel" aria-labelledby="room-type-detail-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Booking Details</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Booking Detail</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <section id="multiple-column-form" class="">
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                                                                        <button type="button" class="btn btn-primary" id="btnAddnewBooking">
+                                                                                            Add New Booking Details
+                                                                                        </button>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="table-responsive">
+                                                                                            <table class='table table-bordered table-striped' id="tblNewbooking">
+
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th scope="col">Select</th>
+                                                                                                        <th scope="col">Expand</th>
+                                                                                                        <th scope="col">B.NO</th>
+                                                                                                        <th scope="col">Booking Date</th>
+                                                                                                        <th scope="col">Contact Name</th>
+                                                                                                        <th scope="col">Room Type</th>
+                                                                                                        <th scope="col">Status</th>
+                                                                                                        <th scope="col">Action</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="catering-detail" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Catering Requirements</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Catering Requirements</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <section id="multiple-column-form" class="">
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card mb-0">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                                                                        <span class="text-danger BookDetNotExist">Please Add Booking Detail First!</span>
+                                                                                        <span id="IsBookingDetailIdForCatReq">
+                                                                                            <button type="button" class="btn btn-primary " id="btnAddnewCatering">
+                                                                                                Add New Catering Requirements
+                                                                                            </button>
+                                                                                        </span>
+                                                                                        <button type="button" class="btn btn-primary ml-2" id="printCateringRequirement">Print Invoice</button>
+
+                                                                                    </div>
+                                                                                    <div class="col-12">
+                                                                                        <div class="table-responsive">
+                                                                                            <table class='table table-bordered table-striped' id="tblNewCatering">
+                                                                                                <thead>
+                                                                                                    <tr>
+
+                                                                                                        <th scope="col" class="details_th">Expand</th>
+                                                                                                        <th scope="col"> Caterer Name</th>
+                                                                                                        @*<th scope="col"> Description of Food</th>*@
+                                                                                                        <th scope="col"> Time For</th>
+                                                                                                        <th scope="col"> Time Collected</th>
+                                                                                                        <th scope="col"> Number of People</th>
+                                                                                                        @*<th scope="col"> Cost per Person</th>*@
+                                                                                                        <th scope="col"> Actions</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                            </table>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                                                                        <div class="total_details_c">
+                                                                                            <h3 id="TotalCost"></h3>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="invoice-detail" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Invoice Details</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Invoice Details</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <section id="multiple-column-form" class="">
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                                                                        <span class="text-danger BookDetNotExist">Please Add Booking Detail First!</span>
+                                                                                        <span id="IsBookingDetailIdForInvDet">
+                                                                                            <button type="button" class="btn btn-primary" id="btnAddnewInvoiceDetail">
+                                                                                                Add New Invoice Detail
+                                                                                            </button>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="table-responsive">
+
+                                                                                            <table class='table table-bordered table-striped' id="tblNewInvoiceDetail">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th scope="col"> Contact Name</th>
+                                                                                                        <th scope="col"> Invoice To</th>
+                                                                                                        <th scope="col"> Email</th>
+                                                                                                        <th scope="col"> Mobile</th>
+                                                                                                        <th scope="col"> Invoice Request Date</th>
+                                                                                                        <th scope="col"> Invoice Address</th>
+                                                                                                        <th scope="col"> Invoice PostCode</th>
+                                                                                                        <th scope="col"> Actions</th>
+
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="security-detail" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Security Details</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Security Details</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <section id="multiple-column-form" class="">
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-between align-items-center mb-2">
+                                                                                        <div>
+                                                                                            <div class="checkbox">
+                                                                                                <input type="checkbox" readonly disabled name="SecurityReq" id="SecurityReq" class="form-check-input">
+                                                                                                <label class="ml-1" for="SecurityReq">
+                                                                                                    Security Required
+                                                                                                </label>
+                                                                                            </div>
+
+                                                                                        </div>
+                                                                                        <span class="text-danger BookDetNotExist">Please Add Booking Detail First!</span>
+                                                                                        <div id="IsBookingDetailIdForSecDet">
+
+                                                                                            <button type="button" class="btn btn-primary" id="btnAddnewSecurityDetail">
+                                                                                                Add New Security Details
+                                                                                            </button>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="table-responsive">
+
+                                                                                            <table class='table table-bordered table-striped' id="tblNewSecurityDetail">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th scope="col"> Date Collected</th>
+                                                                                                        <th scope="col"> Date Returned</th>
+                                                                                                        <th scope="col"> Time Collected</th>
+                                                                                                        <th scope="col"> Time Returned</th>
+                                                                                                        <th scope="col"> Collected By</th>
+                                                                                                        <th scope="col"> Returned By</th>
+                                                                                                        <th scope="col"> Actions</th>
+
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="contact-detail" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Contact Details</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Contact Details</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <section id="multiple-column-form" class="">
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                                                                        <span class="text-danger BookDetNotExist">Please Add Booking Detail First!</span>
+                                                                                        <span id="IsBookingDetailIdForConDet">
+                                                                                            <button type="button" class="btn btn-primary" id="btnAddnewContactDetails">
+                                                                                                Add New Contact Detail
+                                                                                            </button>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="table-responsive">
+
+                                                                                            <table class='table table-bordered table-striped' id="tblNewContactDetails">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th scope="col"> Name</th>
+                                                                                                        <th scope="col"> Department</th>
+                                                                                                        <th scope="col"> Mobile</th>
+                                                                                                        <th scope="col"> Email</th>
+                                                                                                        <th scope="col"> Actions</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="delegates-details" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Visitor Details</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Visitor Details</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <div class="row"></div>
+                                                        <div class="row" id="IsBookingDetailIdForVisBo">
+
+                                                            <div class="d-flex justify-content-between mb-3 mt-4">
+                                                                <div class="col-md-5" style="display:none">
+                                                                    <div class="multiselect_dropdown">
+                                                                        <input type="text" name="SearchVisitor" placeholder="Type Visitor name here" id="SearchVisitor" class="form-control" />
+
+                                                                        <button type="button" class="c_search" id="searchVis">
+                                                                            <i class="fa fa-search" aria-hidden="true"></i>
+                                                                        </button>
+                                                                    </div>
+                                                                </div>
+                                                                <form asp-controller="Internalbooking" asp-area="ClientAdmin" asp-action="UploadExcelFile" method="post" enctype="multipart/form-data">
+                                                                    <input type="file" name="postedFile" />
+                                                                    <input type="submit" value="Import" />
+                                                                </form>
+                                                                <button type="button" class="btn btn-primary" id="btnAddNewVisitor">
+                                                                    Add New Visitor Detail
+                                                                </button>
+                                                            </div>
+                                                        </div>
+
+
+                                                        <section id="multiple-column-form" class="">
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                                                                        <span class="text-danger BookDetNotExist">Please Add Booking Detail First!</span>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="table-responsive">
+
+                                                                                            <table class='table table-bordered table-striped' id="tblVisitor">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        @*<th scope="col" id="vId"> Select</th>*@
+                                                                                                        <th scope="col"> First Name</th>
+                                                                                                        <th scope="col"> Last Name</th>
+                                                                                                        <th scope="col"> Email</th>
+                                                                                                        <th scope="col"> Mobile Number</th>
+                                                                                                        <th scope="col"> Address</th>
+                                                                                                        <th scope="col" id="ActionId">Actions</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="notes-detail" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Notes</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Notes</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <section id="multiple-column-form" class="">
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                                                                        <span class="text-danger BookDetNotExist">Please Add Booking Detail First!</span>
+                                                                                        <span id="IsBookingDetailIdForNot">
+                                                                                            <button type="button" class="btn btn-primary" id="btnAddnewNotes">
+                                                                                                Add New Notes
+                                                                                            </button>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div>
+                                                                                        <div class="table-responsive">
+
+                                                                                            <table class='table table-bordered table-striped' id="tblNewNotes">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th scope="col"> Notes</th>
+                                                                                                        <th scope="col"> Actions</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="standard-equipment" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Equipment Requirements</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Equipment Requirements</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <section id="multiple-column-form" class="">
+
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card mb-0">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                                                                        <span class="text-danger BookDetNotExist">Please Add Booking Detail First!</span>
+                                                                                        <span id="IsBookingDetailIdForEquRe">
+                                                                                            <button type="button" class="btn btn-primary" id="btnAddnewEquipment">
+                                                                                                Add New Equipment Requirements
+                                                                                            </button>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div class="col-12">
+                                                                                        <div class="table-responsive">
+                                                                                            <table class='table table-bordered table-striped' id="tblNewEquipment">
+                                                                                                <thead>
+                                                                                                <th scope="col"> Equipment</th>
+                                                                                                <th scope="col"> No of Item</th>
+                                                                                                <th scope="col" id="ActionId">Actions</th>
+                                                                                                </thead>
+                                                                                            </table>
+
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="call-login" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="tab_padding_sec container-fluid">
+                                                        <div class="row">
+                                                            <div class="col-12 col-md-6 order-first">
+                                                                <div class="page-title">
+                                                                    <h3>Call Logging</h3>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 col-md-6 order-last">
+                                                                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                                                                    <ol class="breadcrumb">
+                                                                        <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Internal/External Booking</li>
+                                                                        <li class="breadcrumb-item active" aria-current="page">Call Logging</li>
+                                                                    </ol>
+                                                                </nav>
+                                                            </div>
+                                                        </div>
+                                                        <section id="multiple-column-form" class="">
+
+                                                            <div class="row match-height">
+                                                                <div class="col-12">
+                                                                    <div class="card mb-0">
+                                                                        <div class="card-content">
+                                                                            <div class="card-body">
+                                                                                <div class="row">
+                                                                                    <div class="col-12 d-flex justify-content-end mb-3">
+                                                                                        <span class="text-danger BookDetNotExist">Please Add Booking Detail First!</span>
+                                                                                        <span id="IsBookingDetailIdForCalLog">
+                                                                                            <button type="button" id="AddCallLog" class="btn btn-primary">
+                                                                                                New Call Log
+                                                                                            </button>
+                                                                                        </span>
+                                                                                    </div>
+                                                                                    <div class="col-md-12">
+                                                                                        @* Table Start *@
+                                                                                        <div class="table-responsive">
+                                                                                            <table class='table table-bordered table-striped' id="tblCallLog">
+                                                                                                <thead>
+                                                                                                    <tr>
+                                                                                                        <th scope="col">Subject</th>
+                                                                                                        @*<th scope="col">Entry Type</th>*@
+                                                                                                        <th scope="col">Entry Date</th>
+                                                                                                        <th scope="col">Contact</th>
+                                                                                                        <th scope="col">Taken For</th>
+                                                                                                        <th scope="col">Taken By</th>
+                                                                                                        <th scope="col">Next Contact</th>
+                                                                                                        <th scope="col">Is Completed</th>
+                                                                                                        <th scope="col">Actions</th>
+                                                                                                    </tr>
+                                                                                                </thead>
+                                                                                            </table>
+                                                                                        </div>
+                                                                                    </div>
+                                                                                </div>
+                                                                            </div>
+                                                                        </div>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </section>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                        </div>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade admin_modelpop" id="divModalCustom" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+            <div id="modalContentCustom"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        var BookingStatus = new Array();
+
+         var statesAvailable = @Html.Raw(ViewBag.BookingStatus);
+           var _select = $('<select>');
+            $.each(statesAvailable, function (value, Text) {
+                _select.append($('<option></option>').val(Text.Value).html(Text.Text));
+            });
+
+        $(".BookDetNotExist").show();
+        $("#IsBookingDetailIdForCatReq").hide();
+        $("#IsBookingDetailIdForInvDet").hide();
+        $("#IsBookingDetailIdForSecDet").hide();
+        $("#IsBookingDetailIdForConDet").hide();
+        $("#IsBookingDetailIdForVisBo").hide();
+        $("#IsBookingDetailIdForNot").hide();
+        $("#IsBookingDetailIdForEquRe").hide();
+        $("#IsBookingDetailIdForCalLog").hide();
+        $("#SecurityReq").prop("disabled", true);
+
+        $(document).on("click", "#btnAddnewBooking", function () {
+            AddNewBooking();
+        });
+
+
+        function AddNewBooking(id = 0, isView = false, isInternalBooking = true) {
+            $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditBookingDetails?id=${id}&isView=${isView}&isInternalBooking=${isInternalBooking}`, function () {
+                ShowModal();
+            });
+        }
+
+        $(document).on("click", "#btnAddnewSecurityDetail", function () {
+
+            AddNewSecurityDetail();
+        });
+
+
+        function AddNewSecurityDetail(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditSecurity?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+
+            });
+        }
+
+
+        $(document).on("click", "#btnAddnewCatering", function () {
+
+            AddNewCatering();
+        });
+
+
+        function AddNewCatering(id = 0, isView = false) {
+
+            $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditCateringRequirements?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                url: `/ClientAdmin/InternalBooking/GetRoomTypeList`,
+                type: 'GET',
+                @*data: { userID:@HttpContextAccessor.HttpContext.Session.GetString("UserID")},*@
+
+                success: function (response) {
+
+                    var roomlist = `<div class="form-group room_dropdown">
+                                            <label for="first-name-column" id="dropLabel">Select Room </label>
+                                                <span id="AboveBranch" rel="tooltip"  data-placement="auto" >
+                                                    <div  class="input-group" >
+                                                        <select  class="form-control form-select" data-val="true"  id="InternalRoomTypeId" name="InternalRoomTypeId">
+                                                        <option value="0">Select All</option>
+                                                        {options}
+                                                        </select>
+                                                    </div>
+                                                 </span>
+                                            </div>`;
+                    var options = '';
+                    for (let i = 0; i < response.length; i++) {
+                        options += `<option value="${response[i].id}">${response[i].title}</option>`;
+                    }
+
+                    roomlist = roomlist.replace('{options}', options);
+                    $("#RoomTypeList").html(roomlist);
+
+                    //$("#BranchId").val();
+                    //debugger;
+                    //$("#BranchId").prop("disabled", false);
+                    //if (localStorage.getItem("LastSelectId") != null)
+                    //    $("#BranchId").val(localStorage.getItem("LastSelectId"));
+                    //$("#dropLabel").html("Change Branch :");
+                    //$("#AboveBranch").attr("data-original-title", "change branch");
+                    //$("#AboveBranch").tooltip();
+                },
+                error: function () { }
+            });
+
+            $.ajax({
+                url: `/ClientAdmin/InternalBooking/GetBookingStatusList`,
+                type: 'GET',
+
+            success: function (response) {
+
+                var statusList = `<div class="form-group status_dropdown">
+                                            <label for="first-name-column" id="dropLabel">Booking Status </label>
+                                            <span id="AboveBranch" rel="tooltip"  data-placement="auto" >
+                                                <div  class="input-group" >
+                                                    <select  class="form-control form-select" data-val="true"  id="BookingStatusId" name="BookingStatusId">
+                                                        <option value="0">Select All</option>
+                                                        {options}
+                                                    </select>
+                                                </div>
+                                            </span>
+                                            </div>`;
+                var options = '';
+                for (let i = 0; i < response.length; i++) {
+                    options += `<option value="${response[i].id}">${response[i].title}</option>`;
+                }
+                statusList = statusList.replace('{options}', options);
+                $("#StatusList").html(statusList);
+            },
+            error: function () { }
+            });
+
+            $.ajax({
+                url: `/ClientAdmin/InternalBooking/GetUserList`,
+                type: 'GET',
+
+                success: function (response) {
+
+                    var userList = `<div class="form-group status_dropdown">
+                                            <label for="first-name-column" id="dropLabel">User Name </label>
+                                            <span id="AboveBranch" rel="tooltip"  data-placement="auto" >
+                                                <div  class="input-group" >
+                                                    <select  class="form-control form-select" data-val="true"  id="UserNameId" name="UserNameId">
+                                                        <option value="0">Select All</option>
+                                                        {options}
+                                                    </select>
+                                                </div>
+                                            </span>
+                                            </div>`;
+                    var options = '';
+                    for (let i = 0; i < response.length; i++) {
+                        options += `<option value="${response[i].id}">${response[i].title}</option>`;
+                    }
+                    userList = userList.replace('{options}', options);
+                    $("#userList").html(userList);
+                },
+                error: function () { }
+            });
+
+            $('#txtdsstartDate').datetimepicker({
+                language: 'en',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                format: 'yyyy-mm-dd',
+                forceParse: 0,
+                pickerPosition: "bottom-left"
+            });
+
+            $('#txtdsEndDate').datetimepicker({
+                language: 'en',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                format: 'yyyy-mm-dd',
+                forceParse: 0,
+                pickerPosition: "bottom-left"
+            });
+
+
+            //if ($("#txtdsEndDate").val() == "") {
+            //    $(".form_date").datetimepicker("setDate", startDate);
+            //}
+
+            bindBookingDetail("#tblNewbooking");
+
+            $('a[data-toggle="tab"]').on('shown.bs.tab', function (e) {
+                var target = $(e.target).attr("href");// activated tab
+                ActiveTab(target);
+            });
+
+            function ActiveTab(active) {
+
+                switch (active) {
+                    case "#room-type-detail":
+                        bindBookingDetail("#tblNewbooking");
+                        break;
+                    case "#catering-detail":
+                        bindCateringDetail("#tblNewCatering");
+                        break;
+                    case "#invoice-detail":
+                        bindInvoiceDetail("#tblNewInvoiceDetail");
+                        break;
+                    case "#security-detail":
+                        bindSecurity("#tblNewSecurityDetail");
+                        break;
+                    case "#notes-detail":
+                        bindNotes("#tblNewNotes");
+                        break;
+                    case "#contact-detail":
+                        bindContactDetails("#tblNewContactDetails");
+                        break;
+                    case "#delegates-details":
+                        bindVisitor("#tblVisitor");
+                        break;
+                    case "#call-login":
+                        bindCallLog("#tblCallLog");
+                        break;
+                    case "#standard-equipment":
+                        bindEquipment("#tblNewEquipment");
+                        break;
+
+                }
+
+            }
+        });
+
+        $('#tblVisitor')
+            .on('init.dt', function () {
+                if ($("#VisitorBookingId").val() > 0) {
+                    $("#tblVisitor").dataTable().fnSetColumnVis(0, false);
+                }
+                if ($("#VisitorBookingId").val() == 0) {
+                    $("#tblVisitor").dataTable().fnSetColumnVis(6, false);
+                }
+            })
+            .dataTable();
+
+        function format(d) {
+
+
+            var table = `<table  cellspacing="0" cellpadding="5" border="0" style="padding-left:50px;" class="w-100 tblcatchild">
+                                        <thead>
+                                            <tr class="hightsecond">
+                                                <th class="text-left">Description of food</th>
+                                                <th class="text-left">Cost</th> </tr>
+                                        </thead>
+                                       <tbody>
+                                            <tr class="hightsecond">
+                                                {row}
+                                            </tr>
+                                        </tbody>
+                                </table>`;
+
+            var allRows = "";
+            for (let i = 0; i < d.length; i++) {
+                var row = `
+                                 <tr  class="hightsecond">
+                                <td style="padding: 14px 18px !important;" class="text-left">{d.menuName}</td>
+                                <td style="padding: 14px 18px !important;" class="text-left">{d.cost}</td>
+                                </tr>
+                             `;
+                row = row.replace("{d.menuName}", d[i].descriptionOFFood);
+                row = row.replace("{d.cost}", d[i].cost);
+                allRows += row;
+            }
+            table = table.replace("{row}", allRows);
+            allRows = "";
+            return table;
+        }
+
+
+
+        function RemoveCateringRequirements(id) {
+
+            Integr8ed.Confirm("Delete Catering Requirements", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/RemoveCateringRequirements",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindCateringDetail("#tblNewCatering");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
+        }
+
+        function bindSecurity(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblNewSecurityDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Internalbooking/GetSecurityList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblNewSecurityDetail_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblNewSecurityDetail_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Security details",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Security details"
+                    },
+                    "columns": [
+                        {
+                            "data": "dateCollected",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "dateReturned",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "timeCollected",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "timeReturned",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "collectedBy",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "returnedBy",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddNewSecurityDetail('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddNewSecurityDetail('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveSecurity('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+        }
+        function RemoveSecurity(id) {
+
+            Integr8ed.Confirm("Delete Security", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/RemoveSecurity",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindSecurity("#tblNewSecurityDetail");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
+        }
+
+
+        $(document).on("click", "#btnAddnewInvoiceDetail", function () {
+
+            AddNewInvoiceDetail();
+        });
+
+
+        function AddNewInvoiceDetail(id = 0, isView = false) {
+            $("#modalContentCustom").load(`/ClientAdmin/InternalBooking/_AddEditInvoiceDetail?id=${id}&isView=${isView}`, function () {
+                $("#divModalCustom").modal('show');
+
+            });
+        }
+
+        //region Notes
+        function bindNotes(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblNewNotes = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Internalbooking/GetNotesList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblNewNotes_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblNewNotes_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Notes",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Notes"
+                    },
+                    "columns": [
+                        {
+                            "data": "note",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddNewNotes('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddNewNotes('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveNotes('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+        }
+        function RemoveNotes(id) {
+
+            Integr8ed.Confirm("Delete Notes", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/RemoveNotes",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindNotes("#tblNewNotes");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
+        }
+        $(document).on("click", "#btnAddnewNotes", function () {
+            AddNewNotes();
+        });
+        function AddNewNotes(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditNotes?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+
+            });
+        }
+        //endregion
+
+
+
+        //region ContactDetails
+
+        function bindContactDetails(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblNewContactDetails = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Internalbooking/GetContactDetailsList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblNewContactDetails_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblNewContactDetails_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Contact details",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Contact details"
+                    },
+                    "columns": [
+                        {
+                            "data": "name",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "department",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        }, {
+                            "data": "mobile",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "email",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddNewContactDetails('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddNewContactDetails('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveContactDetails('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+        }
+        function RemoveContactDetails(id) {
+
+            Integr8ed.Confirm("Delete Contact Details", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/RemoveContactDetails",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindContactDetails("#tblNewContactDetails");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
+        }
+
+
+        $(document).on("click", "#btnAddnewContactDetails", function () {
+
+            AddNewContactDetails();
+        });
+
+
+        function AddNewContactDetails(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditContactDetails?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+
+            });
+        }
+        //endregion
+
+
+        function PrintInvoiceRequest(id) {
+            window.location.href = "/ClientAdmin/Internalbooking/InvoiceViewAsPDF?id=" + id;
+        }
+        function BookingInvoiceViewAsPDF(id) {
+            window.location.href = "/ClientAdmin/Internalbooking/BookingDetailsViewAsPDF?id=" + id;
+        }
+        function BookingDetailsAsPDF(id) {
+            window.location.href = "/ClientAdmin/Internalbooking/BookingDetailsAsPDF?id=" + id;
+        }
+        function PrintCateReqInv(id) {
+            window.location.href = "/ClientAdmin/Internalbooking/CatReqViewAsPDF?id=" + id;
+        }
+
+        function CateringRequirementViewAsPDF(id) {
+            window.location.href = "/ClientAdmin/Internalbooking/CateringRequirementViewAsPDF?id=" + id;
+        }
+
+        $(document).off("click", "#printCateringRequirement");
+        $(document).on("click", "#printCateringRequirement", function () {
+
+            CateringRequirementViewAsPDF($("#BookingDetailId").val())
+        });
+
+        // isActive Toggle
+        function statusToggle(id, status, isDisabled = false) {
+
+            var content = `<label class="switch">
+                                                                                                                                                                              <input type="checkbox" id="ck${id}" {checked} {disabled} data-id="{id}">
+                                                                                                                                                                              <span class="slider round"></span>
+                                                                                                                                                                              </label>`;
+            content = content.replace("{id}", id);
+            content = content.replace("{checked}", status === true ? "checked" : "");
+            content = content.replace("{disabled}", isDisabled === true ? "disabled" : "");
+            return content;
+        }
+
+        function statusContain(id, status, isDisabled = false) {
+            var content;
+            if (status == true)
+                content = 'Y';
+            else
+                content = 'N';
+            return content;
+        }
+
+
+        var d = new Date();
+        var currMonth = d.getMonth();
+        var currYear = d.getFullYear();
+        var currDate = d.getDate();
+
+        var startDate = new Date(currYear, currMonth, currDate);
+
+
+        $('.form_date').datetimepicker({
+            language: 'en',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+        });
+        if ($("#InvoiceRequestDate").val() == "") {
+            $(".form_date").datetimepicker("setDate", startDate);
+        }
+
+
+        function bindInvoiceDetail(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblNewInvoiceDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Internalbooking/GetInvoiceDetailList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblNewInvoiceDetail_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblNewInvoiceDetail_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Invoice Details",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Invoice Details"
+                    },
+                    "columns": [
+                        {
+                            "data": "contactName",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "invoiceTo",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "email",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true
+                        },
+                        {
+                            "data": "mobile",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "invoiceRequestDate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "invoiceAddress",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "invoicePostCode",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddNewInvoiceDetail('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddNewInvoiceDetail('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveInvoiceDetail('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a> | <a onclick="PrintInvoiceRequest('${row.id}');" class="printAsset icon_cust_button" title="Print"><i class="fas fa-print mr-1"></i></a>`;
+                                return element; //statusToggle(row.id);
+                            }
+                        }
+                    ]
+                });
+        }
+
+        function RemoveInvoiceDetail(id) {
+
+            Integr8ed.Confirm("Delete Invoice Detail", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/RemoveInvoiceDetail",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindInvoiceDetail("#tblNewInvoiceDetail");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            });
+        }
+
+        $(document).on("click", "#btnAddNewVisitor", function () {
+            AddVisitor();
+        });
+
+        $(document).on("keypress", "#SearchVisitor", function () {
+            bindVisitor("#tblVisitor");
+        });
+
+        $(document).on("click", "#btnAddnewEquipment", function () {
+
+            AddNewEquipment();
+        });
+
+        function AddNewEquipment(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditEquipmentRequirements?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        function bindVisitor(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblVisitorDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/InternalBooking/GetVisitorBookingList",
+                    "fnServerParams": function (aoData) {
+                        //aoData.push(
+                        //    { "name": "bookingDetailId", "value": $("#Id").val() }
+                        //);
+                        aoData.push(
+                            { "name": "search", "value": $("#SearchVisitor").val() }
+                        );
+                    },
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblVisitor_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblVisitor_info").show();
+                        }
+                    },
+
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_Visitors",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Visitors"
+                    },
+                    "columns": [
+                        //{
+                        //    "data": "visitorId",
+                        //    "width": "5%",
+                        //    "searchable": false,
+                        //    "orderable": false,
+                        //    "render": function (data, type, row) {
+                        //        var element = ` <div class="col-md-4 check_box_center">
+                        //                                                                                    <div class="checkbox">
+                        //                                                                                        <input type="checkbox" onclick="AddVisitorBooking('${row.visitorId}')"; id="VisitorId" name="VisitorId" title="Select Visitor" class="form-check-input">
+                        //                                                                                    </div>
+                        //                                                                                </div>`;
+
+                        //        return element;
+                        //    }
+                        //},
+                        {
+                            "data": "name",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "surName",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "email",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "mobile",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        //{
+                        //    "data": "telephone",
+                        //    "width": "5%",
+                        //    "searchable": false,
+                        //    "orderable": true,
+
+                        //},
+                        {
+                            "data": "address",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="DeleteVisitor('${row.id}');" value="${row.id}" title="Delete" id="VisitorBookingId" name="VisitorBookingId" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a>`;
+                                parseInt($("#VisitorBookingId").val(row.id));
+
+                                // $("#ActionId").css("display", "block");
+                                // tblVisitorDetail.columns(6).visible(true);
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+        }
+
+
+        function AddVisitor(id = 0, isView = false) {
+
+            $("#modalContent").load(`/ClientAdmin/Internalbooking/_AddEditVisitorBooking?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        function AddVisitorBooking(visitorId = 0) {
+            $.ajax({
+                url: "/ClientAdmin/Internalbooking/AddEditVisitorBooking",
+                data: {
+                    visitorId: visitorId
+                },
+                type: "POST",
+                success: function (response) {
+                    Integr8ed.HandleResponse(response);
+                    closeModal();
+
+                    bindVisitor("#tblVisitor");
+
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        function DeleteVisitor(id) {
+
+            Integr8ed.Confirm("Delete Visitor Booking", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/InternalBooking/RemoveVisitorBooking",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindVisitor("#tblVisitor");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+        $(document).on("click", "#AddCallLog", function () {
+            AddCallLog();
+        });
+
+        function AddCallLog(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/Internalbooking/_AddEditCallLog?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        function RemoveCallLog(id) {
+
+            Integr8ed.Confirm("Delete Call Log", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/RemoveCallLog",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindCallLog("#tblCallLog");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+        function bindCallLog(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblCallLog = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Internalbooking/GetCallLogList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblCallLog_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblCallLog_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_CallLog",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 CallLog"
+                    },
+                    "columns": [
+                        {
+                            "data": "subject",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        //{
+                        //    "data": "entryTypeTitle",
+                        //    "width": "5%",
+                        //    "searchable": false,
+                        //    "orderable": true,
+
+                        //},
+                        {
+                            "data": "entryDate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                            "render": function (data, type, row) {
+                                return moment(new Date(row.entryDate)).format("MM-DD-yyyy") + "(" + row.time + ")";
+                            }
+
+                        },
+                        //{
+                        //    "data": "time",
+                        //    "width": "5%",
+                        //    "searchable": false,
+                        //    "orderable": true,
+
+                        //},
+                        {
+                            "data": "contact",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                         {
+                            "data": "takenFor",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "takenBy",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "nextconDate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "isCompleted",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                            "className": "admin_toggle",
+                            "render": function (data, type, row) {
+                                return statusToggle(row.id, row.isCompleted);
+                            }
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddCallLog('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddCallLog('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveCallLog('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+            $('#tblCallLog').on("change", ".admin_toggle", function (e) {
+                const current = $(e.currentTarget).find("input");
+                const id = $(current).data("id");
+
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/ManageCallLogIsCompleted",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            });
+        }
+
+        function RemoveBooking(id) {
+
+            Integr8ed.Confirm("Delete Booking", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/RemoveBookingDetails",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindBookingDetail("#tblNewbooking");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+        function handleBookingDetail(id, bookingContact, dateFromSent, securityRequired, createdUserName, bookingCreatedDate) {
+
+            $.ajax({
+                url: "/ClientAdmin/Internalbooking/HandleBookingDetail",
+                data: {
+                    id: id, bookingContact: bookingContact, dateFromSent: dateFromSent, securityRequired: securityRequired, createdUserName: createdUserName, bookingCreatedDate: bookingCreatedDate
+                },
+                type: "POST",
+                success: function (response) {
+                    $("#BookingDetailId").val(id);
+                    $("#BookingContact").val(bookingContact);
+                    $("#BookingDateFromSent").val(dateFromSent);
+                    $("#Bookedby").val(createdUserName);
+                    $("#BookingCreatedDate").val(bookingCreatedDate);
+                    if ($("#BookingDetailId").val() != "") {
+                        $(".BookDetNotExist").hide();
+                        $("#IsBookingDetailIdForCatReq").show();
+                        $("#IsBookingDetailIdForInvDet").show();
+                        if (securityRequired == "true") {
+                            $("#IsBookingDetailIdForSecDet").show();
+                            $("#SecurityReq").prop("checked", true);
+                        }
+                        else {
+                            $("#IsBookingDetailIdForSecDet").hide();
+                            $("#SecurityReq").prop("checked", false);
+                        }
+                        $("#IsBookingDetailIdForConDet").show();
+                        $("#IsBookingDetailIdForVisBo").show();
+                        $("#IsBookingDetailIdForNot").show();
+                        $("#IsBookingDetailIdForEquRe").show();
+                        $("#IsBookingDetailIdForCalLog").show();
+                    }
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+        //$(document).on("click", "#AddCallLog", function () {
+        //    bindBookingDetail();
+        //});
+
+        //$(document).on("click", "#btnsearchbookingdetails", function () {
+        //    window.alert("Botton Working Properly");
+
+        //    // CheckDateValidation();
+        //});
+
+        function btnsearchbookingdetails() {
+            //debugger;
+            //alert($("#txtdsstartDate").val());
+            bindBookingDetail("#tblNewbooking");
+        }
+
+        function bindBookingDetail(TableId) {
+
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+
+            //var ddlBstatus = '<select id="ddlBookingstatus"  class = "form-control form-select ddlbindstatus" > </select >'
+            //$('.ddlbindstatus').append(_select.html());
+            var ddlBstatus ;
+
+            //ddlBstatus = '<select class = "form-control form-select ddlbindstatus" > </select >'
+            //$('.ddlbindstatus').append(_select.html());
+            var IsInternalBooking = localStorage.getItem("IsInternalbooking");
+            var tblBookingDetail = $(TableId)
+                .dataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": `/ClientAdmin/Internalbooking/GetBookingDetailList?sID=${$("#selectedFromDiaryId").val()} `,
+                    "fnServerParams": function (aoData) {
+                        if (IsInternalBooking == "true") {
+                            aoData.push({ name: "RoomTypeId", value: localStorage.getItem("RoomTypeId") });
+                            aoData.push({ name: "BookingStatus", value: 0 });
+                            aoData.push({ name: "StartDate", value: localStorage.getItem("StartDate") });
+                            aoData.push({ name: "EndDate", value: localStorage.getItem("StartDate") });
+                            aoData.push({ name: "UserName", value: 0 });
+                        }
+                        else {
+                            aoData.push({ name: "RoomTypeId", value: $("#InternalRoomTypeId").val() });
+                            aoData.push({ name: "BookingStatus", value: $("#BookingStatusId").val() });
+                            aoData.push({ name: "StartDate", value: $("#txtdsstartDate").val() });
+                            aoData.push({ name: "EndDate", value: $("#txtdsEndDate").val() });
+                            aoData.push({ name: "UserName", value: $("#UserNameId").val() });
+                        }
+                    },
+                   // "initComplete": function (settings, json) { },
+                    //"rowCallback": function (row, data, index) {
+                    //},
+                   // "fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+
+                   //     var ddlBstatus1 = '<select id="ddlBookingstatus' + row.id + '" data-id=' + row.id + ' class = "form-control form-select ddlbindstatus" > </select >'
+
+                   // },
+                    //"fnDrawCallback": function (oSettings) {
+                    //    alert("Test")
+                    //    $('.ddlbindstatus').append(_select.html());
+                    //    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                    //        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                    //        $("#tblNewbooking_info").hide();
+                    //    } else {
+                    //        $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                    //        $("#tblNewbooking_info").show();
+                    //    }
+                    //},
+                    "order": [[2, "desc"]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Booking Detail",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Booking Detail"
+                    },
+                    "columns": [
+                        {
+                            "data": "id",
+
+                            "orderable": false,
+                            "width": "5%",
+                            "render": function (data, type, row) {
+
+                                var isChecked = $("#BookingDetailId").val() == "" ? false : true;
+                                var isCheckedByUser = parseInt($("#BookingDetailId").val()) == row.id ? true : false;
+                                var element = ``;
+                                if (isCheckedByUser == true) {
+                                    element = `<input type="radio" id="BookingId" onchange="handleBookingDetail( ${parseInt(row.id)}, '${row.bookingContact}', '${row.bookingDateForDisplay}', '${row.securityRequired}' , '${row.createdUserName}','${row.bookingCreatedDate}');" value="${row.id}" name="BookingId" checked="${isCheckedByUser}" class="form-check-input">`;
+                                }
+                                else {
+                                    element = `<input type="radio" id="BookingId" onchange="handleBookingDetail( ${parseInt(row.id)}, '${row.bookingContact}', '${row.bookingDateForDisplay}', '${row.securityRequired}' , '${row.createdUserName}','${row.bookingCreatedDate}');" value="${row.id}" name="BookingId" class="form-check-input">`;
+                                }
+                                return element;
+                            }
+                        },
+                        {
+                            "data": "id",
+                            "className": 'details-control',
+                            "bSortable": false ,
+                            "orderable": false,
+                            "width": "5%",
+                            "render": function (data, type, row) {
+                                var element = `<a class="rowDetails" data-id="${JSON.stringify(row)}"><i class="fas fa-plus"></i></a>`;
+
+                                return element;
+                            }
+                        },
+                          {
+                            "data": "id",
+                            "orderable": false,
+                            "width": "5%",
+
+                        },
+                               {
+                            "data": "bookingDateForDisplay",
+                            "width": "22%",
+                            "searchable": false,
+                            "orderable": true,
+                                   "render": function (data, type, row) {
+                                       var element = moment(new Date(row.bookingDateForDisplay)).format("DD-MM-yyyy") +  '  (' + row.startTime + ' - ' + row.finishTime + ')';
+                                return element;
+                            }
+                        },
+                        {
+                            "data": "bookingContact",
+                            "searchable": false,
+                            "orderable": true
+
+                        },
+                        {
+                            "data": "roomTitle",
+                            "searchable": false,
+                            "orderable": true
+
+                        },
+                                {
+                                    "data": "bookingStatus",
+                                    "width": "22%",
+                                    "searchable": false,
+                                    "orderable": true,
+                                    "render": function (data, type, row) {
+                                        var DDLSTATUS = "";
+                                        DDLSTATUS = $("<select class= 'form-control form-select  ddlbindstatus'></select>").attr("id", "ddlBookingstatus" + row.id).attr("data-id", row.id);
+
+                                        $.each(statesAvailable, function (i, el) {
+
+
+                                            if (el.Value == row.bookingStatus) {
+                                                DDLSTATUS.append($('<option selected>').val(el.Value).text(el.Text));
+                                            }
+                                            else {
+                                                DDLSTATUS.append($('<option>').val(el.Value).text(el.Text));
+                                            }
+                                        });
+
+                                        return DDLSTATUS[0].outerHTML;
+
+
+                           }
+                        },
+
+                        {
+                            "data": "Id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddNewBooking('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a>|<a onclick="AddNewBooking('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a>|<a onclick="RemoveBooking('${row.id}');" title="Delete" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a>
+|<a onclick="BookingInvoiceViewAsPDF('${row.id}');" class="printAsset icon_cust_button" title="Create Invoice"><i class="fas fa-print mr-1"></i></a>|<a onclick="BookingDetailsAsPDF('${row.id}');" class="printAsset icon_cust_button" title="Create Booking Form"><i class="fa fa-plus-square mr-1"></i></a>
+`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+          //  tblBookingDetail.draw();
+            //ddlbindstatus
+            //   $('.ddlbindstatus').append(_select.html());
+            localStorage.removeItem("IsInternalbooking");
+            localStorage.removeItem("StartDate");
+            localStorage.removeItem("RoomTypeId");
+
+            $(document).on("change", ".ddlbindstatus", function () {
+
+                var Bstatus = $(this).val();
+                var BId = $(this).attr("data-id");
+
+            Integr8ed.Confirm("change Booking status", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Warning, "Yes, Change it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/ChangeBookingstatus",
+                    data: { id: BId , Status :  Bstatus},
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+                          bindBookingDetail("#tblNewbooking");
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+            });
+
+             $(TableId).off("click", ".details-control");
+
+            $(TableId).on("click", ".details-control", function (e) {
+
+                var nRow = $(this).parents('tr')[0];
+                var row = tblBookingDetail.fnGetData(nRow);
+                var tr = $(this).closest('tr');
+
+                var element = (row.externalBookingClientId > 0) ? "External (" + row.firstName + " " + row.lastName + ")" : "Internal";
+
+                var rowObj = $("#tblNewbooking").DataTable().row(tr);
+                if (rowObj.child.isShown()) {
+
+                    rowObj.child.hide();
+
+                    tr.removeClass('shown');
+                    tr.removeClass('highlight_td');
+                     $(tr.find(".fa-minus")).addClass("fa-plus");
+                    $(tr.find(".fa-minus")).removeClass("fa-minus");
+                }
+                else {
+                    $(tr.find(".fa-plus")).addClass("fa-minus");
+                    $(tr.find(".fa-plus")).removeClass("fa-plus");
+                     tr.addClass('highlight_td');
+                    var table = '<table cellspacing="0" border="0" class="w-100 test">' +
+                        '<thead> <tr class="hightsecond">' +
+                        '<th>Booking Type</th><th>Mobile</th>' +
+                           '<th>No Of Attending</th><th>Cost</th></tr>' +
+                        '</thead><tbody><tr class= "hightsecond">' +
+                        '<td>' + element + '</td>' +
+                        '<td>' + row.mobile + '</td>' +
+                        '<td>' + row.numberOfAttending + '</td>' +
+                        '<td>' + row.cost + '</td>' +
+                        '</tr></tbody></table>';
+
+                    rowObj.child(table).show();
+                    $(".test").parent().addClass("hightsecond");
+                    tr.addClass('shown');
+                }
+            })
+
+
+        }
+
+        $(document).ready(function () {
+            setTimeout(function () {
+                if ($("#selectedFromDiaryId").val() != 0) {
+                    document.getElementsByClassName("details-control")[1].click();
+                    $("#BookingId").click();
+                }
+            }, 1000);
+        });
+
+        function bindEquipment(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblNewEquipment = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Internalbooking/GetEquipmentRequirementList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblNewEquipment_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblNewEquipment_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_Equipment requirement",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Equipment requirement"
+                    },
+                    "columns": [
+                        {
+                            "data": "equpTitle",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true
+                        },
+                        {
+                            "data": "noofItem",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+
+                                var element = `<a onclick="AddNewEquipment('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddNewEquipment('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveEquipmentReq('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+        }
+        function RemoveEquipmentReq(id) {
+
+            Integr8ed.Confirm("Delete Equipment Requirement", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/RemoveEquipmentRequirement",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                      bindEquipment("#tblNewEquipment");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+        function bindCateringDetail(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            $("#TotalCost").val("");
+            $("#TotalCost").html("")
+            var tblCatering =  $(TableId).dataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Internalbooking/GetCateringRequirementsList",
+                    "initComplete": function (settings, json) { },
+                "rowCallback": function (row, data, index) {
+
+                        if ($("#TotalCost").val() == "" || $("#TotalCost").html() == "") {
+                            $("#TotalCost").html("<span>Total Catering Cost</span> : <label>" + data.totalCateringCost + "</label>");
+                        }
+                    },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblNewCatering_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblNewCatering_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Catering requirements",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Catering requirements"
+                    },
+                    "columns": [
+
+                    {
+                        "data": "id",
+                        "className": 'Catering-details-control',
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            var element = `<a class="rowDetails" data-id="${JSON.stringify(row)}"><i class="fas fa-plus"></i></a>`;
+                            return element;
+                        }
+                    },
+                    {
+                        "data": "catererName",
+                        "width": "5%",
+                        "searchable": false,
+                        "orderable": true,
+
+                    },
+
+                    {
+                        "data": "timeFor",
+                        "width": "5%",
+                        "searchable": false,
+                        "orderable": true,
+
+                    },
+                    {
+                        "data": "timeCollected",
+                        "width": "5%",
+                        "searchable": false,
+                        "orderable": true,
+
+                    },
+                    {
+                        "data": "numberOfPeople",
+                        "width": "5%",
+                        "searchable": false,
+                        "orderable": true,
+
+                    },
+
+                    {
+                        "data": "id",
+                        "autoWidth": true,
+                        "searchable": false,
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            var element = `<a onclick="AddNewCatering('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddNewCatering('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveCateringRequirements('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                            return element;
+                        }
+                    }
+                ]
+            });
+
+             $(TableId).off("click", ".Catering-details-control");
+               $(TableId).on("click", ".Catering-details-control", function (e) {
+
+                var nRow = $(this).parents('tr')[0];
+                var row = tblCatering.fnGetData(nRow);
+                var tr = $(this).closest('tr');
+                var rowObj = $("#tblNewCatering").DataTable().row(tr);
+
+                if (rowObj.child.isShown()) {
+                    rowObj.child.hide();
+                     tr.removeClass('highlight_td');
+                    tr.removeClass('shown');
+                    $(tr.find(".fa-minus")).addClass("fa-plus");
+                    $(tr.find(".fa-minus")).removeClass("fa-minus");
+                }
+                else {
+                    $(tr.find(".fa-plus")).addClass("fa-minus");
+                    $(tr.find(".fa-plus")).removeClass("fa-plus");
+
+                    $.ajax({
+                        url: "/ClientAdmin/Internalbooking/GetCateringMenu",
+                        type: "GET",
+                        data: { CatererId: row.id },
+                        success: function (response) {
+                              tr.addClass('highlight_td');
+                            rowObj.child(format(response.data)).show();
+                              $(".tblcatchild").parent().addClass("hightsecond");
+                            tr.addClass('shown');
+                        }
+                    })
+
+
+
+                }
+
+            })
+        }
+    </script>
+}
+

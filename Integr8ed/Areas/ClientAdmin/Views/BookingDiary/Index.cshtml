@@ -1,0 +1,999 @@
+﻿@model List<Integr8ed.Service.Dto.Room_TypeDto>
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "BookingDiary";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+
+<style>
+
+
+    .tooltip-inner {
+        max-width: 100% !important;
+        text-align: left;
+    }
+
+    .Allocated_Div {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+
+    .switch {
+        position: relative;
+        /* display: inline-block;*/
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+<div class="main-content container-fluid">
+
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Booking Diary</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Bookings </li>
+                    <li class="breadcrumb-item active" aria-current="page">Booking Diary</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                <div class="col-lg-8 col-md-8 col-sm-8">
+                                    <div class="d-flex align-items-flex-end align-items-end">
+                                        <div class="form-group">
+                                            <label>Booking Date</label>
+                                            <input type="text" class="form-control form_date" id="BookingDateFromSent" name="BookingDateFromSent" placeholder="mm-dd-yyyy" />
+                                        </div>
+                                        @*<div class="form-group ml-2">
+                                                <label> only cancelled .</label>
+                                                <input class="form-control" type="checkbox" id="ShowOnlyCan" />
+                                            </div>*@
+
+
+                                        <div class="cust_col ml-2" id="StatusListDropDown" onchange="ChangeStatus()">
+                                        </div>
+                                        <div class="form-group ml-3 d-none" id="canceltoggle">
+                                            <label>Exclude cancelled</label>
+                                            <div>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="ShowOnlyCan" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+                                        <div class="form-group ml-2">
+                                            <button type="button" id="btnDisplay" class="btn btn-primary">
+                                                Display
+                                            </button>
+                                            <button type="button" id="btnPrint" class="btn btn-primary">
+                                                Print
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="col-lg-4 col-md-4 d-flex justify-content-end align-items-center">
+                                    <div class="form-group date_label_dis mt-3">
+                                        @*<button id="btnPrevious"><i class="fas fa-angle-double-left"></i></button>*@
+                                        <label id="dayLable">Monday</label>
+                                        @*<button id="btnNext"><i class="fas fa-angle-double-right"></i></button>*@
+                                    </div>
+                                </div>
+
+                                <div class="col-md-12 mt-3">
+                                    <div class="section_formd section_formd_asd">
+                                        <h4 class="section_formd_title"> Status </h4>
+                                        <div class="row" id="StatusList">
+
+                                            @*<div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group color_section">
+                                                        <div class="color_width color_one"></div>
+                                                        <label for="ExcludeMonday"> Confirmed  </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group color_section">
+                                                        <div class="color_width color_two"></div>
+                                                        <label for="ExcludeMonday"> PreBooking </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group color_section">
+                                                        <div class="color_width color_three"></div>
+                                                        <label for="ExcludeMonday"> Paid </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group color_section">
+                                                        <div class="color_width color_four"></div>
+                                                        <label for="ExcludeMonday"> Deposit </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group color_section">
+                                                        <div class="color_width color_five"></div>
+                                                        <label for="ExcludeMonday"> Cancelled </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group color_section">
+                                                        <div class="color_width color_six"></div>
+                                                        <label for="ExcludeMonday"> Pending </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group color_section">
+                                                        <div class="color_width color_seven"></div>
+                                                        <label for="ExcludeMonday"> Reserved </label>
+                                                    </div>
+                                                </div>
+
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group color_section">
+                                                        <div class="color_width color_eight"></div>
+                                                        <label for="ExcludeMonday"> Waiting </label>
+                                                    </div>
+                                                </div>*@
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+
+                            <div class="col-md-12 mt-3">
+                                @* Table Start *@
+                                <div class="table-responsive roomsHeaders">
+                                    <table class='table table-bordered table-striped' id="tblDiary">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"> Time</th>
+
+                                                @*@foreach (var item in Model)
+                                                    {
+                                                        <th scope="col" class="@item.Title.Substring(0,3)" data-id="@item.Id"> @item.Title</th>
+                                                    }*@
+
+                                            </tr>
+                                        </thead>
+                                        <tbody></tbody>
+                                    </table>
+
+                                </div>
+                                @* Table End *@
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-center mt-3 s_buttons">
+                                <button type="button" id="btnBooking" class="btn btn-primary mr-3">
+                                    New Internal/External Booking
+                                </button>
+                                @*<button type="button" class="btn btn-primary mr-3">
+                                        New Internal Booking
+                                    </button>*@
+                                @*<button type="button" class="btn btn-primary mr-3">
+                                        Exit
+                                    </button>*@
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+@* New new_add_visitor Popup Start *@
+@*<div class="modal fade" id="new_add_visitor" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+             </div>
+        </div>
+    </div>*@
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.11.0/umd/popper.min.js"
+        integrity="sha384-b/U6ypiBEHpOf/4+1nzFpr53nxSS+GLCkfwBdFNTxtclqqenISfwAzpKaMNFNmj4" crossorigin="anonymous"></script>
+@*<script src="https://unpkg.com/@popperjs/core@2.9.2/dist/umd/popper.min.js"></script>*@
+@section Scripts{
+
+
+    <script type="text/javascript">
+
+        $(document).ready(function () {
+
+            $.ajax({
+                url: `/ClientAdmin/BookingDiary/BookingStatusListForBookingDiary`,
+                type: 'GET',
+                @* data: { userID: @HttpContextAccessor.HttpContext.Session.GetString("UserID") },*@
+
+                success: function (response) {
+                    var statusList = '';
+                    for (let i = 0; i < response.length ; i++) {
+                         statusList += `<div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="form-group color_section">
+                                                       <i class="fa fa-square" style="color:${response[i].id} !important;"></i>
+                                                    <label> ${response[i].title}  </label>
+                                                </div>
+                                            </div>`;
+                    }
+                    //var options = '';
+                    //for (let i = 0; i < response.length; i++) {
+                    //    options += `<option value="${response[i].id}">${response[i].title}</option>`;
+                    //}
+
+                    /*roomlist = roomlist.replace('{options}', options);*/
+                    $("#StatusList").html(statusList);
+
+                },
+                error: function () { }
+            });
+            $.ajax({
+                url: `/ClientAdmin/InternalBooking/GetBookingStatusList`,
+                type: 'GET',
+
+                success: function (response) {
+
+                    var statusList = `<div class="form-group status_dropdown">
+                                            <label for="first-name-column" id="dropLabel">Booking Status </label>
+                                            <span id="AboveBranch" rel="tooltip"  data-placement="auto" >
+                                                <div  class="input-group" >
+                                                    <select  class="form-control form-select" data-val="true"  id="BookingStatusId" name="BookingStatusId">
+                                                        <option value="0">Select All</option>
+                                                        {options}
+                                                    </select>
+                                                </div>
+                                            </span>
+                                            </div>`;
+                    var options = '';
+                    for (let i = 0; i < response.length; i++) {
+                        options += `<option value="${response[i].id}">${response[i].title}</option>`;
+                    }
+                    statusList = statusList.replace('{options}', options);
+                    $("#StatusListDropDown").html(statusList);
+                },
+                error: function () { }
+            });
+            executeColorization();
+            if ($("#BookingStatusId").val() != 0) {
+                $("#canceltoggle").removeClass('d-none');
+            }
+            else {
+                $("#canceltoggle").addClass('d-none')
+            }
+
+
+        });
+
+        function ChangeStatus() {
+            if ($("#BookingStatusId").val() == 0) {
+                $("#canceltoggle").removeClass('d-none')
+            }
+            else {
+                $("#canceltoggle").addClass('d-none')
+            }
+           
+        };
+        var TempCount = 0;
+
+        var obj = {
+            Message: "a message",
+            Error: "file not found",
+            Detail: "some information",
+            Type: "Error",
+            ErrorCode: "404"
+        };
+        var d = new Date();
+        var currMonth = d.getMonth();
+        var currYear = d.getFullYear();
+        var currDate = d.getDate();
+
+        var startDate = new Date(currYear, currMonth, currDate);
+
+        $('.form_date').datetimepicker({
+            language: 'en',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            format: 'dd/mm/yyyy',
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+        });
+
+       if  ($("#BookingDateFromSent").val() == "") {
+
+            if (localStorage.getItem("previousSelectedDate") != null) {
+              $(".form_date").datetimepicker("setDate", startDate);
+                $("#BookingDateFromSent").val(localStorage.getItem("previousSelectedDate"));
+                setTimeout(function () { document.getElementById("btnDisplay").click(); }, 500);
+
+                localStorage.clear();
+            } else {
+            $(".form_date").datetimepicker("setDate", startDate);
+            }
+        }
+
+        $(document).off("change", "#BookingDateFromSent");
+        $(document).on("change", "#BookingDateFromSent", function () {
+            changeDay();
+        });
+
+        function changeDay() {
+            var weekday = new Array(7);
+            weekday[0] = "Sunday";
+            weekday[1] = "Monday";
+            weekday[2] = "Tuesday";
+            weekday[3] = "Wednesday";
+            weekday[4] = "Thursday";
+            weekday[5] = "Friday";
+            weekday[6] = "Saturday";
+            var dateArray = $("#BookingDateFromSent").val().split('/');
+            var newDAte = dateArray[2] + "/" + dateArray[1] + "/" + dateArray[0];
+            $("#dayLable").html(weekday[new Date(newDAte).getDay()])
+        }
+
+        function BindRooms() {
+            $.get("/ClientAdmin/BookingDiary/GetRoomList", function (response) {
+
+                var AllTr = `<th scope="col"> Time</th>`;
+                TempCount = response.length;
+                for (let i = 0; i < response.length; i++) {
+
+                    var trelement = ` <th scope="col" class="${response[i].title.substring(0, 3)}" data-id="${response[i].id}"> ${response[i].title}</th>`
+                    AllTr += trelement;
+
+                }
+                $($(document).find(".roomsHeaders thead tr")[0]).html("");
+                $($(document).find(".roomsHeaders thead tr")[0]).append(AllTr);
+                bindEmptyTable();
+
+            })
+
+        }
+
+
+
+        function bindEmptyTable() {
+            $.get("/ClientAdmin/BookingDiary/GetRoomList", function (response) {
+                TempCount = response.length;
+            })
+
+            var $coulmn = '';
+
+            for (i = 0; i < TempCount; i++)
+            {
+                var $coulmnt = '<td class="drop " ></td>';
+                 $coulmn = $coulmn.concat($coulmnt);
+            };
+
+                var tempArray = new Array();
+                    tempArray = [
+                       // "1:00",
+                       // "1:30",
+                       // "2:00",
+                       // "2:30",
+                       // "3:00",
+                       // "3:30",
+                       // "4:00",
+                       // "4:30",
+                       // "5:00",
+                       // "5:30",
+                       // "6:00",
+                       // "6:30",
+                       // "7:00",
+                       // "7:30",
+                       // "8:00",
+                       // "8:30",
+                       // "9:00",
+                       // "9:30",
+                       // "10:00",
+                       // "10:30",
+                       // "11:00",
+                       // "11:30",
+                       // "12:00",
+                       //"12:30"
+
+
+
+//"7:00",
+                        //"7:30",
+                        //"8:00",
+                        //"8:30",
+                        //"9:00",
+                        //"9:30",
+                        //"10:00",
+                        //"10:30",
+                        //"11:00",
+                        //"11:30",
+                        //"12:00",
+                        //"12:30",                        // "1:00",
+                        //"1:30",
+                        //"2:00",
+                        //"2:30",
+                        //"3:00",
+                        //"3:30",
+                        //"4:00",
+                        //"4:30",
+                        //"5:00",
+                        //"5:30",
+                        //"6:00",
+                        //"6:30"
+
+                        "7:00",
+                        "7:30",
+                        "8:00",
+                        "8:30",
+                        "9:00",
+                        "9:30",
+                        "10:00",
+                        "10:30",
+                        "11:00",
+                        "11:30",
+                        "12:00",
+                        "12:30",
+                        "13:00",
+                        "13:30",
+                        "14:00",
+                        "14:30",
+                        "15:00",
+                        "15:30",
+                        "16:00",
+                        "16:30",
+                        "17:00",
+                        "17:30",
+                        "18:00",
+                        "18:30",
+                        "19:00",
+                        "19:30",
+                        "20:00",
+                        "20:30",
+                        "21:00",
+                        "21:30",
+                        "22:00",
+                        "22:30",
+                        "23:00",
+                        "23:30",
+                        "24:00"
+
+
+
+
+                    ];
+                    $('#tblDiary> tbody').html('');
+                    $.each(tempArray, function (index, value) {
+                        var $row = $('<tr>' +
+                        '<td draggable="true">' + value + '</td>' + $coulmn +
+                        '</tr>');
+
+                    $('#tblDiary> tbody:last').append($row);
+                    });
+        }
+
+        function addnewbookingonRightclick(event) {
+            var startTime = event.target.id;
+            if (event.button == 2 && !$('#divModal').is(':visible')) {
+                AddNewBooking(StartTime = startTime);
+            }
+            else { return false; }
+        }
+
+        $(document).ready(function () {
+            changeDay();
+            BindRooms();
+            bindEmptyTable();
+            document.oncontextmenu = function () { return false; };
+        });
+
+        $(document).off("click ", ".resize");
+        $(document).on("click ", ".resize", function () {
+
+
+            var url = `/ClientAdmin/InternalBooking?selectedFromDiaryId=${$(this).attr("data-id")}`;
+            var win = window.open(url);
+            win.focus();
+        });
+
+        function getDatevalue() {
+            return $("#BookingDateFromSent").val();
+        }
+
+        function setColor(response) {
+          var table = document.getElementById("tblDiary");
+            var titleAssignedDiv = new Array();
+            for (let i in table.rows) {
+                let row = "";
+                if (i != 0 && parseInt(i) <= 35) {
+                  row = table.rows[i];
+                    for (var j = 1; j < row.cells.length; j++) {
+                    //let j = 1;
+                    //for ( j in row.cells) {
+
+                        //var CustTable = table.rows[0].cells[j];
+                        //var existingRoomTypeIdData = CustTable != null && CustTable != undefined && CustTable != "" && !isNaN(CustTable) ? CustTable.getAttribute("data-id") : "0";// $(table.rows[0].cells[j]).attr("data-id");
+
+                        //console.log(existingRoomTypeIdData);
+                        //if (isNaN(existingRoomTypeIdData)) continue;
+                        //console.log("Proceeed");
+                        var existingRoomTypeIdData = $(table.rows[0].cells[j]).attr("data-id");
+                        var existingRoomTypeId = parseInt(existingRoomTypeIdData);
+                        var resultId = response.data.filter(x => x.roomTypeId == existingRoomTypeId)[0] == undefined ? 0 : response.data.filter(x => x.roomTypeId == existingRoomTypeId)[0].roomTypeId;
+
+                        if (existingRoomTypeId == resultId) {
+                            var currentTime = row.innerText.trim();
+                            $.each(response.data.filter(x => x.roomTypeId == resultId), function (key, rObj) {
+                                var startTime = rObj.startTime;
+                                var finishTime = rObj.finishTime;
+
+                                if (compareTime(currentTime, startTime) == 1 && compareTime(finishTime, currentTime) == 1) {
+                                    var currentRoom = response.data.filter(x => x.roomTypeId == existingRoomTypeId)[0];
+                                    //row.cells[j].classList = currentRoom.colorCode + " selectedColored" + currentRoom.bookingId;
+                                    //row.cells[j].setAttribute("data-id", currentRoom.bookingId);
+
+
+                                    var coloredDiv = document.createElement("div");
+                                    $(coloredDiv).css("position", "relative");
+                                    $(coloredDiv).css("border", "1px solid");
+                                    $(coloredDiv).css("padding", "0");
+                                    $(coloredDiv).css("height", "27px");
+                                    $(coloredDiv).css("background-color", rObj.colorCode);
+                                    $(coloredDiv).attr("data-toggle", "tooltip");
+                                    $(coloredDiv).attr("data-placement", "top");
+                                    $(coloredDiv).attr("data-id", rObj.bookingId);
+                                    $(coloredDiv).attr("data-date", rObj.bookingDate);
+                                    $(coloredDiv).attr("data-html", true);
+                                    $(coloredDiv).attr("data-container", 'body');
+
+                                    $(coloredDiv).attr("data-original-title", `User Group    : ${rObj.userGroupName} <br/> Meeting Title : ${rObj.meetingTitle} <br/> Contact : ${rObj.contact}`);
+                                    //$(coloredDiv).prop("title", `User Group :${rObj.userGroupName} \n Meeting Title :${rObj.meetingTitle}`);
+
+                                    //if (currBookingId != rObj.bookingId) {
+                                    //    $(coloredDiv).append(`<span>User Group :${rObj.userGroupName} <br/> Meeting Title :${rObj.meetingTitle}</span>`);
+                                    //    currBookingId = rObj.bookingId;
+                                    //}
+
+                                    coloredDiv.classList = rObj.colorCode + " selectedColored" + rObj.bookingId + " resize   notAllowed" + " CopyBooking " + rObj.bookingStatus;
+                                    /*coloredDiv.classList = rObj.colorCode + " selectedColored" + rObj.bookingId + " resize   notAllowed" + " CopyBooking";*/
+                                    //coloredDiv.classList = rObj.bookingId + " resize   notAllowed" + "CopyBooking";
+
+                                    if (!titleAssignedDiv.includes(rObj.bookingId)) {
+                                        titleAssignedDiv.push(rObj.bookingId);
+                                        $(coloredDiv).addClass('Allocated_Div');
+                                        $(coloredDiv).attr('data-usergroupName', 'UG : ' + rObj.userGroupName);
+
+                                    }
+
+                                    row.cells[j].append(coloredDiv);
+                                    $(row.cells[j]).css("cursor", "pointer");
+
+                                    //$(".selectedColored" + currentRoom.bookingId).multiDraggable({ group: $(".selectedColored" + currentRoom.bookingId), dragNative: function () { } });
+
+                                }
+                            });
+                        }
+
+                        if (row.cells[j].innerHTML == "") {
+                            var startTime = row.cells[0].innerText;
+                            $(row.cells[j]).attr("onmousedown","addnewbookingonRightclick(event)");
+                            $(row.cells[j]).attr("id", "" + startTime + "");
+                        }
+                        else {
+                            $(row.cells[j]).removeProp("onmousedown");
+                        }
+                    }
+                }
+            }
+
+            //Drag and drop start
+
+            var sTime = "";
+            var eTime = "";
+            var model = {
+                roomTypeId: "",
+                bookingId: "",
+                startTime: "",
+                endTime: "",
+                BookingDate: ""
+            };
+            $(function () {
+
+                $(".drop").sortable({
+                    connectWith: "td",
+                    revert: true,
+                    scroll: false,
+                    forcePlaceholderSize: true,
+                    cursor: 'pointer',
+                    placeholder: "ui-state-highlight",
+                    helper: function (e, item) {
+
+                        //Clone the selected items into an array
+                        // var elements = item.parent().parent().children('.selected').clone();
+                        var elements = $.grep(item.parent().parent().parent().find("." + item[0].classList[1]), function (x, y) {
+                            return ($(x).parent().index() == item.parent().index());
+                        });
+                        $(elements).addClass('cloned');
+                        var clonedElement = $(elements).clone();
+
+                        //Add a property to `item` called 'multidrag` that contains the
+                        //  selected items, then remove the selected items from the source list
+                        item.data('multidrag', clonedElement).siblings("." + item[0].classList[2]).remove();
+
+                        //Now the selected items exist in memory, attached to the `item`,
+                        //  so we can access them later when we get to the `stop()` callback
+
+                        //Create the helper
+                        var helper = $('<li/>');
+                        for (var i = 0; i < clonedElement.length; i++) {
+                            helper.append(clonedElement[i]);
+                        }
+
+                        //elements.remove();
+                        return helper;
+
+                    },
+                    beforeStop: function (e, ui) {
+
+                        var initialRowIndex = 0;
+                        var CurrentCellColorClass = ui.item.data('multidrag')[0].classList[2];
+
+                        for (let i = 0; i < ui.item.data('multidrag').length; i++) {
+                            var RowIndex = $(ui.placeholder).parent()[0].parentElement.rowIndex + i;
+                            initialRowIndex = initialRowIndex == 0 ? RowIndex : initialRowIndex;
+                            var CellIndex = $(ui.placeholder).parent()[0].cellIndex;
+
+                            if (RowIndex !== initialRowIndex) {
+
+                                if (table.rows[RowIndex] == undefined || (
+                                    (table.rows[RowIndex].cells[CellIndex].childElementCount > 0) &&
+                                    (!table.rows[RowIndex].cells[CellIndex].children[0].children[0].classList.contains(CurrentCellColorClass)))) {
+
+                                    if (table.rows[RowIndex] != undefined) {
+                                        if (!table.rows[RowIndex].cells[CellIndex].children[0].classList.contains('cloned')) {
+
+                                            e.preventDefault();
+                                            executeColorization();
+                                        }
+
+                                    }
+                                    else if (table.rows[RowIndex] == undefined) {
+                                        e.preventDefault();
+                                        executeColorization();
+                                    }
+
+                                }
+                            }
+
+
+                        }
+
+                        if ($(ui.placeholder).parent()[0].childElementCount > 2) { // don't allow within this
+
+                            // dont't allow  if  drag on last cell of the time slot
+                            if (ui.placeholder.parent().children().length > 2 &&
+                                ui.placeholder.parent().children()[0].classList[1] != ui.placeholder.parent().children()[2].classList[1]
+
+                            ) {
+                                e.preventDefault();
+                                executeColorization();
+                            }
+                        }
+                    }
+                    ,
+                    stop: function (e, ui) {
+
+                        //Now we access those items that we stored in `item`s data!
+                        var elements = ui.item.data('multidrag');
+
+                        //`elements` now contains the originally selected items from the source list (the dragged items)!!
+
+                        //Finally I insert the selected items after the `item`, then remove the `item`, since
+                        //item is a duplicate of one of the selected items.
+
+                        //  ui.item.after(elements);
+
+                        var rowIndex = ui.item.parent().parent().index();
+                        var divIndex = ui.item.parent().index();
+                        var table = document.getElementById("tblDiary");
+
+                        sTime = table.rows[rowIndex + 1].cells[0].textContent;
+                        $.each(elements, function (key, ele) {
+
+                            ele.classList.remove('cloned');
+                            $(table.rows[rowIndex + 1].cells[divIndex]).innerHTML = '';
+                            table.rows[rowIndex + 1].cells[divIndex].append(ele);
+                            rowIndex = rowIndex + 1;
+                        });
+
+                        eTime = table.rows[rowIndex].cells[0].textContent;
+
+                        model.startTime = sTime;
+                        model.endTime = eTime;
+                        model.bookingDate = getDatevalue();
+
+                        $(document).find(".cloned").remove();
+                        $(function () {
+                            $('[data-toggle="tooltip"]').tooltip()
+                        });
+
+                        $.ajax({
+                            url: `/ClientAdmin/BookingDiary/UpdateDiary`,
+                            type: "GET",
+                            data: model,
+                            success: function (response) {
+                                executeColorization();
+                            },
+                            error: function (response) { }
+                        });
+
+                        
+                    }
+                    ,
+                    receive: function (e, ui) {
+
+                        var NewRoomTypeId = $('#tblDiary tr').find('th:nth-child(' + (ui.item.closest('td').index() + 1) + ')').attr("data-id");
+                        var BookingId = ui.item[0].classList[1].replace("selectedColored", "");
+
+                        model.roomTypeId = NewRoomTypeId;
+                        model.bookingId = BookingId;
+                        
+                    }
+                }).disableSelection();
+
+                
+            });
+
+            $(function () {
+                $(".resize").resizable({
+                    grid: [50, 0],
+                    handles: 'e'
+                });
+            });
+            $(".notAllowed").on("sortreceive", function (event, ui) {
+
+                // don't allow within this
+                event.preventDefault();
+
+            });
+            //drag and  drop end
+           
+
+        }
+
+        $(document).off("click", "#btnPrint");
+        $(document).on("click", "#btnPrint", function () {
+            //if ($("#RoomTypeId").val() == 0)
+            //    swal("Please selet room first");
+            if ($("#BookingDateFromSent").val() == "")
+                swal("Please selet a date first");
+            else {
+                if ($("#BookingStatusId").val() == 0) {
+                    var IsCan = $("#ShowOnlyCan").prop('checked') ? 1 : 0
+                }
+                else {
+                    var IsCan = 0
+                }
+                //var model = {
+                //    RoomTypeId: $("#RoomTypeId").val(),
+                //    BookingDate: moment($("#BookingDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD')
+                //}
+                //console.log(model)
+                //$.post(`/ClientAdmin/DiaryReports/DemoViewAsPDF`, { model: model })
+                window.open(`/ClientAdmin/DiaryReports/DailyReportViewAsPDF?BookingDate=${moment($("#BookingDateFromSent").val(), 'DD/MM/YYYY').format('YYYY-MM-DD')}&BookingStatusId=${$("#BookingStatusId").val()}&isCan=${IsCan}`);
+
+            }
+        });
+
+        $(document).off("click", "#btnDisplay");
+        $(document).on("click", "#btnDisplay", function () {
+
+            executeColorization();
+            BindRooms();
+            //var bookingDate = $("#BookingDateFromSent").val();
+            //$.get("/ClientAdmin/BookingDiary/BindDiary", { BookingDate: bookingDate}, function (response) {
+
+            //    $('#tblDiary> tbody:last').html("");
+
+            //    bindEmptyTable();
+            //    setColor(response);
+
+            //});
+
+
+        });
+
+        //Add  UserGroup title  at the first node of booked rooms cell
+        function Assigntitle() {
+
+                $.each($(document.getElementsByClassName('Allocated_Div')), function (key, element) {
+                    $(element).css('color', 'white');
+                    $(element).css('text-align', 'left');
+                    $(element).text($(element).attr('data-usergroupName'));
+                });
+
+
+        }
+        function executeColorization() {
+            var bookingDate = $("#BookingDateFromSent").val();
+
+            
+                if ($("#BookingStatusId").val() == 0) {
+                    $.get("/ClientAdmin/BookingDiary/BindDiary", { BookingDate: moment(bookingDate, 'DD-MM-YYYY').format('yyyy-MM-DD'), BookingStatusId: $("#BookingStatusId").val(), isCan: $("#ShowOnlyCan").prop('checked') ? 1 : 0 }, function (response) {
+                        debugger;
+                        $('#tblDiary> tbody:last').html("");
+
+                        bindEmptyTable();
+
+                        setColor(response);
+                        Assigntitle();
+                        $(function () {
+                            $('[data-toggle="tooltip"]').tooltip()
+                        });
+
+                    });
+                }
+                else {
+                    //$.get("/ClientAdmin/BookingDiary/BindDiary", { BookingDate: moment(bookingDate, 'DD-MM-YYYY').format('yyyy-MM-DD'), isCan: $("#ShowOnlyCan").prop('checked') ? 1 : 0 }, function (response) {
+                    $.get("/ClientAdmin/BookingDiary/BindDiary", { BookingDate: moment(bookingDate, 'DD-MM-YYYY').format('yyyy-MM-DD'), BookingStatusId: $("#BookingStatusId").val(), isCan: 0 }, function (response) {
+                        debugger;
+                        $('#tblDiary> tbody:last').html("");
+
+                        bindEmptyTable();
+
+                        setColor(response);
+                        Assigntitle();
+                        $(function () {
+                            $('[data-toggle="tooltip"]').tooltip()
+                        });
+
+                    });
+                }
+
+            
+
+
+        }
+
+
+        function compareTime(str1, str2) {
+
+            if (str1 === str2) {
+                return 1;
+            }
+            var time1 = str1.split(':');
+            var time2 = str2.split(':');
+            if (eval(time1[0]) >  eval(time2[0])) {
+
+                return 1;
+            }
+             if (eval(time1[0]) == eval(time2[0]) && eval(time1[1]) >= eval(time2[1])) {
+                return 1;
+            }
+                return -1;
+
+        }
+
+        $(document).off("click", "#btnBooking");
+        $(document).on("click", "#btnBooking", function () {
+            AddNewBooking(StartTime = '');
+        });
+        function AddNewBooking(StartTime, id = 0, isView = false, isInternalBooking = false) {
+            if (StartTime != null || StartTime != '') {
+                var bookingDate = $("#BookingDateFromSent").val();
+                BookingDate = moment(bookingDate, 'DD/MM/YYYY').format('DD-MM-yyyy');
+            }
+            if (StartTime == null || StartTime == '') {
+                StartTime = '';
+                BookingDate = '';
+            }
+            $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditBookingDetails?id=${id}&isView=${isView}&StartTime=${StartTime}&BookingDate=${BookingDate}&isInternalBooking=${isInternalBooking}`, function () {
+                ShowModal();
+            });
+        }
+
+        $(document).off("mousedown", ".Allocated_Div");
+            $(document).on("mousedown", ".Allocated_Div", function () {
+        });
+
+        $(document).off('mousedown', '.CopyBooking');
+        $(document).on('mousedown', '.CopyBooking', function (e) {
+            if (e.button == 2 && !$('#divModal').is(':visible')) {
+                if ($("#BookingStatusId").val() == 2)
+                {
+                    Integr8ed.Warning("This booking has been cancelled !");
+                }
+                else if (e.currentTarget.classList[5] == 2 )
+                {
+                    Integr8ed.Warning("This booking has been cancelled !");
+                }
+                else
+                {
+                    $("#modalContent").load(`/ClientAdmin/BookingDiary/_CopyBookingDetail?id=${e.target.attributes[2].value}`, function () {
+                        ShowModal();
+                    });
+                }
+            }
+            else
+            {
+                return false;
+            }
+        });
+
+    </script>
+}

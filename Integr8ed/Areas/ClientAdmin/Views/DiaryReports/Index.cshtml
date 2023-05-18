@@ -1,0 +1,451 @@
+﻿@model Integr8ed.Service.Dto.RoomTypeListDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<style type="text/css">
+
+    .tooltip-inner {
+        max-width: 100% !important;
+        text-align: left;
+    }
+
+    .Allocated_Div {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+    }
+    /*Table Dairy*/
+    .tblDairy .table thead {
+        vertical-align: middle;
+        background-color: rgb(17 119 191);
+    }
+
+    .tblDairy .table {
+        border: 1px solid #ddd;
+    }
+
+        .tblDairy .table tr th {
+            padding: 10px 15px;
+            text-align: center;
+            color: #fff;
+            font-weight: 600;
+            border: 0;
+            border: 1px solid #fff;
+        }
+
+        .tblDairy .table tr td {
+            padding: 10px 15px;
+            text-align: center;
+            font-size: 14px;
+            color: #3e4175;
+            font-weight: 500;
+            border: 1px solid #ddd;
+        }
+
+    .switch {
+        position: relative;
+        /* display: inline-block;*/
+        width: 60px;
+        height: 34px;
+    }
+
+        .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .slider:before {
+            position: absolute;
+            content: "";
+            height: 26px;
+            width: 26px;
+            left: 4px;
+            bottom: 4px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    input:checked + .slider:before {
+        -webkit-transform: translateX(26px);
+        -ms-transform: translateX(26px);
+        transform: translateX(26px);
+    }
+
+    /* Rounded sliders */
+    .slider.round {
+        border-radius: 34px;
+    }
+
+        .slider.round:before {
+            border-radius: 50%;
+        }
+</style>
+<div class="main-content container-fluid">
+
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Weekly View Diary</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Bookings </li>
+                    <li class="breadcrumb-item active" aria-current="page">Weekly View Diary</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+
+                            <div class="row">
+
+                                <div class="col-lg-12">
+                                    <div class="d-flex align-items-end">
+                                        <div class="form-group">
+                                            <label>Room</label>
+                                            @Html.DropDownListFor(x => x.RoomTypeId, ViewBag?.RoomList as IEnumerable<SelectListItem>, "All Rooms", new { @class = "form-control form-select", @id = "RoomTypeId", @Name = "RoomTypeId", required = "Select Room" })
+                                        </div>
+                                        <div class="form-group ml-3">
+                                            <label>Start Date</label>
+                                            <input class="form-control" size="16" asp-for="BookingDate" autocomplete="off" name="BookingDate" type="text" readonly placeholder="Select Booking Date " />
+                                        </div>
+
+                                        <div class="cust_col ml-2" id="StatusListDropDown" onchange="ChangeStatus()">
+                                        </div>
+                                        <div class="form-group ml-3 d-none" id="cantoggle">
+                                            <label>Exclude cancelled</label>
+                                            <div>
+                                                <label class="switch">
+                                                    <input type="checkbox" id="ShowOnlyCan" />
+                                                    <span class="slider round"></span>
+                                                </label>
+                                            </div>
+                                        </div>
+
+                                        <div class="form-group ml-auto">
+                                            <button type="button" id="ContextDiary" class="btn btn-primary">
+                                                Display
+                                            </button>
+                                            <button type="button" id="btnPrint" class="btn btn-secondary">
+                                                Print
+                                            </button>
+                                        </div>
+                                    </div>
+                                </div>
+                                <!--<div class="col-lg-6 col-md-6 d-flex justify-content-end align-items-center">
+                                <div class="form-group date_label_dis mt-3">-->
+                                @*<button id="btnPrevious"><i class="fas fa-angle-double-left"></i></button>*@
+                                <!--<label id="dayLable">Monday</label>-->
+                                @*<button id="btnNext"><i class="fas fa-angle-double-right"></i></button>*@
+
+
+                                <!--</div>
+                                </div>-->
+
+                                <div class="col-md-12 py-4">
+                                    <div class="section_formd section_formd_asd">
+                                        <h4 class="section_formd_title"> Status </h4>
+                                        <div class="table-responsive tblDairy">
+                                            <table class="table" width="100%" cellpadding="0" cellspacing="0">
+                                                <thead id="dayHead">
+
+                                                </thead>
+                                                <tbody id="daybody">
+                                                </tbody>
+                                            </table>
+                                        </div>
+
+                                    </div>
+                                </div>
+                                <div class="col-lg-12">
+
+                                    <div class="d-flex align-items-end">
+
+                                        <div class="form-group ">
+                                            <label>Start Date</label>
+                                            <input class="form-control" size="16" id="startDate" autocomplete="off" name="BookingDate" type="text" readonly placeholder="Select Booking Date " />
+                                        </div>
+                                        <div class="form-group ml-3">
+                                            <label>End Date</label>
+                                            <input class="form-control" size="16" id="endDate" autocomplete="off" name="BookingDate" type="text" readonly placeholder="Select Booking End Date " />
+                                        </div>
+                                        <div class="ml-auto">
+                                            <button type="button" class="btn btn-info" id="btnAddnewBooking">
+                                                New Internal / External Booking
+                                            </button>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-12 mt-3">
+                                        @* Table Start *@
+                                        <div class="table-responsive">
+                                            @*<table class='table table-bordered table-striped' id="tblDiary">
+                                                    <thead>
+                                                        <tr>
+                                                            <th scope="col"> Time</th>
+
+                                                            @foreach (var item in Model)
+                                                            {
+                                                                <th scope="col" class="@item.Title.Substring(0,3)" data-id="@item.Id"> @item.Title</th>
+                                                            }
+
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody></tbody>
+                                                </table>*@
+
+                                        </div>
+                                        @* Table End *@
+                                    </div>
+
+
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+    </section>
+</div>
+
+@section Scripts{
+    <script>
+
+        $(document).ready(function () {
+            $.ajax({
+                url: `/ClientAdmin/InternalBooking/GetBookingStatusList`,
+                type: 'GET',
+
+                success: function (response) {
+
+                    var statusList = `<div class="form-group status_dropdown">
+                                                        <label for="first-name-column" id="dropLabel">Booking Status </label>
+                                                        <span id="AboveBranch" rel="tooltip"  data-placement="auto" >
+                                                            <div  class="input-group" >
+                                                                <select  class="form-control form-select" data-val="true"  id="BookingStatusId" name="BookingStatusId">
+                                                                    <option value="0">Select All</option>
+                                                                    {options}
+                                                                </select>
+                                                            </div>
+                                                        </span>
+                                                        </div>`;
+                    var options = '';
+                    for (let i = 0; i < response.length; i++) {
+                        options += `<option value="${response[i].id}">${response[i].title}</option>`;
+                    }
+                    statusList = statusList.replace('{options}', options);
+                    $("#StatusListDropDown").html(statusList);
+                },
+                error: function () { }
+            });
+
+            if ($("#BookingStatusId").val() != 0) {
+                $("#cantoggle").removeClass('d-none');
+            }
+            else {
+                $("#cantoggle").addClass('d-none')
+            }
+        });
+
+
+        function ChangeStatus() {
+            if ($("#BookingStatusId").val() == 0) {
+                $("#cantoggle").removeClass('d-none')
+            }
+            else {
+                $("#cantoggle").addClass('d-none')
+            }
+
+        };
+
+        $(document).on("click", "#btnAddnewBooking", function () {
+            AddNewBooking();
+        });
+
+
+        function AddNewBooking(id = 0, isView = false, isInternalBooking = false) {
+            $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditBookingDetails?id=${id}&isView=${isView}&isInternalBooking=${isInternalBooking}`, function () {
+                ShowModal();
+            });
+            window.location.reload();
+        }
+
+        $('#BookingDate').datetimepicker({
+            language: 'en',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            format: 'dd-mm-yyyy',
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+        });
+
+        function getTime(res) {
+            var timeSlot = '';
+            $.each(res, function (key, val) {
+                timeSlot += val.startTime + " : " + val.finishTime + " ,";
+            });
+            return timeSlot;
+        }
+        $(document).off("click", "#ContextDiary");
+        $(document).on("click", "#ContextDiary", function () {
+
+            if ($("#BookingDate").val() == "")
+                swal("Please selet a date first");
+            else {
+                var model = {
+                    RoomTypeId: $("#RoomTypeId").val(),
+                    BookingDate: moment($("#BookingDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD'),
+                    BookingStatus: $("#BookingStatusId").val()
+                }
+                if ($("#BookingStatusId").val() == 0) {
+                    var IsCan = $("#ShowOnlyCan").prop('checked') ? 1 : 0
+                }
+                else {
+                    var IsCan = 0
+                }
+                $.ajax({
+                    url: `/ClientAdmin/DiaryReports/GetDiaryRoomList`,
+                    type: 'POST',
+                    data: { model: model, isCan: IsCan },
+                    success: function (response) {
+                        console.log(response);
+                        $("#dayHead").html("");
+                        $("#daybody").html("");
+                        var tempDate = BookingDate.value;
+                        var day = "";
+
+                        var rowElement = document.createElement('tr');
+                        for (let i = 0; i < 7; i++) {
+                            if (i == 0) {
+                                $("#startDate").val(tempDate);
+                                $("#startDate").prop('disabled', true);
+                            }
+
+                            day += `<th>${moment(tempDate, 'DD-MM-YYYY').format('dddd')}</th>`;
+                            tempDate = moment(tempDate, "DD-MM-YYYY");
+
+                            if (i == 6) {
+                                $("#endDate").val(moment(tempDate, 'DD-MM-YYYY').format('DD-MM-YYYY'));
+                                $("#endDate").prop('disabled', true);
+                            }
+
+
+
+                            var res = $.grep(response.data, function (a) { return a.bookingDate == tempDate.format("DD-MM-yyyy") });
+                            
+                            var timeSlotString = res.length == 0 ? "" : getTime(res);
+                            //if (res.length != 0) {
+
+                            //}
+                            var sslots = timeSlotString.split(",");
+                            var temp = document.createElement('td');
+                            for (var j = 0; j < res.length; j++) {
+                                var ele = `<div class="custom_blocks" data-id="${res[j].bookingId}">${res[j].startTime} to ${res[j].finishTime}</div>`;
+                                $(temp).append(ele);
+                            }
+                                //$.each(res, function (key, val) {
+                                //    if (val != "") {
+                                //        console.log(key, val);
+                                //        var ele = `<div class="custom_blocks" data-id="${val.bookingId}">${val.startTime} : ${val.finishTime}</div>`;
+                                //        /*var sslot = `<td>${timeSlotString.replace(/,/g, "</br>")}</td>`;*/
+                                //    }
+                                //});
+                            
+                            
+
+                            
+
+                            $(rowElement).append(temp);
+
+                            tempDate = moment(tempDate, "DD-MM-YYYY").add(1, 'days');
+                        }
+                        $("#dayHead").append("<tr>" + day + "</tr>");
+                        $("#daybody").append(rowElement);
+                    },
+                    error: function (response) { }
+                });
+            }
+
+            setTimeout(function () {
+                $.each($("#daybody tr td div"), function (key, val) {
+                    if ($(val).data("id") != 0) {
+                        $.ajax({
+                            url: `/ClientAdmin/DiaryReports/getBookingInfo`,
+                            type: "POST",
+                            data: { BookingId: $(val).data("id") },
+                            success: function (response) {
+                                $(val).addClass("Allocated_Div");
+                                $(val).attr("data-toggle", "tooltip");
+                                $(val).attr("data-placement", "top");
+                                $(val).attr("data-original-title", `Title of Meeting : ${response.titleOfMeeting} & No of Attending: ${response.numberOfAttending}`);
+                                $('[data-toggle="tooltip"]').tooltip();
+                            },
+                            error: function (response) { },
+                        });
+                    }
+                });
+            }, 2000);
+            setTimeout(function () { }, 1000);
+
+        });
+
+
+        $(document).off("click", "#btnPrint");
+        $(document).on("click", "#btnPrint", function () {
+
+            if ($("#BookingDate").val() == "")
+                swal("Please selet a date first");
+            else {
+                if ($("#BookingStatusId").val() == 0) {
+                    var IsCan = $("#ShowOnlyCan").prop('checked') ? 1 : 0
+                }
+                else {
+                    var IsCan = 0
+                }
+                window.open(`/ClientAdmin/DiaryReports/DemoViewAsPDF?BookingDate=${moment($("#BookingDate").val(), 'DD/MM/YYYY').format('YYYY-MM-DD')}&RoomTypeId=${$("#RoomTypeId").val()}&BookingStatusId=${$("#BookingStatusId").val()}&isCan=${IsCan}`);
+            }
+        });
+
+    </script>
+
+}
+

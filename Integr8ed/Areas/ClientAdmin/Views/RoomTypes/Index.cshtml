@@ -1,0 +1,509 @@
+﻿@model Integr8ed.Service.Dto.EquipmentDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Room Types";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Room Types</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Datatable Menu</li>
+                    <li class="breadcrumb-item active" aria-current="page">Room Types</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form1" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            @*<form class="form">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="first-name-column">Room Type</label>
+                                            <input type="text" class="form-control" placeholder="Room Type">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>*@
+                            <div class="form_tab_section custom_tabs">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-xs-12 p-0">
+                                            <nav>
+                                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="room-type-detail-tab" data-toggle="tab" href="#room-type-detail" role="tab" aria-controls="room-type-detail" aria-selected="true">Room Type Detail</a>
+                                                    <a class="nav-item nav-link" id="standard-equipment-tab" data-toggle="tab" href="#standard-equipment" role="tab" aria-controls="standard-equipment" aria-selected="false">Standard Equipment</a>
+                                                    <a class="nav-item nav-link" id="equipment-req-tab" data-toggle="tab" href="#equipment-req" role="tab" aria-controls="equipment-req" aria-selected="false">Equipment Requirements</a>
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content" id="nav-tabContent">
+                                                <div class="tab-pane fade active show" id="room-type-detail" role="tabpanel" aria-labelledby="room-type-detail-tab">
+                                                    <div class="row">
+                                                        <div class="col-12 d-flex justify-content-end mb-2">
+                                                            <button type="button" class="btn btn-primary" id="AddRooms">
+                                                                New Room type
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        @* Table Start *@
+                                                        <div class="table-responsive">
+                                                            <table class='table table-bordered table-striped' id="tblRoomTypes">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col"> Title</th>
+                                                                        <th scope="col"> Floor</th>
+                                                                        <th scope="col"> Hourly Rate</th>
+                                                                        <th scope="col"> Sunday Rate</th>
+                                                                        <th scope="col"> Saturday Rate</th>
+                                                                        <th scope="col"> Max Person</th>
+                                                                        <th scope="col" style="display:none"> Notes</th>
+                                                                        <th scope="col">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+
+                                                        </div>
+                                                        @* Table End *@
+                                                    </div>
+
+                                                </div>
+                                                <div class="tab-pane fade" id="standard-equipment" role="tabpanel" aria-labelledby="standard-equipment-tab">
+                                                    <div class="row">
+                                                        <div class="col-12 d-flex justify-content-end mb-3">
+                                                            <button type="button" id="AddEquipment" class="btn btn-primary">
+                                                                New Standard Equipment
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            @* Table Start *@
+                                                            <div class="table-responsive">
+                                                                <table class='table table-bordered table-striped' id="tblEquipmentDetail">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Title</th>
+                                                                            <th scope="col">Description</th>
+
+                                                                            <th scope="col">Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                                @*<table class="table table-bordered mb-0">
+                            <thead>
+                                <tr>
+                                    <th>Equipment Description</th>
+                                    <th>Equipment Code</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="text-bold-500">Michael Right</td>
+                                    <td>$15/hr</td>
+                                </tr>
+                                <tr>
+                                    <td class="text-bold-500">Morgan Vanblum</td>
+                                    <td>$13/hr</td>
+                                </tr>
+                            </tbody>
+                        </table>*@
+                                                            </div>
+                                                            @* Table End *@
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                                <div class="tab-pane fade" id="equipment-req" role="tabpanel" aria-labelledby="equipment-req-tab">
+                                                    <div class="row">
+                                                        <div class="col-12 d-flex justify-content-end mb-3">
+                                                            <button type="button" id="btnAddnewEquip" class="btn btn-primary">
+                                                               New Equipment Requirements
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            @* Table Start *@
+                                                            <div class="table-responsive">
+                                                                <table class='table table-bordered table-striped' id="tblEquipDetail">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col"> Equipment Type</th>
+                                                                            <th scope="col"> No. Of Items</th>
+                                                                            <th scope="col">Description</th>
+                                                                            <th scope="col">Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+                                                            </div>
+                                                            @* Table End *@
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@section Scripts{
+   
+    <script type="text/javascript">
+
+
+        $(document).ready(function () {
+            bindEquipment("#tblEquipmentDetail");
+            bindRooms("#tblRoomTypes");
+            bindEquip("#tblEquipDetail");
+        });
+
+         $(document).on("click", "#btnAddnewEquip", function () {
+            AddNewEquip();
+        });
+
+
+        function AddNewEquip(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/RoomTypes/_AddEditEquipRequirement?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        function AddImage(id = 0) {
+            $("#modalContent").load(`/ClientAdmin/RoomTypes/_AddEditRoomImages?id=${id}`, function () {
+                ShowModal();
+            });
+        }
+
+
+        function DeleteEquip(id) {
+
+            Integr8ed.Confirm("Delete Equipment", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/RoomTypes/RemoveEquipType",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindEquip("#tblEquipDetail");
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+
+        function bindEquip(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblEquipDetail = $("#tblEquipDetail")
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/RoomTypes/GetEquipmentReqList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblEquipDetail_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblEquipDetail_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Equipments",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Equipments"
+                    },
+                    "columns": [
+                        {
+                            "data": "standardEquipmentName",
+                            // "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "title",
+                            // "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "description",
+                            //    "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddNewEquip('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddNewEquip('${row.id}',true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="DeleteEquip('${row.id}');" title="Delete" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a> `;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+        };
+
+
+        function bindRooms(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblCompanyDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/RoomTypes/GetRoomTypesList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblRoomTypes_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblRoomTypes_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ RoomTypes",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 RoomTypes"
+                    },
+                    "columns": [
+                        {
+                            "data": "title",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "floor",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "hourlyRate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "sundayRate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "saturdayRate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "maxperson",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                         {
+                            "data": "notes",
+                             "width": "5%",
+                             "visible":false,
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddRoooms('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddRoooms('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="DeleteRoom('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>| <a onclick="AddImage('${row.id}');" title="Add Photo" class="icon_cust_button"><i class="far fa-image"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+        }
+
+        $(document).on("click", "#AddRooms", function () {
+            AddRoooms();
+        });
+
+        function AddRoooms(id = 0, isView = false) {
+            
+            $("#modalContent").load(`/ClientAdmin/RoomTypes/_AddEditRoomTypes?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }   
+
+        function DeleteRoom(id) {
+
+            Integr8ed.Confirm("Delete RoomType", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/RoomTypes/RemoveRoomType",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindRooms("#tblRoomTypes");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+        function bindEquipment(TableId) {
+            
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            
+            var tblCompanyDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/RoomTypes/GetEquipmentList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblEquipmentDetail_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblEquipmentDetail_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Equipments",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Equipments"
+                    },
+                    "columns": [
+                        {
+                            "data": "title",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "description",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddEquipment('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddEquipment('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="DeleteEquipment('${row.id}');" title="Delete" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+
+        }
+
+
+        $(document).on("click", "#AddEquipment", function () {
+           AddEquipment();
+        });
+
+
+        function AddEquipment(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/RoomTypes/_AddEditStandardEquipment?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }   
+
+
+        function DeleteEquipment(id) {
+
+            Integr8ed.Confirm("Delete Equipment", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/RoomTypes/RemoveEquipment",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindEquipment("#tblEquipmentDetail");
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+
+      
+
+    </script>
+
+}

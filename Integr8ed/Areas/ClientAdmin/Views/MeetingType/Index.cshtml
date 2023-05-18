@@ -1,0 +1,165 @@
+﻿@model Integr8ed.Service.Dto.MeetingTypeDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Meeting Type";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Meeting Type</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Datatable Menu</li>
+                    <li class="breadcrumb-item active" aria-current="page">Meeting Type</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-end mb-2">
+                                    <button type="button" class="btn btn-primary" id="btnAddnewMeeting">
+                                        New Meeting Type
+                                    </button>
+                                </div>
+                                <div>
+                                    <div class="table-responsive">
+                                        <table class='table table-bordered table-striped' id="tblMeetingDetail">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"> Title</th>
+                                                    <th scope="col"> Description</th>
+                                                    <th scope="col"> Actions</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                      
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts{
+        <script type="text/javascript">
+        $(document).ready(function () {
+
+
+         
+          bindMeeting("#tblMeetingDetail");
+    
+        });
+
+        $(document).on("click", "#btnAddnewMeeting", function () {
+           AddMeeting();
+        });
+
+
+        function AddMeeting(id = 0, isView=false) {
+            
+            $("#modalContent").load(`/ClientAdmin/MeetingType/_AddEditMeetingType?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }   
+
+
+        function DeleteMeetingType(id) {    
+
+            Integr8ed.Confirm("Delete MeetingType", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/MeetingType/RemoveMeetingType",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindMeeting("#tblMeetingDetail");
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+
+        function bindMeeting(TableId) {
+               if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblMeetingDetail = $("#tblMeetingDetail")
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/MeetingType/GetMeetingTypeList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblMeetingDetail_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblMeetingDetail_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_MeetingTypes",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 MeetingTypes"
+                    },
+                    "columns": [
+                        {
+                            "data": "title",
+                        //    "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                         {
+                            "data": "description",
+                          //  "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                      
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddMeeting('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddMeeting('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="DeleteMeetingType('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+        };
+
+    </script>
+    }

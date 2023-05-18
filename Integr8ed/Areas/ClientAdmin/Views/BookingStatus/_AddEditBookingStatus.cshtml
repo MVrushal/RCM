@@ -1,0 +1,115 @@
+﻿@model Integr8ed.Service.Dto.BookingStatusDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="FormRoom" asp-action="AddEditBookingStatus" asp-controller="BookingStatus" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Booking Status</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="first-name-column">Status * </label>
+                        <input type="text" asp-for="Status" name="Status" id="Status" class="form-control" placeholder="Enter Title here">
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Color *</label>
+                        <input type="color" asp-for="ColorCode" name="ColorCode" class="form-control" placeholder="Color">
+                    </div>
+                </div>
+                <div class="col-md-6 check_box_center p-0">
+                    <div class="checkbox">
+                        <input type="checkbox" id="activeRoom" asp-for="IsActive" class="form-check-input" checked="@(Model.IsActive)">
+                        <label for="activeRoom">
+                            Enable/Disable
+                            @*Include Room In Room Booking*@
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+        var validationresult = $("#FormRoom").validate({
+            onfocusout: false,
+            rules: {
+                "Status": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/BookingStatus/CheckTitle",
+                        type: "GET",
+                        data: { Status:$('.Status').val(), Id:$("#Id").val() }
+                    },
+                },
+            },
+            messages: {
+                "Status": {
+                    required: "Please enter a  Status",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Status already exist!"
+                },
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblBookingStatus");
+                        return false;
+                    }
+                    //    window.location.href = `/ClientAdmin/RoomTypes/Index`;
+                });
+
+            }
+        });
+
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+        //if ($("#Id").val() != 0 && $("#IsView").val() == "false") {
+        //    $("#RoomTitle").rules("remove","remote");
+        //}
+    });
+
+</script>

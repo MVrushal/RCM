@@ -1,0 +1,113 @@
+﻿@model Integr8ed.Service.Dto.NotesDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="modal-content">
+    <form id="frmNotes" asp-action="AddEditNotes" asp-controller="InternalBooking" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Notes</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsView" />
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label id="Note">Notes *</label>
+                            <textarea class="form-control" id="Note" rows="3" asp-for="Note" name="Note" placeholder="Enter Notes here"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/bootstrap-datetimepicker.min.js" type="text/javascript"></script>
+<script src="~/js/bootstrap-datetimepicker.fr.js" type="text/javascript"></script>
+<script src="~/js/clockpicker.js"></script>
+
+<script type="text/javascript">
+
+
+
+    $(document).ready(function () {
+
+          if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        var frmNotes = $("#frmNotes").validate({
+            onfocusout: false,
+            rules: {
+                "Note": {
+                    required: true,
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+
+            },
+            messages: {
+                "Note": {
+                    required: "Please enter a Notes",
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+
+            },
+            submitHandler: function (form) {
+
+
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblNewNotes");
+                        return false;
+                    }
+                    //window.location.href = `/ClientAdmin/MeetingType/Index`;
+                });
+
+            }
+        });
+
+
+
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+            $("#btnSave").hide();
+
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+    });
+
+
+
+
+</script>

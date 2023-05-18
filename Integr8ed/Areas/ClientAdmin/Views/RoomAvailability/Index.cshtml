@@ -1,0 +1,822 @@
+﻿@model Integr8ed.Service.Dto.RmAvParamDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Room Availability";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/bootstrap.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="~/css/bootstrap-datetimepicker.min.css" />
+<link href="~/css/jquery.timepicker.css" rel="stylesheet" />
+<link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
+<style>
+    .Expandbooking {
+        cursor: pointer;
+    }
+</style>
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Room Availability</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                    <li class="breadcrumb-item active" aria-current="page">Room Availability</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+
+
+    <section class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+
+                                <div class="panel-heading filter_sections" role="tab" id="headingOne">
+                                    <h5 class="panel-title">
+                                        <a role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOnesss" aria-expanded="true" aria-controls="collapseOnesss">
+                                            <i class="fas fa-sort-amount-down"></i>
+                                            <span>Show Filter</span>
+                                        </a>
+                                    </h5>
+                                </div>
+
+                                <div id="collapseOnesss" class="panel-collapse collapse cust_transition filter_sections" style="" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        <div class="form-body">
+
+                                            @Html.AntiForgeryToken()
+                                            @*<input type="hidden" asp-for="Id" />
+                                                <input type="hidden" asp-for="IsView" />*@
+                                            <div class="row">
+
+                                                @*  *@
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="first-name-column" class="form-label">Room type</label>
+                                                        @Html.DropDownListFor(x => x.roomTypeId, ViewBag?.RoomType as IEnumerable<SelectListItem>, "All Rooms", new { @class = "form-control form-select", @id = "roomTypeId", @Name = "roomTypeId", required = "Select Room" })
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+
+                                                    <div class="form-group input-append date form_datetime">
+                                                        <label for="first-name-column">Start Date *</label>
+                                                        <div class="input-group date form_date col-md-5" data-date="startDate" data-date-format="dd MM yyyy" data-link-field="startDate" data-link-format="dd/mm/yyyy">
+                                                            <input class="form-control" size="16" asp-for="startDate" autocomplete="off" name="startDate" id="startDate" type="text" readonly placeholder="Enter startDate Date here">
+                                                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group input-append date form_datetime">
+                                                        <label for="first-name-column">End Date *</label>
+                                                        <div class="input-group date form_date col-md-5" data-date="endDate" data-date-format="dd MM yyyy" data-link-field="endDate" data-link-format="dd/mm/yyyy">
+                                                            <input class="form-control" size="16" asp-for="endDate" autocomplete="off" name="endDate" id="endDate" type="text" readonly placeholder="Enter endDate  here">
+                                                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="first-name-column" class="form-label">Max. Persons</label>
+                                                        <input type="text" class="form-control" asp-for="maxPerson" name="maxPerson" placeholder="Enter Max. Persons here">
+                                                    </div>
+                                                </div>
+                                                @*  *@
+
+                                                @* == *@
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="first-name-column" class="form-label">Start Time *</label>
+                                                        <input class="form-control" type="time" autocomplete="off" asp-for="TimeStart" name="TimeStart" placeholder="Enter Time Start here" />
+                                                    </div>
+                                                </div>
+                                                <div class="col-lg-3 col-md-4 col-sm-6">
+                                                    <div class="form-group">
+                                                        <label for="first-name-column" class="form-label">End Time *</label>
+                                                        <input class="form-control" type="time" autocomplete="off" asp-for="TimeEnd" name="TimeEnd" placeholder="Enter Time Finish" />
+                                                    </div>
+                                                </div>
+                                                @* == *@
+
+                                                @* == Extra Form == *@
+                                                <div class="col-md-12 mt-3">
+
+                                                    <div class="section_formd">
+                                                        <h4 class="section_formd_title"> Update Information </h4>
+                                                        <div class="row">
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label>Booking Status</label>
+                                                                    @Html.DropDownListFor(x => x.BookingStatus, ViewBag?.BookingStatus as IEnumerable<SelectListItem>, "All Status", new { @class = "form-control form-select", @id = "BookingStatus", @Name = "BookingStatus", required = "Select Booking Status" })
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">User group</label>
+                                                                    @Html.DropDownListFor(x => x.userGroup, ViewBag?.UserGroup as IEnumerable<SelectListItem>, "All User Group", new { @class = "form-control form-select", @id = "userGroup", @Name = "userGroup", required = "Select User Group" })
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">No. Attending</label>
+                                                                    <input type="text" class="form-control" placeholder="Enter No. Attending here" name="ContactName" asp-for="NumberOfAttending" value="">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div>
+                                                                    <div class="form-group">
+                                                                        <label for="first-name-column">Client</label>
+                                                                        @Html.DropDownListFor(x => x.ClientId, ViewBag?.UserList as IEnumerable<SelectListItem>, "All Clients", new { @class = "form-control form-select", @id = "ClientId", @Name = "ClientId" })
+
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @* == *@
+
+                                            </div>
+                                            <div class="row">
+                                                @*<div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <div class="checkbox">
+                                                                <input type="checkbox" class="form-check-input">
+                                                                <label for="RoomType">
+                                                                    Exclude Cancellations From report
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <div class="checkbox">
+                                                                <input type="checkbox" class="form-check-input">
+                                                                <label for="EquipmentRequirment">
+                                                                    Exclude Sponsors
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+                                                <div class="col-md-12 mt-3">
+                                                    <div class="section_formd">
+                                                        <h4 class="section_formd_title"> Exclude </h4>
+                                                        <div class="row">
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <input type="checkbox" asp-for="ExcludeMonday" class="form-check-input">
+                                                                        <label for="ExcludeMonday">
+                                                                            Monday
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <input type="checkbox" asp-for="ExcludeTuesday" class="form-check-input">
+                                                                        <label for="ExcludeTuesday">
+                                                                            Tuesday
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <input type="checkbox" asp-for="ExcludeWednesday" class="form-check-input">
+                                                                        <label for="ExcludeWednesday">
+                                                                            Wednesday
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <input type="checkbox" asp-for="ExcludeThursday" class="form-check-input">
+                                                                        <label for="ExcludeThursday">
+                                                                            Thursday
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <input type="checkbox" asp-for="ExcludeFriday" class="form-check-input">
+                                                                        <label for="ExcludeFriday">
+                                                                            Friday
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <input type="checkbox" asp-for="ExcludeSaturday" class="form-check-input">
+                                                                        <label for="ExcludeSaturday">
+                                                                            Saturday
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                                <div class="form-group">
+                                                                    <div class="checkbox">
+                                                                        <input type="checkbox" asp-for="ExcludeSunday" class="form-check-input">
+                                                                        <label for="ExcludeSunday">
+                                                                            Sunday
+                                                                        </label>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+
+                                                @*<div class="col-md-3">
+                                                        <div class="form-group">
+                                                            <div class="checkbox">
+                                                                <input type="checkbox" id="CateringDetail" class="form-check-input">
+                                                                <label for="CateringDetail">
+                                                                    Exclude Bank Holidays
+                                                                </label>
+                                                            </div>
+                                                        </div>
+                                                    </div>*@
+
+                                                <div class="col-12 d-flex justify-content-end mb-3">
+                                                    <button type="button" id="btnSearch" class="btn btn-primary mr-3">
+                                                        Search
+                                                    </button>
+                                                    <button type="button" id="btnClear" class="btn btn-primary mr-3">
+                                                        Clear
+                                                    </button>
+                                                    <a id="btnAddNewUserGroup" href="/ClientAdmin/Dashboard/index" class="btn btn-primary">
+                                                        Exit
+                                                    </a>
+                                                </div>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+
+                            </div>
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class='table table-bordered table-striped roomavl_info' id="tblRmAvl">
+                                        <thead>
+                                            <tr>
+                                                <th> Expand</th>
+                                                <th> Date </th>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+
+                            <div class="col-12 d-flex justify-content-center mt-3 s_buttons">
+                                @*<button type="button" id="ExportRoomAvaReport" class="btn btn-primary mr-3">
+                                    Room Availability Report
+                                </button>*@
+                                <button type="button" id="IntExtBooking" class="btn btn-primary mr-3">
+                                    New Internal/External Booking
+                                </button>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<script src="https://cdn.jsdelivr.net/gh/linways/table-to-excel@v1.0.4/dist/tableToExcel.js"></script>
+
+@section Scripts{
+    <script src="~/js/jquery.timepicker.js"></script>
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/xlsx/0.17.2/xlsx.full.min.js" integrity="sha512-DaMQrMxgirR5T0Zu+d7EABoP1uD7e2Sv6OBjifMM8RADf1orW42COfJgwZ8xsLRV6NhgR/erzCfodeqJmA3NtA==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+
+    <script>
+        var roomAvailiblitiesLST = [];
+
+        $(document).off("click", "#IntExtBooking");
+        $(document).on("click", "#IntExtBooking", function () {
+            window.location.href = `/ClientAdmin/InternalBooking/Index`;
+        });
+
+        $(document).off("click", "#ExportRoomAvaReport");
+        $(document).on("click", "#ExportRoomAvaReport", function () {
+            //let table = document.querySelector("#tblRmAvl");
+            //TableToExcel.convert(table);
+            var roomTypeId = $("#roomTypeId").val();
+            var ClientId = $("#ClientId").val();
+            var maxPerson = $("#maxPerson").val();
+            var NumberOfAttending = $("#NumberOfAttending").val();
+            var BookingStatus = $("#BookingStatus").val();
+            var startDate = $("#startDate").val();
+            var endDate = $("#endDate").val();
+            var userGroup = $("#userGroup").val();
+            var TimeStart = $("#TimeStart").val();
+            var TimeEnd = $("#TimeEnd").val();
+            var ExcludeSunday = $("#ExcludeSunday").prop("checked");
+            var ExcludeMonday = $("#ExcludeMonday").prop("checked");
+            var ExcludeTuesday = $("#ExcludeTuesday").prop("checked");
+            var ExcludeWednesday = $("#ExcludeWednesday").prop("checked");
+            var ExcludeThursday = $("#ExcludeThursday").prop("checked");
+            var ExcludeFriday = $("#ExcludeFriday").prop("checked");
+            var ExcludeSaturday = $("#ExcludeSaturday").prop("checked");
+
+            window.location.href = "/ClientAdmin/RoomAvailability/GetRoomAvailiblityDownloadExcel?roomTypeId=" + roomTypeId + "&startDate=" + startDate +
+                "&endDate=" + endDate + "&maxPerson=" + maxPerson + "&userGroup=" + userGroup + " &BookingStatus=" + BookingStatus + "&ClientId=" + ClientId +
+                "&NumberOfAttending=" + NumberOfAttending +
+
+                "&TimeStart=" + TimeStart +
+                "&TimeEnd=" + TimeEnd +
+                "&ExcludeSunday=" + ExcludeSunday +
+                "&ExcludeMonday=" + ExcludeMonday +
+                "&ExcludeTuesday=" + ExcludeTuesday +
+                "&ExcludeWednesday=" + ExcludeWednesday +
+                "&ExcludeThursday=" + ExcludeThursday +
+                "&ExcludeFriday=" + ExcludeFriday +
+                "&ExcludeSaturday=" + ExcludeSaturday;
+
+        });
+
+
+
+        $(document).ready(function () {
+
+            $('#TimeStart').timepicker({
+                'show2400': true,
+                'timeFormat': 'H:i',
+                format: 'hh:mm',
+                allowInputToggle: true,
+                'step': 60,
+                'disableTextInput': false,
+                'minTime': '1:00',
+                'maxTime': '23:00'
+            });
+
+            $("#TimeStart").on("changeTime", function () {
+
+                $("#TimeEnd").val('');
+
+                $('#TimeEnd').timepicker({
+                    'show2400': true,
+                    'timeFormat': 'H:i',
+                    format: 'hh:mm',
+                    allowInputToggle: true,
+                    'step': 60,
+                    'disableTextInput': false,
+                    'minTime': moment($("#TimeStart").val(), "hh:mm").add(60, 'minutes').format("hh:mm"),
+                    'maxTime': '23:00',
+                    'showDuration': false
+                });
+
+            });
+
+            $(document).off("change", "#TimeEnd");
+            $(document).on("change", "#TimeEnd", function () {
+
+                var result = new Date('1/1/1999 ' + $("#TimeEnd").val()) > new Date('1/1/1999 ' + $("#TimeStart").val());
+                if (!result) {
+                    $("#TimeEnd").val('');
+                    swal("error", "Invalid finish time");
+                    $("#btnSearch").hide();
+                } else {
+                    $("#btnSearch").show();
+                }
+            });
+
+
+
+
+
+
+
+
+            var d = new Date();
+            var currMonth = d.getMonth();
+            var currYear = d.getFullYear();
+            var currDate = d.getDate();
+
+            var startDate = new Date(currYear, currMonth, currDate);
+
+            $('.form_date').datetimepicker({
+                language: 'en',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0,
+                pickerPosition: "bottom-left"
+            });
+
+            if ($("#startDate").val() == "") {
+                $(".form_date").datetimepicker("setDate", startDate);
+            }
+
+            if ($("#endDate").val() == "") {
+                $(".form_date").datetimepicker("setDate", startDate);
+            }
+
+
+        });
+
+        $("#endDate").on("change", function () {
+
+            CheckDateValidation();
+
+        });
+
+        function CheckDateValidation() {
+
+            if ($("#startDate").val() > $("#endDate").val()) {
+                Integr8ed.HandleResponse({ status: 0, message: "End Date is not minimum than Start Date !", data: null });
+                $("#btnSearch").hide();
+                $("#endDate").val("");
+                return false;
+            }
+            else {
+                $("#btnSearch").show();
+                return true;
+            }
+        }
+
+        $(document).off("click", "#btnSearch");
+        $(document).on("click", "#btnSearch", function () {
+
+            if (($("#TimeStart").val() != "" || $('#TimeEnd').val() != "") && $('#TimeEnd').val() != "" && $("#TimeStart").val() != "") {
+                $("#btnSearch").show();
+
+
+                //bindRmAvl("#tblRmAvl");
+                BindTable();
+                return true;
+            }
+            else {
+                Integr8ed.HandleResponse({ status: 0, message: "Please fill required field first !", data: null });
+                $("#btnSearch").hide();
+                return false;
+            }
+        });
+
+        $(document).off("click", "#btnClear");
+        $(document).on("click", "#btnClear", function () {
+            $.each($(document).find("#collapseOnesss input,select,checkbox"), function (key, ele) {
+                $(ele).val("");
+                $(ele).prop('checked', false);;
+            });
+        });
+
+
+        function compareTime(str1, str2) {
+
+            if (str1 === str2) {
+                return 1;
+            }
+            var time1 = str1.split(':');
+            var time2 = str2.split(':');
+            if (eval(time1[0]) > eval(time2[0])) {
+
+                return 1;
+            }
+            if (eval(time1[0]) == eval(time2[0]) && eval(time1[1]) >= eval(time2[1])) {
+                return 1;
+            }
+            return -1;
+
+        }
+
+        function bindRmAvl(TableId) {
+            var formData = {
+                roomTypeId: $("#roomTypeId").val(),
+                ClientId: $("#ClientId").val(),
+                maxPerson: $("#maxPerson").val(),
+                NumberOfAttending: $("#NumberOfAttending").val(),
+                BookingStatus: $("#BookingStatus").val(),
+                startDate: $("#startDate").val(),
+                endDate: $("#endDate").val(),
+                userGroup: $("#userGroup").val(),
+                TimeStart: $("#TimeStart").val(),
+                TimeEnd: $("#TimeEnd").val(),
+                ExcludeSunday: $("#ExcludeSunday").prop("checked"),
+                ExcludeMonday: $("#ExcludeMonday").prop("checked"),
+                ExcludeTuesday: $("#ExcludeTuesday").prop("checked"),
+                ExcludeWednesday: $("#ExcludeWednesday").prop("checked"),
+                ExcludeThursday: $("#ExcludeThursday").prop("checked"),
+                ExcludeFriday: $("#ExcludeFriday").prop("checked"),
+                ExcludeSaturday: $("#ExcludeSaturday").prop("checked")
+            };
+
+            $.ajax({
+                url: "/ClientAdmin/RoomAvailability/GetRoomAvailiblity",
+                data: formData,
+                type: "GET",
+                success: function (response) {
+                    $("#tblRmAvl thead").html("");
+                    $("#tblRmAvl tbody").html("");
+
+                    if (response.iTotalRecords > 0 && response.aaData) {
+
+                        var timearr = ["01:00", "02:00", "03:00", "04:00", "05:00", "06:00", "07:00", "08:00", "09:00", "10:00", "11:00", "12:00", "13:00", "14:00", "15:00", "16:00", "17:00", "18:00", "19:00", "20:00", "21:00", "22:00", "23:00", "24:00"];
+                        var finalHtml;
+                        var finalHeader = "<tr><td>Date</td><td>Room Name</td>";
+                        var paramTimeArray = new Array();
+                        $(timearr).each(function (key, ele) {
+
+                            var isMatched = $.grep(response.aaData, function (svalue) {
+                                return (compareTime(ele, svalue.startTime) == 1 && compareTime(svalue.endTime, ele) == 1)
+                            });
+
+                            if (isMatched.length != 0) {
+                                finalHeader += "<td>" + ele + "</td>";
+                                paramTimeArray.push(ele);
+                            }
+                        });
+
+                        finalHeader += "</tr>";
+
+                        $(response.aaData).each(function (key, ele) {
+                            finalHtml += "<tr><td>" + ele.bookingDate + "</td><td>" + ele.title + "</td>";
+                        });
+
+                        $(paramTimeArray).each(function (key, val) {
+                            var isMatched = $.grep(response.aaData, function (svalue) {
+                                return (compareTime(val, svalue.b_StartTime) == 1 && compareTime(svalue.b_FinishTime, val) == 1)
+                            });
+
+                            if (isMatched.length != 0) {
+                                finalHtml += "<td style='background: #ff0000'></td>";
+                            } else {
+                                finalHtml += "<td></td>";
+                            }
+
+                        });
+
+                        finalHtml += "</tr>";
+
+                        $("#tblRmAvl thead").append(finalHeader);
+                        $("#tblRmAvl tbody").append(finalHtml);
+                    }
+                },
+                error: function (data) {
+                }
+            });
+
+        };
+
+
+        function BindTable() {
+            var first = moment($("#startDate").val(), "DD-MM-YYYY").format("YYYY-MM-DD");
+            var second = moment($("#endDate").val(), "DD-MM-YYYY").format("YYYY-MM-DD");
+            second = moment(moment(second, "YYYY-MM-DD").add(1, "days"), "YYYY-MM-DD");
+            $("#tblRmAvl tbody").html("");
+
+            var ExcludeSunday = $("#ExcludeSunday").prop("checked");
+            var ExcludeMonday = $("#ExcludeMonday").prop("checked");
+            var ExcludeTuesday = $("#ExcludeTuesday").prop("checked");
+            var ExcludeWednesday = $("#ExcludeWednesday").prop("checked");
+            var ExcludeThursday = $("#ExcludeThursday").prop("checked");
+            var ExcludeFriday = $("#ExcludeFriday").prop("checked");
+            var ExcludeSaturday = $("#ExcludeSaturday").prop("checked");
+            while (moment(first).isSame(second) == false) {
+                var tr = document.createElement('tr');
+                var td1 = document.createElement('td')
+                var td2 = document.createElement('td')
+                var headerText = document.createElement('label');
+                $(headerText).text(moment(first, "YYYY-MM-DD").format("DD-MM-YYYY"));
+                $(td1).append(`<label class="Expandbooking" data-date="${moment(first, "YYYY-MM-DD").format("YYYY-MM-DD")}"><i class="fas fa-plus-circle"></i></label>`);
+                $(td2).append(headerText);
+                $(tr).append(td1);
+                $(tr).append(td2);
+
+                if (ExcludeMonday && moment(first, "YYYY-MM-DD").day() == 1) { }
+                else if (ExcludeTuesday && moment(first, "YYYY-MM-DD").day() == 2) { }
+                else if (ExcludeWednesday && moment(first, "YYYY-MM-DD").day() == 3) { }
+                else if (ExcludeThursday && moment(first, "YYYY-MM-DD").day() == 4) { }
+                else if (ExcludeFriday && moment(first, "YYYY-MM-DD").day() == 5) { }
+                else if (ExcludeSaturday && moment(first, "YYYY-MM-DD").day() == 6) { }
+                else if (ExcludeSunday && moment(first, "YYYY-MM-DD").day() == 0) { } else {
+
+                    $("#tblRmAvl tbody").append(tr);
+                }
+                first = moment(moment(first, "YYYY-MM-DD").add(1, "days"), "YYYY-MM-DD");
+            }
+
+
+
+        }
+
+        function compareTime(str1, str2) {
+
+            if (str1 === str2) {
+                return 1;
+            }
+            var time1 = str1.split(':');
+            var time2 = str2.split(':');
+            if (eval(time1[0]) > eval(time2[0])) {
+
+                return 1;
+            }
+            if (eval(time1[0]) == eval(time2[0]) && eval(time1[1]) >= eval(time2[1])) {
+                return 1;
+            }
+            return -1;
+
+
+        }
+
+
+        $(document).off("click", ".CloseBooking");
+        $(document).on("click", ".CloseBooking", function () {
+            $(this).addClass("Expandbooking");
+            $(this).removeClass("CloseBooking");
+            $($(this).find(".fa-minus-circle")).addClass("fa-plus-circle");
+            $($(this).find(".fa-minus-circle")).removeClass("fa-minus-circle");
+            $("#avlTempTable_TD").remove();
+        });
+
+
+        $(document).off("click", ".Expandbooking");
+        $(document).on("click", ".Expandbooking", function () {
+
+            $.each($(document).find(".fa-minus-circle"), function (key, val) {
+                $(val).addClass("fa-plus-circle");
+                $(val).removeClass("fa-minus-circle");
+            });
+
+
+
+            $(this).addClass("CloseBooking")
+            $(this).removeClass("Expandbooking")
+            $($(this).find(".fa-plus-circle")).addClass("fa-minus-circle");
+            $($(this).find(".fa-plus-circle")).removeClass("fa-plus-circle");
+            var bookingDate = $(this).data("date");
+            var currentRow = this;
+
+            var formData = {
+                roomTypeId: $("#roomTypeId").val(),
+                clientId: $("#ClientId").val(),
+                maxPerson: $("#maxPerson").val(),
+                numberOfAttending: $("#NumberOfAttending").val(),
+                bookingStatus: $("#BookingStatus").val(),
+                userGroup: $("#userGroup").val(),
+                bookingDate: bookingDate,
+                maxPerson: $("#maxPerson").val(),
+            };
+
+            $.ajax({
+                url: `/ClientAdmin/RoomAvailability/GetbookingTableList`,
+                type: "POST",
+                data: { model: formData },
+                success: function (response) {
+
+                    var sTime = parseInt($("#TimeStart").val().split(":")[0]);
+                    var fTime = parseInt($("#TimeEnd").val().split(":")[0]);
+                    var timeSlot = new Array();
+                    while (sTime <= fTime) {
+                        if (sTime.toString().length > 1) {
+                            timeSlot.push(sTime + ":00");
+                        } else {
+                            timeSlot.push("0" + sTime + ":00");
+                        }
+                        sTime++;
+                    }
+                    var tdel = ``;
+                    var ttime = ``;
+
+
+                    if (response != "") {
+
+                        var trow = "";
+                        $.each(response, function (key, v) {
+
+                            tdel = "";
+                            $.each(timeSlot, function (k, val) {
+                                if (compareTime(val, v.startTime) == 1 && compareTime(v.endTime, val) == 1) {
+
+                                    tdel += `<td class="slot_highlight">${val}</td>`;
+
+                                }
+                                else {
+                                    if (val != "")
+                                        tdel += `<td>${val}</td>`;
+                                }
+                            });
+
+
+                            trow += `<tr><td class="slot_title">${v.roomTitle}</td>${tdel}</tr>`
+                        });
+                        var tEle = `<tr id="avlTempTable_TD"><td colspan="2" ><div class="table-responsive"><table class="custom_slot_table" id="avlTempTable"><tbody>${trow}</tbody></table><button class="form-control btnExcel">Download Excel</button></div></td></tr>`;
+                        $("#avlTempTable_TD").remove();
+
+                        var currIndex = $($(currentRow).parent().parent()).index();
+
+
+                        $("#tblRmAvl > tbody > tr").eq(currIndex).after(tEle);
+                        
+                    }
+
+
+                },
+                error: function (response) { }
+
+            });
+        });
+
+      
+
+        var tableToExcel = (function () {
+                                var style = `<style>.custom_slot_table {
+                        width: 100%;
+                        position: relative;
+                        margin: 0 0 5px 0;
+                    }
+                    .custom_slot_table tbody {
+                    
+                    }
+                        .custom_slot_table tr {
+                            border-bottom: 1px solid #dddddd;
+                        }
+                        .custom_slot_table tr:first-child {
+                            border-top: 1px solid #dddddd;
+                        }
+                        .custom_slot_table tr td {
+                            border-left: 1px solid #dddddd;
+                            padding: 10px 10px;
+                        }
+                            .custom_slot_table tr td:last-child {
+                                border-right: 1px solid #dddddd;
+                            }
+                        .custom_slot_table tr th {
+                            padding: 10px 10px;
+                        }
+                    .slot_title {
+                        font-size: 14px;
+                        font-weight: 500;
+                        color: #222222;
+                    }
+                    .slot_highlight {
+                        background-color: #0366d6;
+                        color: #ffffff;
+                    }</style>`;
+            var uri = 'data:application/vnd.ms-excel;base64,'
+                , template = '<html xmlns:o="urn:schemas-microsoft-com:office:office" xmlns:x="urn:schemas-microsoft-com:office:excel" xmlns="http://www.w3.org/TR/REC-html40"><head><!--[if gte mso 9]><xml><x:ExcelWorkbook><x:ExcelWorksheets><x:ExcelWorksheet><x:Name>{worksheet}</x:Name><x:WorksheetOptions><x:DisplayGridlines/></x:WorksheetOptions></x:ExcelWorksheet></x:ExcelWorksheets></x:ExcelWorkbook></xml><![endif]-->' + style + '</head><body><table>{table}</table></body></html>'
+                , base64 = function (s) {
+                    return window.btoa(unescape(encodeURIComponent(s)))
+                }
+                , format = function (s, c) {
+                    return s.replace(/{(\w+)}/g, function (m, p) { return c[p]; })
+                }
+            return function (table, name) {
+                if (!table.nodeType) table = document.getElementById(table)
+                var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+                window.location.href = uri + base64(format(template, ctx))
+            }
+        })();
+
+
+        $(document).off("click", ".btnExcel");
+        $(document).on("click", ".btnExcel", function () {
+
+            tableToExcel('avlTempTable', 'RoomAvailiblity');
+
+            //code for export excel without styling 
+
+            //let data = document.getElementById('avlTempTable');
+            //var fp = XLSX.utils.table_to_book(data, { sheet: 'Rooms' });
+            //XLSX.write(fp, {
+            //    booktype: 'xlsx',
+            //    type: 'base64',
+            //    cellStyles:true
+            //});
+            //XLSX.writeFile(fp, 'RoomAvailiblity.xlsx', { cellStyles: true});
+        });
+    </script>
+
+}
+

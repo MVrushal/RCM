@@ -1,0 +1,401 @@
+﻿@model Integr8ed.Service.Dto.CallLogsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmCallLog" asp-action="AddEditCallLog" asp-controller="Internalbooking" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Call Log</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            @*<input type="hidden" asp-for="EntryType" />*@
+            <input type="hidden" asp-for="EntryDate" />
+            <input type="hidden" asp-for="NextconDate" />
+            <div class="row">
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Subject * </label>
+                        <input type="text" asp-for="Subject" name="Subject" class="form-control" placeholder="Enter Subject here">
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group ">
+                        @if (!ViewBag.IsEntryTypeEmpty)
+                        {
+                            <label>Select Entry Type *</label>
+
+                            @Html.DropDownListFor(x => x.EntryType, ViewBag?.EntryTypeList as IEnumerable<SelectListItem>, "Select Entry Type", new { @class = "form-control form-select", @id = "EntryType", @Name = "EntryType", required = "Select Entry Type" })
+                        }
+                        else
+                        {
+                            <label style="color:red">Please Add Entry Type First !</label>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group input-append date form_datetime">
+                        <label for="first-name-column">Date of entry *</label>
+                        <div class="input-group date form_date col-md-5" data-date="DateOfentry" data-date-format="dd MM yyyy" data-link-field="DateOfentry" data-link-format="yyyy-mm-dd">
+                            <input class="form-control" size="16" readonly asp-for="DateOfentry" autocomplete="off" name="DateOfentry" id="DateOfentry" type="text" placeholder="Enter Next Contact Date here">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-md-6">
+            <div class="form-group input-append date form_datetime">
+                <label for="first-name-column">Time *</label>
+                <div class="input-group date form_time col-md-5" data-date="Time" data-date-format="hh:ii" data-link-field="Time" data-link-format="hh:ii">
+                    <input class="form-control" asp-for="Time" name="Time" id="Time" size="16" type="text" placeholder="Enter Time here">
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                    <span class="input-group-addon"><span class="glyphicon glyphicon-time"></span></span>
+                </div>
+            </div>
+        </div>*@
+                @*<div class="col-md-6">
+            <div class="form-group input-append date form_datetime">
+                <label for="first-name-column">Time *</label>
+                <div class="input-group">
+                    <input class="form-control timepicker" asp-for="Time" name="Time" type="time" placeholder="Enter Time here">
+                </div>
+            </div>
+        </div>*@
+                @*<div class="col-md-6" id="datePicker-input">
+            <div class="form-group position-relative">
+                <label for="first-name-column">Time *</label>
+                <input type="text" asp-for="Time" onclick="timepicker();" name="Time" class="form-control" placeholder="Enter Time here">
+                <div class="timepicker" id="datePicker-view">
+                    <div class="top">
+                        <span class="h"></span>:<span class="m"></span>
+                    </div>
+                    <div class="circle">
+                    </div>
+                    <div class="actions">
+                        <div class="action cancel">Cancel</div>
+                        <div class="action ok">OK</div>
+                    </div>
+                </div>
+            </div>
+        </div>*@
+                <div class="col-md-6 col-sm-6">
+                    <div class="show-input form-group w-100 p-0">
+                        <label for="first-name-column">Time *</label>
+                        <input type="text" asp-for="Time" readonly name="Time" class="form-control" placeholder="Click To See The Watch" autocomplete="off">
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Contact *</label>
+                        <input type="number" asp-for="Contact" name="Contact" class="form-control" placeholder="Enter Contact here">
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">PostCode *</label>
+                        <input type="text" asp-for="PostCode" name="PostCode" class="form-control" placeholder="Enter PostCode here">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        @if (!ViewBag.IsUserEmpty)
+                        {
+                            <label>Select Taken For *</label>
+
+                            @Html.DropDownListFor(x => x.TakenFor, ViewBag?.UserList as IEnumerable<SelectListItem>, "Select Taken For", new { @class = "form-control form-select", @id = "TakenFor", @Name = "TakenFor", required = "Select Taken For" })
+                        }
+                        else
+                        {
+                            <label style="color:red">Please Add Taken For First !</label>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group input-append date form_datetime">
+                        <label for="first-name-column">Next Contact Date *</label>
+                        <div class="input-group date form_date col-md-5" data-date="NextContactDate" data-date-format="dd MM yyyy" data-link-field="NextContactDate" data-link-format="yyyy-mm-dd">
+                            <input class="form-control" size="16" readonly asp-for="NextContactDate" name="NextContactDate" id="NextContactDate" type="text" placeholder="Enter Next Contact Date here" autocomplete="off">
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-6">
+                    <div class="form-group">
+                        @if (!ViewBag.IsUserEmpty)
+                        {
+                            <label>Select Taken By *</label>
+
+                            @Html.DropDownListFor(x => x.TakenBy, ViewBag?.UserList as IEnumerable<SelectListItem>, "Select Taken By", new { @class = "form-control form-select", @id = "TakenBy", @Name = "TakenBy", required = "Select Taken By" })
+                        }
+                        else
+                        {
+                            <label style="color:red">Please Add Taken By First !</label>
+                        }
+                    </div>
+                </div>
+                <div class="col-md-6 check_box_center">
+                    <div class="checkbox">
+                        <input type="checkbox" id="ISCompleted" name="ISCompleted" asp-for="ISCompleted" class="form-check-input">
+                        <label for="ISCompleted">
+                            Is Completed ?
+                        </label>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Address *</label>
+                        <textarea class="form-control" asp-for="Address" name="Address" id="exampleFormControlTextarea1" placeholder="Enter Address here" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea2">Comments</label>
+                        <textarea class="form-control" asp-for="Comments" name="Comments" id="exampleFormControlTextarea2" placeholder="Enter Comments here" rows="3"></textarea>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+          if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        $("#datePicker-view").hide();
+        $("#DateOfentry").val($("#EntryDate").val());
+        $("#NextContactDate").val($("#NextconDate").val());
+
+        var validationresult = $("#frmCallLog").validate({
+            onfocusout: false,
+            rules: {
+                "Subject": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "EntryType": {
+                    required: true,
+                    maxlength: 5,
+                    min: 0,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "DateOfentry": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Time": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Contact": {
+                    required: true,
+                    maxlength: 12,
+                    min: 10,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Address": {
+                    required: true,
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Comments": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "PostCode": {
+                    required: true,
+                    maxlength: 10,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "TakenBy": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "TakenFor": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "NextContactDate": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+
+            },
+            messages: {
+                "Subject": {
+                    required: "Please enter a  Subject",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Subject already exist !"
+                },
+                "EntryType": {
+                    required: "Please enter a  Entry Type",
+                    min: "Invalid Entry Type",
+                    maxlength: "More than 5 characters are not allowed !"
+                },
+                "DateOfentry": {
+                    required: "Please enter a  Date of Entry"
+                },
+                "Time": {
+                    required: "Please enter a  Time"
+                },
+                "Contact": {
+                    required: "Please enter a  Contact",
+                    min: "Invalid Contact",
+                    maxlength: "More than 12 digits are not allowed !"
+                },
+                "Address": {
+                    required: "Please enter a  Address",
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "Comments": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "PostCode": {
+                    required: "Please enter a  PostCode",
+                    maxlength: "More than 10 characters are not allowed !"
+                },
+                "TakenBy": {
+                    required: "Please enter a Taken By",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "TakenFor": {
+                    required: "Please enter a Taken For",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "NextContactDate": {
+                    required: "Please enter a Next Contact Date"
+                }
+            },
+            submitHandler: function (form) {
+                $("#EntryType").val($("#EntryType").val());
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblCallLog");
+                        return false;
+
+                    }
+                });
+
+            }
+        });
+
+
+        if ('@ViewBag.IsUserEmpty' == "True") {
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }
+        else if ('@ViewBag.IsEntryTypeEmpty' == "True") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+
+            $("#btnSave").hide();
+        }
+        else {
+             if ($("#IsView").val() == "true") {
+                var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", true);
+                });
+                 $("#EntryType").prop("disabled", true);
+                 $("#TakenBy").prop("disabled", true);
+                $("#btnSave").hide();
+            }
+            else {
+                var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", false);
+                });
+                $("#btnSave").show();
+            }
+        }
+
+    });
+
+    var d = new Date();
+    var currMonth = d.getMonth();
+    var currYear = d.getFullYear();
+    var currDate = d.getDate();
+
+    var startDate = new Date(currYear, currMonth, currDate);
+
+
+    $('.form_date').datetimepicker({
+        language: 'en',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        pickerPosition: "bottom-left"
+    });
+    if ($("#EntryDate").val() == "") {
+        $(".form_date").datetimepicker("setDate", startDate);
+    }
+    if ($("#NextconDate").val() == "") {
+        $(".form_date").datetimepicker("setDate", startDate);
+    }
+
+    $("input[name=Time]").clockpicker({
+  placement: 'bottom',
+  align: 'left',
+  autoclose: true,
+  default: 'now',
+  donetext: "Select"
+});
+
+</script>

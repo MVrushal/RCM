@@ -1,0 +1,98 @@
+﻿@model Integr8ed.Service.Dto.CompanyDetailViewModel
+
+<div class="modal-content">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">Add New Admin</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+    <form id="companyForm" class="form form-vertical">
+        <div class="modal-body">
+            <div class="form-body">
+                <div class="row">
+                    <input type="hidden" id="Id" name="Id" value="Id" asp-for="Id" />
+                    @*@Html.HiddenFor(Model => Model.Id)*@
+                    <h6 class="text-danger">@TempData["isCompanyDetailExist"]</h6>
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+                    <div class="col-md-6">
+                        <div class="form-group mb-3 custom_n_form">
+                            <label asp-for="Name">First Name</label>
+                            <div class="custom_n_form_l">
+                                @if (Model.PersonTitleDtos != null)
+                                {
+                                    <select asp-for="PersonTitleId"
+                                            class="form-control"
+                                            asp-items="@(new SelectList(Model.PersonTitleDtos,"Id", "Title"))">
+                                    </select>
+                                }
+                                <input type="text" asp-for="Name" class="form-control" aria-label="Text input with dropdown button">
+                            </div>
+                            <span asp-validation-for="Name" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="SurName">SurName</label>
+                            <input type="text" asp-for="SurName" class="form-control">
+                            <span asp-validation-for="SurName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="Email">Email</label>
+                            <input type="email" asp-for="Email" class="form-control">
+                            <span asp-validation-for="Email" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="Password">Password</label>
+                            <input type="password" asp-for="Password" class="form-control">
+                            <span asp-validation-for="Password" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="OrganisationName">Organisation Name</label>
+                            <input type="text" class="form-control" asp-for="OrganisationName">
+                            <span asp-validation-for="OrganisationName" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="Address">Address</label>
+                            <textarea class="form-control" asp-for="Address" rows="3"></textarea>
+                            <span asp-validation-for="Address" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="PostCode">Post Code</label>
+                            <input type="text" class="form-control" asp-for="PostCode">
+                            <span asp-validation-for="PostCode" class="text-danger"></span>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="Telephone">Telephone</label>
+                            <input type="text" class="form-control" asp-for="Telephone">
+                            <span asp-validation-for="Telephone" class="text-danger"></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <input type="button" onclick="SaveData();" id="btnsubmit" value="Save" class="btn btn-primary" />
+        </div>
+    </form>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+
+}

@@ -1,0 +1,1047 @@
+﻿@model Integr8ed.Service.Dto.BookingDetailsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using static Integr8ed.Enums.Enum;
+
+
+<div class="modal-content">
+    <form id="frmInternalbooking" asp-action="AddEditBookingDetails" asp-controller="InternalBooking" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">New Booking Details</h5>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-header mb-0">
+            @if (@Model.Id != 0)
+            {
+            <span class="ml-1"><span>Booked By : <b>@ViewBag.CreatedUserName</b></span> <span class="ml-2">  Created Date :  <b>@ViewBag.CreatedDate</b></span></span>
+            }
+        </div>
+        <div class="modal-body">
+            <div class="form-body">
+
+
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IsView" />
+                <input type="hidden" asp-for="BookingDateForDisplay" />
+                <input type="hidden" asp-for="IsInternalBooking" />
+
+
+                <div id="ReqVal" class="text-danger"></div>
+                <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+
+                    <div class="k-custom-accordian">
+                        <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingOne">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseOne1" aria-expanded="true" aria-controls="collapseOne1">
+                                            User & Meeting Details
+                                        </a>
+                                    </h4>
+
+                                </div>
+                                <div id="collapseOne1" class="panel-collapse collapse in" role="tabpanel" aria-labelledby="headingOne">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6" id="IsExtBook">
+                                                <div class="form-group">
+                                                    <input type="checkbox" name="IsExternalBooking" id="IsExternalBooking" class="form-check-input">
+                                                    <label for="ReturnedBookingForm">
+                                                        Is External Booking
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6" id="UserList">
+                                                <div class="form-group">
+                                                    @if (!ViewBag.IsUserEmpty)
+                                                    {
+                                                        <label>Select User *</label>
+
+                                                        @Html.DropDownListFor(x => x.ExternalBookingClientId, ViewBag?.UserList as IEnumerable<SelectListItem>, "Select User", new { @class = "form-control form-select", @id = "ExternalBookingClientId", @Name = "ExternalBookingClientId" })
+
+                                                    }
+
+                                                    else
+                                                    {
+                                                        <label style="color:red">Please Add User First !</label>
+                                                    }
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="form-group">
+                                                    @if (!ViewBag.IsUserGroupEmpty)
+                                                    {
+                                                        <label>User Group *</label>
+
+                                                        @Html.DropDownListFor(x => x.UserGroupId, ViewBag?.UserGroup as IEnumerable<SelectListItem>, "Select User Group", new { @class = "form-control form-select", @id = "UserGroupId", @Name = "UserGroupId", required = "Select User Group" })
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <label style="color:red">Please Add User Group First !</label>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="form-group">
+                                                    @if (!ViewBag.IsMeetingTypeEmpty)
+                                                    {
+                                                        <label>Meeting type *</label>
+
+                                                        @Html.DropDownListFor(x => x.MeetingTypeId, ViewBag?.MeetingType as IEnumerable<SelectListItem>, "Select Meeting type", new { @class = "form-control form-select", @id = "MeetingTypeId", @Name = "MeetingTypeId", required = "Select Meeting type" })
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <label style="color:red">Please Add Meeting type First !</label>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6 col-sm-6">
+
+                                                <div class="form-group input-append date form_datetime">
+                                                    <label for="first-name-column">Booking Date *</label>
+
+                                                    <div class="input-group date form_date col-md-5">
+                                                        <input class="form-control" size="16" asp-for="BookingDateS" autocomplete="off" name="BookingDateS" type="text" readonly placeholder="Enter Booking Date here" />
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                    </div>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Title of Meeting *</label>
+                                                    <input type="text" class="form-control" name="TitleOfMeeting" asp-for="TitleOfMeeting" placeholder="Enter Title of Meeting here">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+
+
+                                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                                <div class="demo form-group">
+                                                    <label>Time Start *</label>
+                                                    <input class="form-control" type="time" autocomplete="off" asp-for="StartTime" name="StartTime" id="StartTime" placeholder="Enter Time Start here" />
+                                                    @*<input type="text" autocomplete="off" class="time form-control" asp-for="StartTime" name="StartTime" id="StartTime" placeholder="Enter Time Start here">*@
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                                <div class="demo form-group">
+                                                    <label>Time Finish *</label>
+                                                    <input class="form-control" type="time" autocomplete="off" asp-for="FinishTime" name="FinishTime" id="FinishTime" placeholder="Enter Time Finish" />
+                                                    @*<input type="text" class="time form-control" autocomplete="off" asp-for="FinishTime" name="FinishTime" id="FinishTime" placeholder="Enter Time Finish here">*@
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Car Spaces Req.</label>
+                                                    <input type="number" class="form-control" asp-for="CarSpaceRequired" name="CarSpaceRequired" placeholder="Enter Car Spaces Req. here">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-6 col-sm-6">
+                                                <div class="form-group">
+                                                    <label>No of Attending *</label>
+                                                    <input type="number" class="form-control" asp-for="NumberOfAttending" name="NumberOfAttending" placeholder="Enter No of Attending here">
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-4 col-sm-6 check_box_center">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" id="HouseKeepingRequired" asp-for="HouseKeepingRequired" name="HouseKeepingRequired" class="form-check-input">
+                                                    <label for="HouseKeepingRequired">
+                                                        HouseKeeping Required
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4 col-sm-6 check_box_center">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" id="SecurityRequired" asp-for="SecurityRequired" class="form-check-input">
+                                                    <label for="SecurityRequired">
+                                                        Security Required
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingTwo">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                            Room Details
+                                        </a>
+                                    </h4>
+
+                                </div>
+                                <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                                    <div class="panel-body">
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    @if (!ViewBag.IsRoomTypeEmpty)
+                                                    {
+                                                        <label>Room Type *</label>
+
+                                                        @Html.DropDownListFor(x => x.RoomTypeId, ViewBag?.RoomType as IEnumerable<SelectListItem>, "Select Room Type", new { @class = "form-control form-select", @id = "RoomTypeId", @Name = "RoomTypeId", required = "Select Room Type" })
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <label style="color:red">Please Add Room Type First !</label>
+                                                    }
+
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Cost *</label>
+                                                    <input type="text" class="form-control" asp-for="Cost" name="Cost" placeholder="Enter Cost here" readonly>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label for="LayoutInformation">Layout Information</label>
+                                                    <textarea class="form-control" id="LayoutInformation" rows="3" asp-for="LayoutInformation" name="LayoutInformation" placeholder="Enter Layout Information here"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-lg-4 col-md-6 col-sm-6 check_box_center">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" asp-for="TobeInvoiced" id="TobeInvoiced" name="TobeInvoiced" class="form-check-input">
+                                                    <label for="TobeInvoiced">
+                                                        To be Invoiced
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-sm-6 check_box_center">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" asp-for="TechnicianOnSite" name="TechnicianOnSite" id="TechnicianOnSite" class="form-check-input">
+                                                    <label for="TechnicianOnSite">
+                                                        Technician on Site?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-sm-6 check_box_center">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" asp-for="ReturnedBookingForm" name="ReturnedBookingForm" id="ReturnedBookingForm" class="form-check-input">
+                                                    <label for="ReturnedBookingForm">
+                                                        Returned Booking Form
+                                                    </label>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-4 col-md-6 col-sm-6 check_box_center">
+                                                <div class="checkbox">
+                                                    <input type="checkbox" asp-for="DisabledAccess" name="DisabledAccess" id="DisabledAccess" class="form-check-input">
+                                                    <label for="DisabledAccess">
+                                                        Disabled Access?
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="panel panel-default">
+                                <div class="panel-heading" role="tab" id="headingThree">
+                                    <h4 class="panel-title">
+                                        <a class="collapsed" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                            Booking Contact Details
+                                        </a>
+                                    </h4>
+
+                                </div>
+                                <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                                    <div class="panel-body">
+
+                                        <!-- New design -->
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Booking Contact Name*</label>
+                                                    <input type="text" class="form-control" asp-for="BookingContact" placeholder="Enter Booking Contact Name here">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Email Address</label>
+                                                    <input type="text" class="form-control" asp-for="Email" placeholder="Enter Email Address here">
+                                                </div>
+                                                <div class="form-group">
+                                                    <label>Mobile Number *</label>
+                                                    <input type="text" class="form-control" asp-for="Mobile" name="Mobile" placeholder="Enter Mobile here">
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Additional Information</label>
+                                                    <textarea class="form-control" id="AdditionalInformation" rows="5" asp-for="AdditionalInformation" name="AdditionalInformation" placeholder="Enter Additional Information here"></textarea>
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+
+                                                <div class="form-group">
+                                                    <label>Date Booking Form Sent</label>
+                                                    <input class="form-control" size="16" asp-for="DateFromSent" autocomplete="off" name="DateFromSent" type="text" readonly placeholder="Booking Form Sent Date " />
+                                                </div>
+
+                                                @*<div class="form-group input-append date " id="BookingDateS">
+                                                    <label for="first-name-column"> Date Booking Form Sent *</label>
+                                                    <div class="input-group date form_date col-md-5" data-date="DateFromSent" data-date-format="dd MM yyyy" data-link-field="DateFromSent" data-link-format="dd-mm-yyyy">
+                                                        <input class="form-control" readonly size="16" asp-for="DateFromSent" autocomplete="off" name="DateFromSent" id="DateFromSent" type="text" placeholder="Enter Date From Sent here">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                    </div>
+                                                </div>*@
+
+                                                <div class="form-group">
+                                                    @if (!ViewBag.IsBookingStatusEmpty)
+                                                    {
+                                                        <label>Booking Status *</label>
+
+                                                        @Html.DropDownListFor(x => x.BookingStatus, ViewBag?.BookingStatus as IEnumerable<SelectListItem>, "Select Booking Status", new { @class = "form-control form-select", @id = "BookingStatus", @Name = "BookingStatus", required = "Select Booking Status" })
+
+                                                    }
+                                                    else
+                                                    {
+                                                        <label style="color:red">Please Add Booking Status First !</label>
+                                                    }
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Cancellation Detail</label>
+                                                    <textarea class="form-control" id="CancellationDetail" rows="5" asp-for="CancellationDetail" name="CancellationDetail" placeholder="Enter Cancellation Detail here"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-12">
+                                                <div class="form-group">
+                                                    <label>Caterer Remark</label>
+                                                    <textarea class="form-control" id="CatererRemark" rows="1" asp-for="CatererRemark" name="CatererRemark" placeholder="Enter Caterer Remark here"></textarea>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                @if (@Model.Id != 0)
+                {
+                    <div>
+                        <button type="button" id="btnSave" class="btn btn-primary" onclick="BookingDetailsAsPDF(@Model.Id)">Create Booking Form</button>
+                        <button type="button" id="btnSave" class="btn btn-primary" onclick="EmailBookingDetails(@Model.Id)">Email Booking Form</button>
+                        <button type="button" id="btnSave" class="btn btn-primary" onclick="BookingInvoiceViewAsPDF(@Model.Id)">Create Invoice</button>
+                    </div>
+                }
+            </div>
+        </div>
+        <div class="modal-footer">
+            @if (Model.IsView == false)
+            {
+                <div>
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                    <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+                </div>
+            }
+
+        </div>
+    </form>
+</div>
+
+<script src="~/js/jquery.timepicker.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+
+<script type="text/javascript">
+
+    function callSweetMsg(msg) {
+
+        swal({ title: "", text: msg, icon: "success" });
+
+    }
+
+    function BookingDetailsAsPDF(id) {
+        window.location.href = "/ClientAdmin/Internalbooking/BookingDetailsAsPDF?id=" + id;
+    }
+    function EmailBookingDetails(Id) {
+        //window.location.href = "/ClientAdmin/Internalbooking/EmailBookingDetails?id=" + id;
+        $.ajax({
+            url: "/ClientAdmin/Internalbooking/EmailBookingDetails",
+            data: {
+                id: Id,
+            },
+            type: "GET",
+
+            success: function (response) {
+                callSweetMsg(response.message);
+                if (response.status == 1) {
+                    closeModal();
+                }
+            },
+            error: function (data) {
+                console.log(data);
+            }
+        });
+    }
+    //function EmailBookingDetails(Id) {
+    //        $.ajax({
+    //            url: "/ClientAdmin/Internalbooking/EmailBookingDetails",
+    //            data: { id: Id},
+    //            type: "GET",
+    //            success: function (response) {
+    //                if (response.status == 1) {
+    //                    Integr8ed.HandleResponse(response);
+    //                    closeModal();
+    //                }
+    //            },
+    //            error: function (data) {
+    //                console.log(data);
+    //            }
+    //        });
+    //    }
+    function BookingInvoiceViewAsPDF(id) {
+        window.location.href = "/ClientAdmin/Internalbooking/BookingDetailsViewAsPDF?id=" + id;
+    }
+
+    var d = new Date();
+    var currMonth = d.getMonth();
+    var currYear = d.getFullYear();
+    var currDate = d.getDate();
+
+    var startDate = new Date(currYear, currMonth, currDate);
+      if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+    }
+
+    $(document).off("click", "#btnSave");
+    $(document).on("click", "#btnSave", function () {
+            $(".panel-collapse").collapse("show");
+    });
+
+
+    $(document).ready(function () {
+        //console.log(StartTime,("#StartTime").val())
+        //console.log(FinishTime,("#FinishTime").val())
+
+        $('#DateFromSent').datetimepicker({
+            language: 'en',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            format: 'dd-mm-yyyy',
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+        });
+
+        $('.form_date').datetimepicker({
+            language: 'en',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            format: 'dd-mm-yyyy',
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+        });
+
+       /* if ($("#BookingDateS").val() == "") {*/
+
+            $("#BookingDateS").datetimepicker({
+            setDate: startDate,
+            language: 'en',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            format: 'dd-mm-yyyy',
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+            });
+        //} else {
+
+        //}
+
+
+            $(document).on("change", "#UserGroupId", function () {
+	        $("#UserGroupId-error").html("");
+	        $("#UserGroupId").removeClass("error");
+        });
+
+            $(document).on("change", "#MeetingTypeId", function () {
+	        $("#MeetingTypeId-error").html("");
+	        $("#MeetingTypeId").removeClass("error");
+        });
+
+                $(document).on("change", "#RoomTypeId", function () {
+	        $("#RoomTypeId-error").html("");
+	        $("#RoomTypeId").removeClass("error");
+                });
+
+        $(document).on("change", "#BookingStatus", function () {
+	        $("#BookingStatus-error").html("");
+	        $("#BookingStatus").removeClass("error");
+        });
+
+        $(document).on("change", "#ExternalBookingClientId", function () {
+	        $("#ExternalBookingClientId-error").html("");
+	        $("#ExternalBookingClientId").removeClass("error");
+        });
+
+        //if ($("#BookingDateForDisplay").val() != null || $("#BookingDateForDisplay").val() != "") {
+        //    $("#BookingDateS").val($("#BookingDateForDisplay").val());
+        //}
+
+        if ($("#ExternalBookingClientId").val() == "")
+            $("#UserList").hide();
+        else
+            $("#IsExternalBooking").prop("checked", true);
+
+        $('input[type="checkbox"]').click(function () {
+            if ($(this).prop("checked") == true) {
+                $("#UserList").show();
+                //$("#IsExtBook").hide();
+            }
+            else {
+                $("#UserList").hide();
+            }
+        });
+
+
+   jQuery.validator.addMethod("nameAndno", function (value, element) {
+        return this.optional(element) || /^([a-zA-Z ]*)$/i.test(value);
+         }, "Please Enter a Valid Name");
+
+        $(document).on("change", "#BookingDateS", function () {
+            CalculateCost($("#BookingDateS").val(), $("#StartTime").val(), $("#FinishTime").val(), $("#RoomTypeId").val(),0);
+        });
+
+        $(document).on("click", "#StartTime", function () {
+            CalculateCost($("#BookingDateS").val(), $("#StartTime").val(), $("#FinishTime").val(), $("#RoomTypeId").val(),0);
+        });
+
+        $(document).on("click", "#FinishTime", function () {
+            CalculateCost($("#BookingDateS").val(), $("#StartTime").val(), $("#FinishTime").val(), $("#RoomTypeId").val(),0);
+        });
+
+        $(document).on("change", "#RoomTypeId", function () {
+            CalculateCost($("#BookingDateS").val(), $("#StartTime").val(), $("#FinishTime").val(), $("#RoomTypeId").val(),1);
+        });
+
+        function CalculateCost(bookingDate, startTime, finishTime, roomTypeId, flag) {
+            if (bookingDate != "" && startTime != "" && finishTime != "" && roomTypeId != 0) {
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/CalculateBookingCostByDate",
+                    data: {
+                        bookingDate: moment($("#BookingDateS").val(), 'DD-MM-YYYY').format('yyyy-MM-DD'),
+                        startTime: $("#StartTime").val(),
+                        finishTime: $("#FinishTime").val(),
+                        roomTypeId: $("#RoomTypeId").val()
+                    },
+                    type: "GET",
+                    success: function (response) {
+
+                        $("#Cost").val(response.message);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            else {
+                if (flag == 1) {
+                    $("#RoomTypeId").val("");
+                     Integr8ed.HandleResponse({status: 0, message: "Please select date or time first !", data: null});
+                }
+            }
+        }
+        //$('#StartTime').inputmask(
+        //    "hh:mm:ss", {
+        //    placeholder: "HH:MM:SS",
+        //    insertMode: false,
+        //    showMaskOnHover: false,
+        //    hourFormat: 24
+        //}
+        //);
+        //$('#FinishTime').inputmask(
+        //    "hh:mm:ss", {
+        //    placeholder: "HH:MM:SS",
+        //    insertMode: false,
+        //    showMaskOnHover: false,
+        //    hourFormat: 24
+        //}
+        //);
+
+
+		$('#StartTime').timepicker({
+		    'show2400': true,
+            'timeFormat': 'H:i',
+
+            allowInputToggle: true,
+            'step': 60,
+            'disableTextInput': false,
+            'step': 60,
+            'disableTextInput': false,
+            'minTime': '1:00',
+            'maxTime': '23:00',
+        });
+
+        var startTimeValue = moment('@Model.StartTime', "hh:mm").format("HH:mm");
+        $("#StartTime").val(startTimeValue);
+
+        $("#StartTime").on("changeTime", function () {
+
+            $("#FinishTime").val('');
+
+            $('#FinishTime').timepicker({
+                'show2400': true,
+                'timeFormat': 'H:i',
+
+                allowInputToggle: true,
+                'step': 60,
+                'disableTextInput': false,
+                'step': 60,
+                'disableTextInput': false,
+
+                'minTime': moment($("#StartTime").val(), "H:i").add(60, 'minutes').format("H:i"),
+                'maxTime': '23:00',
+                'showDuration': true
+            });
+
+        });
+
+        $(document).off("change", "#FinishTime");
+        $(document).on("change", "#FinishTime", function () {
+
+            var result = new Date('1/1/1999 ' + $("#FinishTime").val()) > new Date('1/1/1999 ' + $("#StartTime").val());
+            if (!result) {
+                $("#FinishTime").val('');
+                swal("error", "Invalid finish time");
+            }
+        });
+
+
+
+        //if ($("#DateFromSent").val() == "") {
+        //    // $("#DateFromSent").datetimepicker("setDate", moment(startDate, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+        //    $("#DateFromSent").val(moment(startDate, 'YYYY-MM-DD').format('DD-MM-YYYY'));
+        //} else {
+        //    $("#DateFromSent").val($("#DateFromSent").val());
+        //}
+
+
+        if ('@ViewBag.IsRoomTypeEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }
+
+        else if ('@ViewBag.IsUserGroupEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }
+
+        else if ('@ViewBag.IsMeetingTypeEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }
+
+             else if ('@ViewBag.IsBookingStatusEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }
+
+        else {
+            if ($("#IsView").val() == "true") {
+                var allElement = $(document).find('input[type="text"],textarea,input[type="number"],input[type="number"], input[type="checkbox"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", true);
+                });
+                $("#UserGroupId").prop("disabled", true);
+                $("#MeetingTypeId").prop("disabled", true);
+                $("#RoomTypeId").prop("disabled", true);
+                $("#BookingStatus").prop("disabled", true);
+                $("#btnSave").hide();
+            }
+            else {
+                var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"],input[type="select"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", false);
+                });
+                $("#btnSave").show();
+            }
+        }
+    });
+
+    jQuery.validator.addMethod("noOnly", function (value, element) {
+        return this.optional(element) || /^\d{0,20}$/i.test(value);
+         }, "You can't enter decimal value");
+
+
+    var validationresult = $("#frmInternalbooking").validate({
+        onfocusout: false,
+        ignore: "hidden",
+        rules: {
+            "ExternalBookingClientId": {
+                required: '#IsExternalBooking:checked'
+            },
+            "UserGroupId": {
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+                //remote: {
+                //    url: "/ClientAdmin/InternalBooking/CheckBookingDetailUserGroup",
+                //    type: "GET",
+                //    data: {
+                //        UserGroupId: $(".UserGroupId").val(), Id: $("#Id").val(), bookingDate: function () {
+                //            return moment($("#BookingDateS").val(), 'MM-DD-YYYY').format('yyyy-MM-DD');
+                //           /* $('#BookingDateS').val();*/
+                //        }, timeStart: function () { return $('#StartTime').val() }, finishTime: function () { return $('#FinishTime').val() }
+                //    },
+                //},
+            },
+                "MeetingTypeId": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                    //,
+                    //remote: {
+                    //    url: "/ClientAdmin/InternalBooking/CheckBookingDetailMeetingType",
+                    //    type: "GET",
+                    //    data: {
+                    //        MeetingTypeId: $(".MeetingTypeId").val(), Id: $("#Id").val(), bookingDate: function () { return $('#BookingDateS').val() }, timeStart: function () { return $('#StartTime').val() }, finishTime: function () { return $('#FinishTime').val() }
+                    //    }
+                    //},
+                },
+                "RoomTypeId": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/InternalBooking/CheckBookingDetailRoomType",
+                        type: "GET",
+                        data: {
+                            RoomTypeId: function () {
+                                return $("#RoomTypeId").val();
+                            }, Id: $("#Id").val(), bookingDate: function () {
+                                return moment($('#BookingDateS').val(), 'DD-MM-YYYY').format('yyyy-MM-DD')
+                            }, timeStart: function () { return $('#StartTime').val() }, finishTime: function () { return $('#FinishTime').val() }
+                        }
+                    },
+                },
+                "BookingDateS": {
+
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "StartTime": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "FinishTime": {
+
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "TitleOfMeeting": {
+
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+
+                },
+                "NumberOfAttending": {
+                    required: true,
+                    /*min: 1,*/
+                    /*maxlength: 10,*/
+                    number: true,
+                    noOnly: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/InternalBooking/validateMaxPerson",
+                        type: "GET",
+                        data: {
+                            TotalPerson: function () { return $("#NumberOfAttending").val() },
+                            RoomTypeId: function() { return $("#RoomTypeId").val() }
+                        }
+                    },
+                },
+                "CarSpaceRequired": {
+
+                    required: false,
+                    min: 0,
+                    maxlength: 10,
+                    number: true,
+                    noOnly: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Cost": {
+
+                    required: true,
+                    //min: 1,     Allow booking at zero cost   Request by Richard on 13/04/2022
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "RoomOrder": {
+
+                    required: true,
+                    //min: 1,     Allow booking at zero cost   Request by Richard on 13/04/2022
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "LayoutInformation": {
+
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "BookingContact": {
+
+                    required: true,
+                    maxlength: 50,
+                    /*nameAndno: true*/
+                    //normalizer: function (value) {
+                    //    return $.trim(value);
+                    //}
+                },
+                "Mobile": {
+
+                    required: true,
+                    //minlength: 10,   Allow booking at zero cost   Request by Richard on 13/04/2022
+                   // maxlength: 12,   Allow booking at zero cost   Request by Richard on 13/04/2022
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "DateFromSent": {
+                    //required: true,
+                    required: false,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "BookingStatus": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "AdditionalInformation": {
+
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "CancellationDetail": {
+
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+            },
+                 "CatererRemark": {
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+        messages: {
+            "ExternalBookingClientId": {
+                required: "Please enter a User Name",
+            },
+            "UserGroupId": {
+                required: "Please enter a User Group",
+                min: "Invalid User Group",
+                maxlength: "More than 5 characters are not allowed !",
+                remote: "User Group already exist !"
+            },
+            "MeetingTypeId": {
+                required: "Please enter a Meeting Type",
+                min: "Invalid Meeting Type",
+                maxlength: "More than 5 characters are not allowed !",
+                remote: "Meeting Type already exist !"
+            },
+            "RoomTypeId": {
+                required: "Please enter a Room Type",
+                min: "Invalid Room Type",
+                maxlength: "More than 5 characters are not allowed !",
+                remote: "Booking already exist in this slot,please try another slot!"
+            },
+            "BookingDateS": {
+                required: "Please enter a Booking Date"
+            },
+            "StartTime": {
+                required: "Please enter a Start Time"
+            },
+            "FinishTime": {
+                required: "Please enter a Finish Time"
+            },
+            "TitleOfMeeting": {
+                required: "Please enter a Meeting Title",
+                maxlength: "More than 50 characters are not allowed !"
+            },
+            "NumberOfAttending": {
+                required: "Please enter a  Number of Attending",
+                min: "Invalid Number of Attending",
+                maxlength: "More than 10 digits are not allowed !",
+                remote: "Attendee exceeded from room capacity",
+
+            },
+            "CarSpaceRequired": {
+                min: "Invalid Number of Car Space",
+                maxlength: "More than 10 digits are not allowed !"
+            },
+            "Cost": {
+                required: "Please enter a Cost",
+                min: "Invalid Cost"
+            },
+            "RoomOrder": {
+                required: "Please enter a RoomOrder",
+            },
+
+            "LayoutInformation": {
+                maxlength: "More than 200 characters are not allowed !"
+            },
+            "BookingContact": {
+                required: "Please enter a Booking Contact Name",
+                maxlength: "More than 50 characters are not allowed !"
+            },
+            "Mobile": {
+                required: "Please enter a Mobile Number",
+                minlength: "Minimum 10 characters are required !",
+                maxlength: "More than 12 characters are not allowed !"
+            },
+            "DateFromSent": {
+                required: "Please enter a Date From Sent"
+            },
+            "BookingStatus": {
+                required: "Please enter a Booking Status"
+            },
+            "AdditionalInformation": {
+                maxlength: "More than 200 characters are not allowed !"
+            },
+            "CancellationDetail": {
+                maxlength: "More than 200 characters are not allowed !"
+            },
+            "CatererRemark": {
+                maxlength: "More than 200 characters are not allowed !"
+            }
+        },
+
+        submitHandler: function (form) {
+            localStorage.setItem("IsInternalbooking", $("#IsInternalBooking").val());
+            localStorage.setItem("StartDate", moment($("#BookingDateS").val(), 'DD-MM-YYYY').format('yyyy-MM-DD'));
+            localStorage.setItem("RoomTypeId", $("#RoomTypeId").val());
+            console.log($("#IsInternalBooking").val(), "IsInternalBooking");
+            var IsInternal = localStorage.getItem("IsInternalbooking");
+            console.log(IsInternal, "IsInternalBookingAfter");
+            $(".panel-collapse").collapse("show");
+            if ($("#frmInternalbooking").valid() == true) {
+                let post_url = form.action;
+                let form_data = $("#frmInternalbooking").serialize();
+
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        if (IsInternal == "true")
+                        {
+                            window.location.href =`/ClientAdmin/InternalBooking/Index`;
+                        }
+                        //bindBookingDetail("#tblNewbooking");
+                        /* */
+                        return false;
+                    }
+                });
+            }
+        }
+    });
+             //if ($("#collapseOne1").hasClass("panel-collapse in collapse show") && $("#collapseTwo").hasClass("panel-collapse in collapse show") && $("#collapseThree").hasClass("panel-collapse in collapse show")) {
+             //    if ($("#frmInternalbooking").valid() == true) {
+
+                 //}
+             //    else {
+             //       $("#ReqVal").html("Required fields are missing...");
+             //   }
+             //}
+             //   else {
+             //       $("#ReqVal").html("Required fields are missing...");
+             //   }
+          // }
+
+
+    //$(document).on("click", "#btnSave", function () {
+    //
+
+    // });
+
+</script>

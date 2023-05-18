@@ -1,0 +1,222 @@
+﻿@model Integr8ed.Service.Dto.RecurringBookingsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Recurring Booking";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Recurring Booking</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                    <li class="breadcrumb-item active" aria-current="page">Recurring Booking</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-end mb-2">
+                                    <button type="button" class="btn btn-primary" id="btnAddnewRecurringBooking">
+                                        New Recurring Booking
+                                    </button>
+                                </div>
+                                <div>
+                                    <div class="col-12">
+                                        <div class="table-responsive user_customs_group">
+                                            <table class='table table-bordered table-striped' id="tblRecurringBooking">
+                                                <thead>
+                                                    <tr>
+                                                        <th scope="col" class="user_title_s"> Booking Date</th>
+                                                        <th scope="col"> Room</th>
+                                                        <th scope="col"> Event Title</th>
+                                                        <th scope="col"> Booking Type</th>
+                                                        <th scope="col" class="action_th">Actions</th>
+                                                    </tr>
+                                                </thead>
+                                            </table>
+                                        </div>
+                                    </div>
+                                    <div class="col-12 d-flex justify-content-end mb-2">
+                                        <div class="total_details_c">
+                                            <button type="submit" id="btnSaveData" class="btn btn-primary">Save Booking Details</button>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade admin_modelpop" id="divModalCustom" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div id="modalContentCustom"></div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+
+        var BookingDetailList = [];
+
+        $(document).ready(function () {
+            bindRecurringBooking("#tblRecurringBooking");
+            $("#btnSaveData").hide();
+        });
+
+        $(document).on("click", "#btnAddnewRecurringBooking", function () {
+            AddRecurringBooking();
+        });
+
+        $(document).on("click", "#btnSaveData", function () {
+            $.ajax({
+                url: "/ClientAdmin/RecurringBooking/AddEditRecurringBookingDetails",
+                data: { models: BookingDetailList },
+                type: "POST",
+                success: function (response) {
+                    Integr8ed.HandleResponse(response);
+                    bindRecurringBooking("#tblRecurringBooking");
+                    $("#btnSaveData").hide();
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+
+        function AddRecurringBooking(id = 0, isView = false) {
+            $(".form_date").datetimepicker("destroy");
+            if (id > 0) {
+                $("#modalContentCustom").load(`/ClientAdmin/RecurringBooking/_AddEditRecurringBookingDetails?id=${id}&isView=${isView}`, function () {
+                    $("#divModalCustom").modal('show');
+                    
+
+                    $(".form_date").datetimepicker("refresh");
+                });
+            }
+            else {
+                $("#modalContent").load(`/ClientAdmin/RecurringBooking/_AddEditRecurringBookingDetails?id=${id}&isView=${isView}`, function () {
+                    ShowModal();
+                });
+            }
+        }
+
+        function DeleteRecurringBooking(id) {
+
+            Integr8ed.Confirm("Delete Recurring Booking", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/RecurringBooking/RemoveRecurringBookingDetails",
+                    data: { id: parseFloat(id) },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindRecurringBooking("#tblRecurringBooking");
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+        function bindRecurringBooking(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblMeetingDetail = $("#tblRecurringBooking").DataTable({
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "/ClientAdmin/RecurringBooking/GetRecurringBookingDetailList",
+                "initComplete": function (settings, json) { },
+                "rowCallback": function (row, data, index) { },
+                "fnDrawCallback": function (oSettings) {
+                    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                        $("#tblRecurringBooking_info").hide();
+                    } else {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                        $("#tblRecurringBooking_info").show();
+                    }
+                },
+                //"bPaginate": false,
+                //"bInfo": false,
+                //"searching": false,
+                "order": [[1, ""]],
+                "language": {
+                    "info": "Showing _START_ to _END_ of _TOTAL_ Recurring Booking",
+                    "sInfoEmpty": "Showing 0 to 0 of 0 Recurring Booking"
+                },
+                "columns": [
+                    {
+                        "data": "bookingDateForDisplay",
+                        "width": "22%",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function (data, type, row) {
+                            var element = moment(new Date(row.bookingDateForDisplay)).format("DD-MM-yyyy") + '  (' + row.startTime + ' - ' + row.finishTime + ')';
+                            return element;
+                        }
+                    },
+                    {
+                        "data": "roomTitle",
+                        "width": "5%",
+                        "searchable": true,
+                        "orderable": true
+                    },
+                    {
+                        "data": "meetingTitle",
+                        "width": "5%",
+                        "searchable": true,
+                        "orderable": true,
+
+                    },
+                    {
+                        "data": "externalBookingClientId",
+                        "width": "5%",
+                        "searchable": true,
+                        "orderable": true,
+                        "render": function (data, type, row) {
+                            var element = (row.externalBookingClientId > 0) ? "External (" + row.firstName + " " + row.lastName + ")" : "Internal";
+                            return element;
+                        }
+                    },
+                    {
+                        "data": "id",
+                        "autoWidth": true,
+                        "searchable": false,
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            var element = `<a onclick="AddRecurringBooking('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="DeleteRecurringBooking('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                            return element;
+                        }
+                    }
+                ]
+            });
+        }
+    </script>
+}

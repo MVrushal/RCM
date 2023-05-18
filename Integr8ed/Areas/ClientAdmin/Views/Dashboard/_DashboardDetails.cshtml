@@ -1,0 +1,256 @@
+﻿
+@model Integr8ed.Service.Dto.DashboardDto
+    <script>
+        var RoomTypeList = new Array();
+        var BookingCount = new Array();
+        var BookingStatus = new Array();
+        var BookingstatusCount = new Array();
+
+        var MeetingTypeList = new Array();
+        var MeetingTypeListCount = new Array();
+
+
+        var MonthList = new Array();
+        var MonthListCount = new Array();
+
+        var RoomTypeName = new Array();
+        var RoomTypeCountMonth = new Array();
+
+    </script>
+<div class="row">
+
+    @* Dashbord Note Start *@
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="dashbord_note_data">
+            <h3>
+                @Model.AdminDasboardCount[0].BookingCount
+           </h3>
+            <p>  No. of Booking</p>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="dashbord_note_data">
+            <h3>
+                @Model.AdminDasboardCount[0].CateringCount
+            </h3>
+            <p>   Catering Count</p>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="dashbord_note_data">
+            <h3>
+                @Model.AdminDasboardCount[0].Visitors
+            </h3>
+            <p>  No. of Visitors </p>
+        </div>
+    </div>
+
+    <div class="col-lg-3 col-md-6 col-sm-6">
+        <div class="dashbord_note_data">
+            <h3>
+                @Model.AdminDasboardCount[0].TotalEarning
+            </h3>
+            <p>  Total Earning</p>
+        </div>
+    </div>
+
+    @* Dashbord Note End *@
+
+</div>
+
+
+@* Chart Start *@
+
+<div class="row mb-30">
+    <div class="col-xl-8">
+        <div class="dashbord_chart_sec mb-0">
+
+            <div class="chart_info">
+                <label>Booking Count</label>
+
+                <a class="chart_link" id="Booking_Count_chart_link" href="#">Details</a>
+            </div>
+
+
+            @if (Model.bookingDetailCountMonthWises != null)
+            {
+
+                @foreach (var item in Model.bookingDetailCountMonthWises)
+                {
+                    <text>
+                        <script>
+                                
+                               MonthList.push('@item.MonthNames');
+                               MonthListCount.push('@item.BookingCount');
+                        </script>
+                    </text>
+
+
+
+                }
+
+            }
+            <canvas id="myMonthWiseBookingChart"></canvas>
+
+
+        </div>
+    </div>
+
+    <div class="col-xl-4">
+        <div class="dashbord_chart_sec height_a">
+            <div class="chart_info">
+                <label>Booking Status</label>
+
+                <a class="chart_link" href="#">Details</a>
+            </div>
+            @if (Model.bookingDetailCountStatusWises != null)
+            {
+
+                @foreach (var item in Model.bookingDetailCountStatusWises)
+                {
+                    <text>
+                        <script>
+
+                        BookingStatus.push('@item.status');
+                        BookingstatusCount.push('@item.StatusCount');
+                        </script>
+                    </text>
+
+                }
+
+            }
+            <canvas id="mypieChart" width="1000" height="1000"></canvas>
+        </div>
+
+    </div>
+</div>
+<div class="row">
+
+    
+
+    <div class="col-xl-6">
+        <div class="dashbord_chart_sec">
+
+            <div class="chart_info">
+                <label>Room Types</label>
+
+                <a class="chart_link" href="#">Details</a>
+            </div>
+            @if (Model.bookingDetailCountRoomWiseMultis != null)
+            {
+
+                @foreach (var item in Model.bookingDetailCountRoomWiseMultis)
+                {
+                    <text>
+                        <script>
+
+                             RoomTypeName.push('@item.RoomName');
+
+                             RoomTypeCountMonth.push('@item.jan' + ',' + '@item.feb' + ',' + '@item.march'  + ',' + '@item.april'  + ',' + '@item.may'  + ',' + '@item.june'  + ',' + '@item.july'  + ',' + '@item.augest'  + ',' + '@item.sep'  + ',' + '@item.oct'  + ',' + '@item.nov'  + ',' + '@item.dece');
+                                                                                        //     RoomTypeCountMonth.push();
+                        </script>
+                    </text>
+
+
+
+                }
+
+            }
+
+
+
+            <canvas id="linearChart"></canvas>
+
+
+
+        </div>
+    </div>
+    <div class="col-xl-6">
+        <div class="dashbord_chart_sec">
+            <div class="chart_info">
+                <label>External Booking Count</label>
+
+                <a id="btnExternalCount" href="#">Details</a>
+            </div>
+
+            @if (Model.bookingDetailExternalcountWises != null)
+            {
+
+                @foreach (var item in Model.bookingDetailExternalcountWises)
+                {
+                    <text>
+                        <script>
+
+                           RoomTypeList.push('@item.MonthName');
+                           BookingCount.push('@item.ExternalBokingCount');
+                        </script>
+                    </text>
+
+
+
+                }
+
+            }
+
+            <canvas id="myChart"></canvas>
+            @if (Model.bookingDetailCountMeetingWises != null)
+            {
+
+                @foreach (var item in Model.bookingDetailCountMeetingWises)
+                {
+                    <text>
+                        <script>
+                             MeetingTypeList.push('@item.MeetingName');
+                             MeetingTypeListCount.push('@item.BokingCount');
+                        </script>
+                    </text>
+
+
+
+                }
+
+            }
+
+        </div>
+
+    </div>
+
+
+    <div class="modal fade" tabindex="-1" role="dialog" id="divModeldashboardData" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div id="ModalContentForChartData" class="modal-content">
+
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    DrowPieChart();
+    DrowBarChart();
+    DrowLineChart();
+    DrowmyMonthWiseBookingChart();
+    var flag = 0;
+
+    $(document).on("click", "#btnExternalCount", function () {
+        flag = 1;
+        $("#ModalContentForChartData").load(`/ClientAdmin/Dashboard/_LoadChartJSData`, function () {
+            $("#divModeldashboardData").modal('show');
+        });
+    
+
+
+    })
+
+    $(document).on("click", ".chart_link", function () {
+        flag = 0;
+        $("#ModalContentForChartData").load(`/ClientAdmin/Dashboard/_LoadChartJSData`, function () {
+            $("#divModeldashboardData").modal('show');
+        });
+    
+
+
+    })
+</script>

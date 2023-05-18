@@ -1,0 +1,225 @@
+﻿@model Integr8ed.Service.Dto.UserDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Profile Page";
+    Layout = "~/Areas/SuperAdmin/Views/Shared/_Layout.cshtml";
+}
+
+
+<form id="frmProfile" asp-action="EditUser" asp-controller="Profile" asp-area="SuperAdmin" method="post">
+    <div class="main-content container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-first">
+                <div class="page-title">
+                    <h3>Profile</h3>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-last">
+                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                    <ol class="breadcrumb">
+                        
+                        <li class="breadcrumb-item"><a href="/SuperAdmin/Company/index">Admin Organisation</a></li>
+                        <li class="breadcrumb-item active" aria-current="page">Profile</li>
+                    </ol>
+                </nav>
+            </div>
+        </div>
+        <section id="multiple-column-form" class="">
+            <div class="row match-height">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body">
+
+                                <div class="form-body">
+
+                                    @Html.AntiForgeryToken()
+                                    <div class="row">
+                                        <input type="hidden" asp-for="ID" />
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">User Name </label>
+                                                <input disabled type="text" class="form-control" name="UserName" asp-for="UserName" placeholder="Enter User Name here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Email </label>
+                                                <input disabled type="email" class="form-control" name="Email" asp-for="Email" placeholder="Enter Email here" readonly>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">First Name *</label>
+                                                <input type="text" class="form-control" asp-for="FirstName" name="FirstName" placeholder="Enter First Name here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Middle Name </label>
+                                                <input type="text" class="form-control" asp-for="MiddleName" name="MiddleName" placeholder="Enter Middle Name here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Last Name *</label>
+                                                <input type="text" class="form-control" asp-for="LastName" name="LastName" placeholder="Enter Last Name here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Mobile Number *</label>
+                                                <input type="text" class="form-control" asp-for="MobileNumber" name="MobileNumber" placeholder="Enter Mobile Number here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Telephone Number </label>
+                                                <input type="text" class="form-control" asp-for="TelephoneNumber" name="TelephoneNumber" placeholder="Enter Telephone Number here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Notes</label>
+                                                <textarea rows="2" class="form-control" asp-for="Notes" name="Notes" placeholder="Enter Notes here"></textarea>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Address Line1 *</label>
+                                                <input type="text" class="form-control" asp-for="AddressLine1" name="AddressLine1" placeholder="Enter Address Line1 here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Address Line2 </label>
+                                                <input type="text" class="form-control" asp-for="AddressLine2" name="AddressLine2" placeholder="Enter Address Line2 here">
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <button type="submit" id="btnSave" class="btn btn-primary mt-3">Update Profile</button>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</form>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        var validationresult = $("#frmProfile").validate({
+            rules: {
+              
+                "FirstName": {
+                    required: true,
+                    maxlength: 20,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "MiddleName": {
+                    required: false,
+                    maxlength: 20,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "LastName": {
+                    required: true,
+                    maxlength: 20,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "MobileNumber": {
+                    required: true,
+                    maxlength: 12,
+                    min: 10,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "TelephoneNumber": {
+                    required: false,
+                    maxlength: 12,
+                    min: 10,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Notes": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "AddressLine1": {
+                    required: true,
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+            messages: {
+             
+                "FirstName": {
+                    required: "Please enter a First Name",
+                    maxlength: "More than 20 characters are not allowed !"
+                },
+                "MiddleName": {
+                   
+                    maxlength: "More than 20 characters are not allowed !"
+                },
+                "LastName": {
+                    required: "Please enter a Last Name",
+                    maxlength: "More than 20 characters are not allowed !"
+                },
+                "MobileNumber": {
+                    required: "Please enter a Mobile Number",
+                    maxlength: "More than 12 digits are not allowed !",
+                    min: "Minimum 10 digits are required !"
+                },
+                "TelephoneNumber": {
+                  
+                    maxlength: "More than 12 digits are not allowed !",
+                    min: "Minimum 10 digits are required !"
+                },
+                "Notes": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "AddressLine1": {
+                    required: "Please enter a Address Line1",
+                    maxlength: "More than 50 characters are not allowed !"
+                }
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+    
+                    if (response.status === 1) {
+                        closeModal();
+                        window.location.href = `/SuperAdmin/Company/index`;
+                    }
+                });
+
+            }
+        });
+
+    </script>
+
+}

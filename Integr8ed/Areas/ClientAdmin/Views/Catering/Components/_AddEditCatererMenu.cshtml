@@ -1,0 +1,263 @@
+﻿@model Integr8ed.Service.Dto.CatererMenuDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<script>
+    var MenuList = new Array();
+
+</script>
+@*<form id="frmCatererMenu" asp-action="AddEditCateringDetail" asp-controller="Catering" asp-area="ClientAdmin" method="post">*@
+<form id="frmCatererMenu">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Caterer Menu</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            <div class="row">
+                <div class="col-md-12">
+
+                    <div class="form-group">
+                        <label for="exampleFormControlSelect1">Select Caterer</label>
+                        @*<select class="form-control" id="exampleFormControlSelect1">
+                                <option>1</option>
+                                <option>2</option>
+                                <option>3</option>
+                                <option>4</option>
+                                <option>5</option>
+                            </select>*@
+                        @Html.DropDownListFor(x => x.Id, ViewBag?.CatererList as IEnumerable<SelectListItem>, "Select Caterer", new { @class = "form-control form-select", @id = "CatId", @Name = "CatId", required = "Select caterer" })
+                    </div>
+
+                </div>
+                <div class="col-md-12" id="Menudiv">
+
+                    @*@foreach (var item in Model?.catererMenuItemLists)
+                        {*@
+
+                    @*<div id="frmMenuItem" class="upload_form">
+                            <button class="btn btn-danger add_form_button" href="#"><i class="fas fa-times"></i></button>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1"> Menu</label>
+                                    <input class="form-control" type="text">
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Cost</label>
+                                    <input class="form-control" type="text">
+                                </div>
+                            </div>
+                        </div>*@
+                    @if (Model.catererMenuItemLists != null)
+                    {
+
+                        @foreach (var item in Model.catererMenuItemLists)
+                        {
+                            <text>
+                                <script>
+
+                                MenuList.push('@item.MenuId');
+                                </script>
+                            </text>
+                            <div class="upload_form">
+                                @if (!Model.IsView)
+                                {
+                                    <button type="button" class="btn btn-danger add_form_button RemoveMenu">
+                                        <i class="fas fa-times"></i>
+                                    </button>
+                                }
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleFormControlSelect1">Select Menu</label>
+                                        <input class="form-control form-select MenuItem" type="text" data-id="@("Menu"+item.MenuId) " value="@item.MenuName" disabled="">
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label>Cost</label>
+                                        <input class="form-control" id="Cost" value="@item.Cost" type="number" disabled="">
+                                    </div>
+                                </div>
+                            </div>
+                        }
+                    }
+
+                    @if (!Model.IsView)
+                    {
+
+                        <div id="frmMenuItem" class="upload_form">
+                            <button type="button" class="btn btn-primary add_form_button" id="AddMenuBtn"><i class="fas fa-plus"></i></button>
+
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label for="exampleFormControlSelect1">Select Menu</label>
+                                    @Html.DropDownListFor(x => x.Id, ViewBag?.MenuList as IEnumerable<SelectListItem>, "Select Menu", new { @class = "form-control form-select", @id = "MenuId", @Name = "MenuId", required = "Select Menu" })
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="form-group">
+                                    <label>Cost</label>
+                                    <input id="Cost" class="form-control InitCost" type="number" min="1">
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <h5 id="MenuError" style="color:red; display:none"> Error !</h5>
+                        @*}*@
+                    }
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        @if (!Model.IsView)
+        {
+            <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+        }
+    </div>
+</form>
+<script type="text/javascript">
+    var Cost = "";
+    $(document).ready(function () {
+        $("#MenuId").val("");
+        if ($("#Id").val() != 0) {
+            $("#CatId").attr("Disabled", true);
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+    });
+
+
+    //Add Menu
+
+    $(document).off("click", "#AddMenuBtn");
+    $(document).on("click", "#AddMenuBtn", function () {
+        insertMenu();
+    });
+    function insertMenu() {
+        
+        $("#MenuError").css("display", "none");
+        var NewMenuId = $("#MenuId   option:selected").val();
+        var NewMenuName = $("#MenuId  option:selected").text();
+        var NewCost = $(document).find(".InitCost").val();
+        
+
+        if (MenuList.includes(NewMenuId)) {
+            $("#MenuError").html("Menu already added !");
+            $("#MenuError").css("display", "block");
+            return false;
+        }
+        else if (NewCost == "" || NewCost < 1) {
+            $("#MenuError").html("Invalid cost amount !");
+            $("#MenuError").css("display", "block");
+            return false;
+        } else if ($("#MenuId").val() == "") {
+            $("#MenuError").html("Please Select Menu!");
+            $("#MenuError").css("display", "block");
+            return false;
+        }
+        MenuList.push(NewMenuId);
+        Cost = NewCost;
+
+        var element = document.createElement('div');
+        element.className = "upload_form"
+        element.innerHTML = `<button type="button" class="btn btn-danger add_form_button RemoveMenu"  ><i class="fas fa-times"></i>
+                </button>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="exampleFormControlSelect1"> Menu</label>
+                                <input class="form-control MenuItem" type="text" data-id="Menu${NewMenuId}"  value="${NewMenuName}" disabled />
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label>Cost</label>
+                                <input class="form-control " id="Cost" value="${Cost}" type="number" disabled />
+                            </div>
+                        </div>`.trim();
+
+
+        $("#Menudiv").prepend(element);
+        element = "";
+        $("#MenuId").val("");
+        $(document).find(".InitCost").val("");
+
+    }
+
+
+
+
+
+
+    //Remove Menu
+    $(document).off("click", ".RemoveMenu");
+    $(document).on("click", ".RemoveMenu", function () {
+
+        $(this).parent().remove();
+        var currentMenu = $(this).next().find("input[type='text']").attr("data-id").trim().replace("Menu", "");
+        if (MenuList.includes(currentMenu)) {
+            arrayRemove(MenuList, currentMenu);
+        }
+    });
+
+
+    $(document).off("click", "#btnSave");
+    $(document).on("click", "#btnSave", function () {
+        var NewCost = $(document).find(".InitCost").val();
+        if ($("#CatId").val() == "") {
+            $("#MenuError").html("Please select caterer !");
+            $("#MenuError").css("display", "block");
+            return false;
+        } 
+        Save();
+    });
+
+
+    function Save() {
+
+        var Model = {
+            CatererId: "",
+            CatMenuList: new Array()
+        };
+
+        Model.CatererId = $("#CatId").val();
+        $.each($(document).find(".MenuItem"), function (key, element) {
+            var CatMenuList = {
+                MenuId: "",
+                Cost: ""
+            }
+            CatMenuList.MenuId = $(element).attr("data-id").replace("Menu", "");
+            CatMenuList.Cost = $(element).parent().parent().next().find("#Cost").val();
+            Model.CatMenuList.push(CatMenuList);
+        });
+
+        //sending data
+
+        $.ajax({
+            url: "/ClientAdmin/Catering/AddEditCatererMenu",
+            type: "POST",
+            data: { model: Model },
+            success: function (response) {
+                Integr8ed.HandleResponse(response);
+                if (response.status === 1) {
+
+                    closeModal();
+                    bindCateMenu("#CatMenu");
+                    //refreshDatatable("#tblCateringDetail");
+                    return false;
+                }
+            }
+        })
+    }
+
+</script>

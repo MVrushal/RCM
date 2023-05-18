@@ -1,0 +1,1982 @@
+a {
+    text-decoration: none !important;
+    outline: 0;
+}
+
+/* Side menu */
+
+.sidebar-wrapper .sidebar-header {
+    padding: 10px 10px 20px 10px;
+    font-size: 2rem;
+    font-weight: bold;
+    display: flex;
+    justify-content: center;
+    border-bottom: 1px solid #ddd;
+}
+
+.sidebar-wrapper:before {
+    content: '';
+    position: absolute;
+    width: 40%;
+    height: 50vh;
+    background-color: rgba(211, 237, 252, 0.5);
+    z-index: -2;
+    bottom: 0;
+    left: -10px;
+    border-radius: 0 200% 0 0;
+}
+
+.sidebar-wrapper:after {
+    content: '';
+    position: absolute;
+    width: 40%;
+    height: 40vh;
+    background-color: rgba(159, 216, 249, 0.5);
+    z-index: -2;
+    bottom: -80px;
+    left: -10px;
+    border-radius: 0 200% 0 0;
+}
+
+.collapse:not(.show) {
+    display: none;
+    transition: all 0.2s ease;
+}
+
+.collapse.show {
+    transition: all 0.2s ease;
+}
+
+.sidebar-wrapper .sidebar-header img {
+    height: inherit;
+    width: 180px;
+}
+
+.navbar .nav-link-user img {
+    width: 30px;
+    height: 30px;
+    object-fit: cover;
+}
+
+.avatar img {
+    height: 40px;
+}
+
+.navbar.navbar-header .dropdown > a {
+    color: #6c757d;
+    font-weight: 600;
+    padding: 0;
+}
+
+.navbar {
+    height: inherit;
+    padding: 15px 30px;
+    position: relative;
+    background-color: white;
+    box-shadow: 0 10px 15px 0 rgba(142, 142, 142, 0.15);
+    background-image: url(../../images/background/header-bg.png);
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+/* Side Menu C */
+
+.custom_accordion .panel-heading {
+    display: block;
+    padding: 0.7rem 1.5rem;
+    font-size: 0.85rem;
+    display: flex;
+    align-items: center;
+    transition: all 0.5s;
+    position: relative;
+}
+
+.custom_accordion:hover .panel-heading {
+    background-color: #e8f3ff;
+}
+
+.custom_accordion:hover ul.sub_side_menu {
+    background-color: rgba(232, 243, 255, 0.5);
+}
+
+.custom_accordion .panel-heading:hover .custom_accordion .panel-heading:before {
+    content: "";
+    position: absolute;
+    left: 0;
+    height: 100%;
+    top: 0;
+    bottom: 0;
+    background-color: rgba(46, 170, 244, 0.5);
+    width: 5px;
+}
+
+.panel-title {
+    margin: 0px;
+}
+
+    .panel-title span {
+        color: #053382;
+        font-weight: 500;
+        margin-left: 8px;
+        opacity: 0.8;
+        font-size: 16px;
+        margin: 0 0 0 5px;
+    }
+
+.custom_accordion .panel-heading:before {
+    content: "\f107";
+    font-family: "Font Awesome 5 Pro";
+    font-style: normal;
+    font-weight: normal;
+    text-decoration: inherit;
+    color: #999;
+    font-size: 18px;
+    padding-right: 0;
+    position: absolute;
+    top: 8px;
+    right: 20px;
+}
+
+.navbar-expand .navbar-nav .dropdown-menu i {
+    width: 20px;
+    text-align: left;
+}
+
+/* Main Section */
+
+#main .main-content {
+    padding: 2rem 1.5rem;
+    min-height: calc(100vh - 190px);
+    background-image: url('../../images/background/MainBackground.png');
+    background-position: center;
+    background-repeat: no-repeat;
+    background-size: cover;
+}
+
+.breadcrumb-header .breadcrumb {
+    padding: 0;
+}
+
+.custom_section {
+    box-shadow: -8px 12px 18px 0 rgba(25, 42, 70, 0.13);
+    min-height: calc(100vh - 310px);
+    background-color: white;
+}
+
+#main .main-content .page-title h3 {
+    font-size: 28px;
+    color: #0072CE;
+    margin: 0 0 0px 0;
+    padding: 0 0 20px 0;
+    position: relative;
+}
+
+    #main .main-content .page-title h3:before {
+        content: '';
+        position: absolute;
+        width: 140px;
+        height: 2px;
+        bottom: 0;
+        background-color: #0072CE;
+        left: 0;
+    }
+
+.breadcrumb-header {
+    display: flex;
+    align-items: center;
+    height: 100%;
+    justify-content: flex-end;
+}
+
+/* Footer Start */
+
+footer {
+    padding: 1rem 1.5rem;
+    background-color: white;
+    border-top: 2px solid #5a8dee;
+}
+
+.right_text p {
+    margin-bottom: 1px;
+}
+
+    .right_text p span {
+        font-weight: 500;
+        color: #333;
+    }
+
+.w_text_r {
+    width: 190px;
+}
+
+.left_t_l {
+    color: #333;
+    font-size: 16px;
+}
+
+/* Main Style */
+
+.form-group label {
+    font-size: 14px;
+    text-transform: capitalize;
+    color: rgba(35, 28, 99, 0.9);
+    font-weight: 500;
+    margin: 0 0 5px 0;
+}
+
+.cust_transition {
+    transition: all 0.2s ease 0s;
+}
+
+.sub_side_menu {
+}
+
+ul.sub_side_menu {
+    padding: 10px 0px 10px 45px;
+}
+
+    ul.sub_side_menu li {
+        padding: 5px 0px 5px 0px;
+        transform: translateX(0);
+        transition: 0.3s all ease;
+    }
+
+        ul.sub_side_menu li:hover {
+            transform: translateX(10px);
+            transition: 0.3s all ease;
+        }
+
+            ul.sub_side_menu li:hover a {
+                color: #0072CE;
+            }
+
+        ul.sub_side_menu li a {
+            color: #333333;
+            text-decoration: none;
+            position: relative;
+        }
+
+/* Custom Tab */
+
+.form-control {
+    border: 1px solid #dddddd;
+    border-radius: 4px !important;
+}
+
+.form-group {
+    margin-bottom: 15px;
+}
+
+.custom_tabs {
+    margin: 10px 0 0 0;
+}
+
+    .custom_tabs .nav-tabs {
+        /*border-bottom: 1px solid #dee2e6;*/
+    }
+
+    .custom_tabs .nav-fill > .nav-link,
+    .nav-fill .nav-item {
+        flex: inherit;
+        text-align: center;
+    }
+
+.check_box_center {
+    display: flex;
+    align-items: center;
+}
+
+.checkbox label {
+    display: inline-block;
+    color: #333333;
+    margin: 0 10px;
+}
+
+.check_box_center .checkbox {
+    padding: 10px 0px 0 0;
+    display: flex;
+    align-items: flex-start;
+}
+
+.cancel_btn {
+    background-color: #ebebeb;
+}
+
+.tab-content {
+    padding: 20px 20px 20px 20px;
+    border: 1px solid #ddd;
+    border-radius: 0px 0px 5px 5px;
+    margin: 0 0 10px 0;
+}
+
+.custom_tabs .nav-fill > .nav-link,
+.nav-fill .nav-item {
+    flex: inherit;
+    text-align: center;
+    background-color: #eeeeee;
+    color: #333333;
+    margin: 0 0px 0 0px;
+    border: 1px solid #ccc;
+    border-bottom: 0;
+}
+
+.nav-tabs .nav-link.active {
+    border: none;
+    position: relative;
+    color: #ffffff;
+    background-color: #5A8DEE;
+}
+
+.modal .modal-header {
+    padding: 13px 30px;
+}
+
+    .modal .modal-header .close {
+        padding: 0;
+        border-radius: 0;
+        font-size: 36px;
+        line-height: 0px;
+        width: 35px;
+        height: 35px;
+    }
+
+/* Sub Title */
+
+.sub_title_form {
+    margin: 10px 0px 20px 0;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #ddd;
+    position: relative;
+}
+
+    .sub_title_form h4 {
+        margin: 0 0 5px 0;
+        font-size: 20px;
+    }
+
+    .sub_title_form::after {
+        content: '';
+        position: absolute;
+        width: 140px;
+        height: 2px;
+        bottom: -1px;
+        background-color: #0072CE;
+        left: 0;
+    }
+
+.input_two {
+    display: flex;
+    align-items: center;
+    width: 100%;
+}
+
+.w-20 {
+    width: 20%;
+}
+
+.w-80 {
+    width: 80%;
+}
+
+/* Table Css Design */
+
+table.dataTable.no-footer {
+    border-bottom: 1px solid #dddddd !important;
+}
+
+table.dataTable.no-footer {
+    border-bottom: 0;
+    margin: 15px 0px 15px 0px;
+    width: 100% !important;
+}
+
+table.dataTable thead th,
+table.dataTable thead td {
+    padding: 14px 18px !important;
+    border-bottom: 1px solid #111;
+}
+
+.table > :not(caption) > * > * {
+    padding: 1.15rem 2rem;
+    background-color: transparent;
+    background-image: none;
+    border-bottom-width: 1px;
+}
+
+.table > thead {
+    vertical-align: bottom;
+    background-color: rgba(90, 141, 238, 0.15);
+}
+
+.dataTables_wrapper .dataTables_length {
+    float: left;
+    margin: 0 0 20px 0px;
+}
+
+.dataTables_length select {
+    padding: 5px 5px 8px 5px;
+    margin: 0 3px 0 2px;
+    color: #333;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+
+.dataTables_wrapper .dataTables_filter input {
+    margin-left: 0.5em;
+    height: 40px;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    min-width: 220px;
+    padding: 0 10px;
+}
+
+.icon_cust_button {
+    padding: 0 5px;
+    color: #888888;
+    cursor: pointer;
+}
+
+table.dataTable tbody td:last-child {
+    text-align: center;
+}
+
+table.dataTable thead th,
+table.dataTable thead td {
+    padding: 10px 18px;
+    color: #0071cc;
+    /*letter-spacing: 0.04em;*/
+    border-bottom: 1px solid #111;
+}
+
+.dataTables_wrapper .dataTables_paginate .paginate_button.current {
+    color: #fff !important;
+    border: 1px solid #5a8dee !important;
+    padding: 0px 10px 4px 10px !important;
+    border-radius: 6px !important;
+    font-size: 18px !important;
+    background-color: #5a8dee !important;
+    background: rgba(90, 141, 238, 0.2) !important;
+}
+
+.dt-buttons {
+    position: absolute;
+    margin: 0 0 0px 0;
+    top: 0px;
+}
+
+.dataTables_wrapper .dataTables_filter {
+    float: right;
+    text-align: right;
+    margin: 0 0 20px 0px;
+}
+
+.sidebar-wrapper .menu .sidebar-link > span {
+    margin-left: 10px;
+    font-size: 16px;
+}
+
+table thead tr th:last-child,
+.action_th {
+    width: 15% !important;
+}
+
+/*.action_th{
+    width: 150px;
+}*/
+
+table tbody td,
+table thead th {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    max-width: 120px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
+}
+
+/* Firefox */
+
+input[type=number] {
+    -moz-appearance: textfield;
+}
+
+/* */
+
+.admin_toggle {
+}
+
+    .admin_toggle .switch {
+        position: relative;
+        display: inline-block;
+        width: 46px;
+        height: 26px;
+    }
+
+        .admin_toggle .switch input {
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+    .admin_toggle .slider {
+        position: absolute;
+        cursor: pointer;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: #ccc;
+        -webkit-transition: .4s;
+        transition: .4s;
+    }
+
+        .admin_toggle .slider:before {
+            position: absolute;
+            content: "";
+            height: 20px;
+            width: 20px;
+            left: 3px;
+            bottom: 3px;
+            background-color: white;
+            -webkit-transition: .4s;
+            transition: .4s;
+        }
+
+    .admin_toggle input:checked + .slider {
+        background-color: #2196F3;
+    }
+
+    .admin_toggle input:focus + .slider {
+        box-shadow: 0 0 1px #2196F3;
+    }
+
+    .admin_toggle input:checked + .slider:before {
+        transform: translateX(20px);
+    }
+
+    .admin_toggle .slider.round {
+        border-radius: 34px;
+    }
+
+.slider.round:before {
+    border-radius: 50%;
+}
+
+.user_customs_group .user_title_s {
+    width: 100px !important;
+}
+
+table tr td {
+    word-break: break-word;
+}
+
+.timepicker {
+    width: 100%;
+    height: 290px;
+    background-color: #fafafa;
+    position: absolute;
+    font-family: Calibri;
+    border: 1px solid #ddd;
+    z-index: 1014;
+}
+
+    .timepicker .top {
+        background-color: #fff;
+        color: #333;
+        height: auto;
+        line-height: inherit;
+        font-size: 18px;
+        text-align: center;
+        padding: 10px;
+        border-bottom: 1px solid #ddd;
+    }
+
+        .timepicker .top .active {
+            color: #333;
+        }
+
+    .timepicker .circle {
+        user-select: none;
+        background-color: #fff;
+        width: 150px;
+        height: 150px;
+        border-radius: 1000px;
+        position: absolute;
+        top: 50px;
+        left: 0;
+        box-sizing: border-box;
+        //margin: auto;
+        //border: 1px solid #ddd;
+    }
+
+        .timepicker .circle .mid {
+            position: absolute;
+            left: calc(80% - 0px);
+            top: calc(80% - 0px);
+            width: 2px;
+            height: 2px;
+            border-radius: 10px;
+            background-color: black;
+        }
+
+        .timepicker .circle .hour {
+            position: absolute;
+            height: 40px;
+            line-height: 40px;
+            width: 40px;
+            border-radius: 40px;
+            text-align: center;
+        }
+
+            .timepicker .circle .hour.selected {
+                background-color: #009788;
+            }
+
+                .timepicker .circle .hour.selected::after {
+                    content: '';
+                }
+
+            .timepicker .circle .hour::after {
+                z-index: -1;
+                background-color: #009788;
+                height: 1px;
+                width: 100%;
+                position: absolute;
+                transform: rotate(-90deg);
+                transform-origin: 100% 0%;
+                top: 50%;
+                width: 101px;
+                right: 50%;
+            }
+
+            .timepicker .circle .hour:hover {
+                color: white;
+                z-index: 2;
+            }
+
+                .timepicker .circle .hour:hover::after {
+                    content: '';
+                }
+
+            .timepicker .circle .hour:nth-child(12):after {
+                transform: rotate(330deg);
+            }
+
+            .timepicker .circle .hour:nth-child(11):after {
+                transform: rotate(300deg);
+            }
+
+            .timepicker .circle .hour:nth-child(10):after {
+                transform: rotate(270deg);
+            }
+
+            .timepicker .circle .hour:nth-child(9):after {
+                transform: rotate(240deg);
+            }
+
+            .timepicker .circle .hour:nth-child(8):after {
+                transform: rotate(210deg);
+            }
+
+            .timepicker .circle .hour:nth-child(7):after {
+                transform: rotate(180deg);
+            }
+
+            .timepicker .circle .hour:nth-child(6):after {
+                transform: rotate(150deg);
+            }
+
+            .timepicker .circle .hour:nth-child(5):after {
+                transform: rotate(120deg);
+            }
+
+            .timepicker .circle .hour:nth-child(4):after {
+                transform: rotate(90deg);
+            }
+
+            .timepicker .circle .hour:nth-child(3):after {
+                transform: rotate(60deg);
+            }
+
+            .timepicker .circle .hour:nth-child(2):after {
+                transform: rotate(30deg);
+            }
+
+            .timepicker .circle .hour:nth-child(1):after {
+                transform: rotate(0deg);
+            }
+
+        .timepicker .circle .hour2 {
+            z-index: 2;
+            position: absolute;
+            height: 30px;
+            line-height: 30px;
+            width: 30px;
+            border-radius: 40px;
+            text-align: center;
+            font-size: 14px;
+        }
+
+            .timepicker .circle .hour2:hover {
+                color: white;
+            }
+
+                .timepicker .circle .hour2:hover::after {
+                    content: '';
+                    background-color: #009788;
+                    height: 1px;
+                    width: 100%;
+                    position: absolute;
+                    transform: rotate(-90deg);
+                    transform-origin: 100% 0%;
+                    top: 50%;
+                    width: 64px;
+                    right: 50%;
+                    z-index: -1;
+                }
+
+            .timepicker .circle .hour2:nth-child(24):after {
+                transform: rotate(690deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(23):after {
+                transform: rotate(660deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(22):after {
+                transform: rotate(630deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(21):after {
+                transform: rotate(600deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(20):after {
+                transform: rotate(570deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(19):after {
+                transform: rotate(540deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(18):after {
+                transform: rotate(510deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(17):after {
+                transform: rotate(480deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(16):after {
+                transform: rotate(450deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(15):after {
+                transform: rotate(420deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(14):after {
+                transform: rotate(390deg);
+            }
+
+            .timepicker .circle .hour2:nth-child(13):after {
+                transform: rotate(360deg);
+            }
+
+            .timepicker .circle .hour:hover,
+            .timepicker .circle .hour2:hover {
+                background-color: #009788;
+            }
+
+        .timepicker .circle .min {
+            position: absolute;
+            height: 20px;
+            line-height: 20px;
+            width: 20px;
+            border-radius: 40px;
+            text-align: center;
+            font-size: 12px;
+        }
+
+            .timepicker .circle .min:hover {
+                background-color: #009788;
+            }
+
+                .timepicker .circle .min:hover::after {
+                    content: '';
+                    background-color: #009788;
+                    height: 1px;
+                    width: 100%;
+                    position: absolute;
+                    transform: rotate(-90deg);
+                    transform-origin: 100% 0%;
+                    top: 50%;
+                    width: 101px;
+                    right: 50%;
+                }
+
+            .timepicker .circle .min:nth-child(60):after {
+                transform: rotate(354deg);
+            }
+
+            .timepicker .circle .min:nth-child(59):after {
+                transform: rotate(348deg);
+            }
+
+            .timepicker .circle .min:nth-child(58):after {
+                transform: rotate(342deg);
+            }
+
+            .timepicker .circle .min:nth-child(57):after {
+                transform: rotate(336deg);
+            }
+
+            .timepicker .circle .min:nth-child(56):after {
+                transform: rotate(330deg);
+            }
+
+            .timepicker .circle .min:nth-child(55):after {
+                transform: rotate(324deg);
+            }
+
+            .timepicker .circle .min:nth-child(54):after {
+                transform: rotate(318deg);
+            }
+
+            .timepicker .circle .min:nth-child(53):after {
+                transform: rotate(312deg);
+            }
+
+            .timepicker .circle .min:nth-child(52):after {
+                transform: rotate(306deg);
+            }
+
+            .timepicker .circle .min:nth-child(51):after {
+                transform: rotate(300deg);
+            }
+
+            .timepicker .circle .min:nth-child(50):after {
+                transform: rotate(294deg);
+            }
+
+            .timepicker .circle .min:nth-child(49):after {
+                transform: rotate(288deg);
+            }
+
+            .timepicker .circle .min:nth-child(48):after {
+                transform: rotate(282deg);
+            }
+
+            .timepicker .circle .min:nth-child(47):after {
+                transform: rotate(276deg);
+            }
+
+            .timepicker .circle .min:nth-child(46):after {
+                transform: rotate(270deg);
+            }
+
+            .timepicker .circle .min:nth-child(45):after {
+                transform: rotate(264deg);
+            }
+
+            .timepicker .circle .min:nth-child(44):after {
+                transform: rotate(258deg);
+            }
+
+            .timepicker .circle .min:nth-child(43):after {
+                transform: rotate(252deg);
+            }
+
+            .timepicker .circle .min:nth-child(42):after {
+                transform: rotate(246deg);
+            }
+
+            .timepicker .circle .min:nth-child(41):after {
+                transform: rotate(240deg);
+            }
+
+            .timepicker .circle .min:nth-child(40):after {
+                transform: rotate(234deg);
+            }
+
+            .timepicker .circle .min:nth-child(39):after {
+                transform: rotate(228deg);
+            }
+
+            .timepicker .circle .min:nth-child(38):after {
+                transform: rotate(222deg);
+            }
+
+            .timepicker .circle .min:nth-child(37):after {
+                transform: rotate(216deg);
+            }
+
+            .timepicker .circle .min:nth-child(36):after {
+                transform: rotate(210deg);
+            }
+
+            .timepicker .circle .min:nth-child(35):after {
+                transform: rotate(204deg);
+            }
+
+            .timepicker .circle .min:nth-child(34):after {
+                transform: rotate(198deg);
+            }
+
+            .timepicker .circle .min:nth-child(33):after {
+                transform: rotate(192deg);
+            }
+
+            .timepicker .circle .min:nth-child(32):after {
+                transform: rotate(186deg);
+            }
+
+            .timepicker .circle .min:nth-child(31):after {
+                transform: rotate(180deg);
+            }
+
+            .timepicker .circle .min:nth-child(30):after {
+                transform: rotate(174deg);
+            }
+
+            .timepicker .circle .min:nth-child(29):after {
+                transform: rotate(168deg);
+            }
+
+            .timepicker .circle .min:nth-child(28):after {
+                transform: rotate(162deg);
+            }
+
+            .timepicker .circle .min:nth-child(27):after {
+                transform: rotate(156deg);
+            }
+
+            .timepicker .circle .min:nth-child(26):after {
+                transform: rotate(150deg);
+            }
+
+            .timepicker .circle .min:nth-child(25):after {
+                transform: rotate(144deg);
+            }
+
+            .timepicker .circle .min:nth-child(24):after {
+                transform: rotate(138deg);
+            }
+
+            .timepicker .circle .min:nth-child(23):after {
+                transform: rotate(132deg);
+            }
+
+            .timepicker .circle .min:nth-child(22):after {
+                transform: rotate(126deg);
+            }
+
+            .timepicker .circle .min:nth-child(21):after {
+                transform: rotate(120deg);
+            }
+
+            .timepicker .circle .min:nth-child(20):after {
+                transform: rotate(114deg);
+            }
+
+            .timepicker .circle .min:nth-child(19):after {
+                transform: rotate(108deg);
+            }
+
+            .timepicker .circle .min:nth-child(18):after {
+                transform: rotate(102deg);
+            }
+
+            .timepicker .circle .min:nth-child(17):after {
+                transform: rotate(96deg);
+            }
+
+            .timepicker .circle .min:nth-child(16):after {
+                transform: rotate(90deg);
+            }
+
+            .timepicker .circle .min:nth-child(15):after {
+                transform: rotate(84deg);
+            }
+
+            .timepicker .circle .min:nth-child(14):after {
+                transform: rotate(78deg);
+            }
+
+            .timepicker .circle .min:nth-child(13):after {
+                transform: rotate(72deg);
+            }
+
+            .timepicker .circle .min:nth-child(12):after {
+                transform: rotate(66deg);
+            }
+
+            .timepicker .circle .min:nth-child(11):after {
+                transform: rotate(60deg);
+            }
+
+            .timepicker .circle .min:nth-child(10):after {
+                transform: rotate(54deg);
+            }
+
+            .timepicker .circle .min:nth-child(9):after {
+                transform: rotate(48deg);
+            }
+
+            .timepicker .circle .min:nth-child(8):after {
+                transform: rotate(42deg);
+            }
+
+            .timepicker .circle .min:nth-child(7):after {
+                transform: rotate(36deg);
+            }
+
+            .timepicker .circle .min:nth-child(6):after {
+                transform: rotate(30deg);
+            }
+
+            .timepicker .circle .min:nth-child(5):after {
+                transform: rotate(24deg);
+            }
+
+            .timepicker .circle .min:nth-child(4):after {
+                transform: rotate(18deg);
+            }
+
+            .timepicker .circle .min:nth-child(3):after {
+                transform: rotate(12deg);
+            }
+
+            .timepicker .circle .min:nth-child(2):after {
+                transform: rotate(6deg);
+            }
+
+            .timepicker .circle .min:nth-child(1):after {
+                transform: rotate(0deg);
+            }
+
+    .timepicker .actions {
+        color: #2c6de9;
+        font-weight: bold;
+        font-size: 15px;
+        display: flex;
+        justify-content: flex-end;
+        position: absolute;
+        width: 105%;
+        box-sizing: border-box;
+        bottom: 10px;
+    }
+
+        .timepicker .actions .action {
+            display: inline-block;
+            width: 70px;
+            text-align: center;
+            height: 32.5px;
+            line-height: 37.5px;
+            margin-right: 10px;
+            cursor: pointer;
+            border-radius: 1px;
+        }
+
+            .timepicker .actions .action:hover {
+                background-color: rgba(0, 0, 0, 0.1);
+            }
+
+            .timepicker .actions .action:active {
+                background-color: rgba(0, 0, 0, 0.3);
+            }
+
+/*input {
+    height: 32px;
+    width: 100%;
+}*/
+
+/*body {
+    margin: 20px auto;
+    /*   display:flex;
+  justify-content:center; */
+
+}
+
+*/ .show-input {
+    width: 300px;
+    padding: 10px;
+}
+
+/*h3 {
+    margin-top: 20px;
+    white-space: no-wrap;
+    margin-left: 10px
+}*/
+
+.clockpicker-popover .popover-title {
+    background-color: #fff;
+    color: #999;
+    font-size: 18px !important;
+    font-weight: normal !important;
+}
+
+/* Custom css */
+
+.k-custom-accordian .panel-title > a:before {
+    float: right !important;
+    font-family: 'Font Awesome 5 Pro';
+    content: "\f068";
+    padding-right: 5px;
+}
+
+.k-custom-accordian .panel-title > a.collapsed:before {
+    float: right !important;
+    content: "\f067";
+    font-family: 'Font Awesome 5 Pro';
+}
+
+.k-custom-accordian .panel-heading {
+    padding: 15px;
+    border-bottom: 1px solid #ddd;
+    background-color: #fafafa;
+}
+
+.k-custom-accordian .panel-default {
+    border: 1px solid #ddd;
+    margin-bottom: 25px;
+}
+
+    .k-custom-accordian .panel-default .panel-body {
+        padding: 15px;
+    }
+
+.k-custom-accordian .panel-title {
+    font-size: 18px;
+    font-weight: normal;
+}
+
+    .k-custom-accordian .panel-title a {
+        color: #333;
+    }
+
+.section_formd {
+    padding: 25px 10px 10px 10px;
+    border: 1px solid #dddddd;
+    margin: 0 0px 20px 0;
+    position: relative;
+    border-radius: 4px;
+}
+
+.section_formd_title {
+    position: absolute;
+    top: -16px;
+    margin: 0 0 0 0;
+    padding: 3px 10px 3px 10px;
+    background-color: white;
+    border-radius: 10px;
+    font-size: 16px;
+    font-weight: 500;
+}
+
+.tab_padding_sec {
+    padding: 10px 5px 0px 5px !important;
+}
+
+#divModalCustom .modal-lg {
+    max-width: 1024px;
+}
+
+.total_details_c h3 {
+    margin-bottom: 0;
+}
+
+.model_scroll_custom {
+    max-height: 530px;
+    overflow-y: scroll;
+}
+
+.multipopup:before {
+    width: 100%;
+    height: auto;
+    background-color: rgba(47, 47, 47, 0.7);
+    content: '';
+    position: absolute;
+}
+
+.container {
+    max-width: 100% !important;
+}
+
+.upload_form {
+    display: flex;
+    position: relative;
+    padding: 10px 80px 0px 15px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    margin: 5px 0 15px 0;
+}
+
+.upload_form_add {
+    padding: 10px 0px 0px 15px;
+}
+
+.upload_form button.add_form_button {
+    position: absolute;
+    right: 15px;
+    bottom: 15px;
+}
+
+.upload_form .col-md-6 {
+    padding: 0 15px 0px 0;
+}
+
+.upload_form .delete_form_button {
+    position: absolute;
+    right: -10px;
+    top: -10px;
+    border: 1px solid red;
+    background-color: red;
+    color: white;
+    border-radius: 50%;
+    line-height: 20px;
+}
+
+.select-wrapper {
+    margin: auto;
+    max-width: 600px;
+    width: calc(100% - 40px);
+}
+
+.select-pure__select {
+    align-items: center;
+    background: #f9f9f8;
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    color: #363b3e;
+    cursor: pointer;
+    display: flex;
+    justify-content: left;
+    min-height: 44px;
+    padding: 5px 10px;
+    position: relative;
+    transition: 0.2s;
+    width: 100%;
+}
+
+.select-pure__options {
+    border-radius: 4px;
+    border: 1px solid rgba(0, 0, 0, 0.15);
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.04);
+    box-sizing: border-box;
+    color: #363b3e;
+    display: none;
+    left: 0;
+    max-height: 221px;
+    overflow-y: scroll;
+    position: absolute;
+    top: 50px;
+    width: 100%;
+    z-index: 5;
+}
+
+.select-pure__select--opened .select-pure__options {
+    display: block;
+}
+
+.select-pure__option {
+    background: #fff;
+    border-bottom: 1px solid #e4e4e4;
+    box-sizing: border-box;
+    height: 44px;
+    line-height: 25px;
+    padding: 10px;
+}
+
+.select-pure__option--disabled {
+    color: #e4e4e4;
+}
+
+.select-pure__option--selected {
+    color: #e4e4e4;
+    cursor: initial;
+    pointer-events: none;
+}
+
+.select-pure__option--hidden {
+    display: none;
+}
+
+.select-pure__selected-label {
+    align-items: 'center';
+    background: #5e6264;
+    border-radius: 4px;
+    color: #fff;
+    cursor: initial;
+    display: inline-flex;
+    justify-content: 'center';
+    margin: 5px 10px 5px 0;
+    padding: 3px 7px;
+}
+
+    .select-pure__selected-label:last-of-type {
+        margin-right: 0;
+    }
+
+    .select-pure__selected-label i {
+        cursor: pointer;
+        display: inline-block;
+        margin-left: 7px;
+    }
+
+    .select-pure__selected-label img {
+        cursor: pointer;
+        display: inline-block;
+        height: 18px;
+        margin-left: 7px;
+        width: 14px;
+    }
+
+    .select-pure__selected-label i:hover {
+        color: #e4e4e4;
+    }
+
+.select-pure__autocomplete {
+    background: #f9f9f8;
+    border-bottom: 1px solid #e4e4e4;
+    border-left: none;
+    border-right: none;
+    border-top: none;
+    box-sizing: border-box;
+    outline: none;
+    padding: 10px;
+    width: 100%;
+}
+
+.select-pure__placeholder--hidden {
+    display: none;
+}
+
+.multiselect_dropdown {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    position: relative;
+}
+
+    .multiselect_dropdown .c_search {
+        border: 0;
+        position: absolute;
+        right: 0px;
+        background-color: transparent;
+        padding: 7px 12px;
+        color: #0072ce;
+    }
+
+    .multiselect_dropdown .autocomplete-select {
+        width: 100%;
+    }
+
+    .multiselect_dropdown .select-pure__select {
+        min-height: 38px;
+        padding: 0 0 0 7px;
+    }
+
+    .multiselect_dropdown .btn-primary {
+        margin: 0 0 0 10px;
+    }
+
+    .multiselect_dropdown .select-pure__option--selected {
+        color: #5a8dee;
+        cursor: initial;
+        pointer-events: none;
+        background-color: #eee;
+    }
+
+.select-pure__selected-label {
+    font-size: 12px;
+}
+
+    .select-pure__selected-label i {
+        line-height: 18px;
+    }
+
+#tblNewInvoiceDetail tbody td:last-child {
+    overflow: visible;
+    max-width: 150px;
+}
+
+.filter_sections {
+    margin: 0 0 20px 0;
+}
+
+    .filter_sections .panel-title span {
+        color: #053382;
+        font-weight: 500;
+        margin-left: 8px;
+        opacity: 0.8;
+        font-size: 18px;
+        margin: 0 0 0 5px;
+    }
+
+    .filter_sections .panel-title i {
+        font-size: 18px;
+    }
+
+    .filter_sections .panel-title {
+        padding: 10px 10px 10px 10px;
+        border: 1px solid #1b6ec2;
+        border-radius: 5px;
+    }
+
+        .filter_sections .panel-title a {
+            display: block;
+        }
+
+    .filter_sections .panel-body {
+        padding: 15px 15px 15px 15px;
+        border: 1px solid #ddd;
+        border-radius: 7px;
+        margin: 0 0 30px 0;
+    }
+
+.BookDetNotExist {
+    font-size: 1rem;
+    font-weight: bold;
+}
+
+.details_th {
+    width: 100px !important;
+}
+
+.highlight_td {
+    background-color: #c4d6fa !important;
+    --bs-table-accent-bg: none !important;
+}
+
+.hightsecond {
+    background-color: #dee8fc !important;
+}
+
+/* Dashbord Start */
+
+.dashbord_note_data {
+    padding: 15px 15px 15px 15px;
+    box-shadow: 0 3px 11px 0px rgb(0 0 0 / 9%);
+    border-radius: 5px;
+    margin: 10px 0 30px 0;
+    position: relative;
+    overflow: hidden;
+    background-color: white;
+    transition: 0.2s all ease;
+}
+
+    .dashbord_note_data:before {
+        content: '';
+        position: absolute;
+        width: 80%;
+        height: 40px;
+        background-color: rgba(211, 237, 252, 0.5);
+        z-index: 0;
+        bottom: -10px;
+        right: -10px;
+        border-radius: 160% 0% 0% 0%;
+        transition: 0.2s all ease;
+    }
+
+    .dashbord_note_data:after {
+        content: '';
+        position: absolute;
+        width: 60%;
+        height: 110px;
+        background-color: rgba(159, 216, 249, 0.5);
+        z-index: 0;
+        bottom: -80px;
+        right: 0;
+        border-radius: 200% 0% 0 0;
+        transition: 0.2s all ease;
+    }
+
+    .dashbord_note_data:hover:before {
+        height: 50px;
+        transition: 0.2s all ease;
+    }
+
+    .dashbord_note_data:hover:after {
+        height: 120px;
+        transition: 0.2s all ease;
+    }
+
+    .dashbord_note_data h3 {
+        font-size: 24px;
+        font-weight: 500;
+        margin: 0 0 5px 0px;
+        z-index: 10;
+    }
+
+    .dashbord_note_data p {
+        margin: 0 0 0 0;
+        font-size: 16px;
+        z-index: 10;
+    }
+
+/*Chart Section*/
+
+.dashbord_chart_sec {
+    padding: 15px 20px 20px 20px;
+    border-radius: 5px;
+    background-color: #ffffff;
+    margin: 0 0 30px 0;
+    box-shadow: 0 4px 11px 0px rgb(0 0 0 / 10%);
+    min-height: 365px;
+    height: auto;
+}
+
+.chart_info {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    padding: 0 0 10px 0;
+    border-bottom: 1px solid #dddddd;
+    margin: 0 0 20px 0;
+}
+
+    .chart_info label {
+        font-size: 18px;
+        color: #333333;
+        font-weight: 500;
+    }
+
+.chart_link {
+    font-size: 16px;
+    letter-spacing: 0px;
+    color: #36a2eb;
+}
+
+.form-control:disabled,
+.form-control[readonly] {
+    background-color: #ffffff;
+    opacity: 1;
+}
+
+.dashbord_panel {
+    margin: 0 0 15px 0;
+    padding: 10px 20px 0px 15px;
+    border-radius: 5px;
+    box-shadow: 0 3px 11px 0px rgb(0 0 0 / 8%);
+    position: relative;
+    overflow: hidden;
+}
+
+    .dashbord_panel:before {
+        content: '';
+        position: absolute;
+        width: 80%;
+        height: 60px;
+        background-color: rgba(159, 216, 249, 0.3);
+        z-index: 0;
+        bottom: 0;
+        right: 0;
+        border-radius: 160% 0% 0 0;
+        transition: 0.2s all ease;
+    }
+
+    .dashbord_panel:after {
+        content: '';
+        position: absolute;
+        width: 100%;
+        height: 81px;
+        background-color: rgba(211, 237, 252, 0.3);
+        z-index: 0;
+        bottom: -10px;
+        right: -10px;
+        border-radius: 160% 0% 0% 0%;
+        transition: 0.2s all ease;
+    }
+
+    .dashbord_panel .row {
+        justify-content: flex-end;
+    }
+
+    .dashbord_panel .cust_col {
+        z-index: 9;
+        width: 20%;
+    }
+
+    .dashbord_panel .cust_col_btn {
+        z-index: 9;
+        display: flex;
+        align-items: flex-end;
+        padding-bottom: 16px;
+        width: 10%;
+    }
+
+/* Dashbord End */
+
+.th-100 {
+    width: 100px !important;
+}
+
+.booking-error {
+    background-color: red !important;
+    color: black;
+}
+
+.height_a {
+    min-height: inherit;
+    height: 100%;
+}
+
+.mb-30 {
+    margin-bottom: 30px !important;
+}
+
+.date_label_dis {
+    display: flex;
+    align-items: center;
+    height: 100%;
+}
+
+    .date_label_dis label {
+        font-size: 16px;
+        text-align: center;
+        min-width: 130px;
+        font-weight: 600;
+        padding: 8px 20px 8px 20px;
+        margin: 0px 10px 0px 10px;
+        border-radius: 10px;
+        background-color: rgba(49, 110, 194, 0.2);
+    }
+
+    .date_label_dis button {
+        margin: 0 0 -8px 0;
+        border-radius: 6px;
+        background-color: rgba(49, 110, 194, 0.2);
+        border: 0;
+        line-height: 47px;
+        font-size: 0;
+        width: 35px;
+        height: 35px;
+    }
+
+        .date_label_dis button i {
+            font-size: 18px;
+        }
+
+.color_section {
+    margin: 0 0 20px 0;
+    display: flex;
+    align-items: center;
+    padding: 8px 8px 8px 8px;
+    border: 1px solid #dddddd;
+    border-radius: 5px;
+}
+
+    .color_section label {
+        font-size: 16px;
+        margin: 0px 0 0 10px;
+        letter-spacing: 0.00em;
+    }
+
+.color_width {
+    width: 20px;
+    height: 20px;
+}
+
+.color_one {
+    background-color: #979abf !important;
+}
+
+.color_two {
+    background-color: #d4969a !important;
+}
+
+.color_three {
+    background-color: #81c8a1 !important;
+}
+
+.color_four {
+    background-color: #d498c0 !important;
+}
+
+.color_five {
+    background-color: #cd5764 !important;
+}
+
+.color_six {
+    background-color: #c0bb52 !important;
+}
+
+.color_seven {
+    background-color: #b7b6b7 !important;
+}
+
+.color_eight {
+    background-color: #4B9EDB !important;
+}
+
+.table > :not(caption) > * > * {
+    padding: 5px 10px 5px 10px;
+}
+
+.section_formd_asd {
+    padding: 20px 15px 0px 15px;
+    border-radius: 10px;
+}
+
+/*  */
+
+.branch_dropdown {
+    display: flex;
+    align-items: center;
+    margin: 0 10px 0px 0;
+}
+
+    .branch_dropdown label {
+        margin: 0 10px 0 0;
+    }
+
+    .branch_dropdown .input-group {
+        width: auto;
+    }
+
+.table-grid-block {
+    display: flex;
+    position: relative;
+}
+
+.table-grid-block p {
+    margin: 0;
+    padding: 8px 0;
+    position: relative;
+    /* flex: 0 0 50%; */
+}
+
+.table-grid-block p.available-time {
+    flex: 0 0 70px;
+}
+
+p.available-status {
+    flex: 0 0 50%;
+}
+
+.table-grid-block p.available-status:after {
+    content: " ";
+    height: 1px;
+    width: 100%;
+    background-color: #ddd;
+    position: absolute;
+    left: 0;
+    top: 50%;
+    z-index: 1;
+}
+
+.table-grid-block .badge {
+    position: relative;
+    z-index: 2;
+}
+
+.whitespace-no {
+    white-space: nowrap;
+}
+
+.table-grid .table-responsive {
+    max-height: 125px;
+    overflow: auto;
+}
+
+
+
+
+/**********  User Layout CSS  **********/
+.userheader .logo {
+    max-width: 180px;
+    display: block;
+}
+.userheader .logo img {
+    width: auto;
+    height: auto;
+    max-width: 100%;
+    max-height: 100%;
+}
+.room-info {
+    position: relative;
+    border: 1px solid #dee2e6;
+    padding: 30px 20px 20px;
+    margin-top: 25px;
+}
+.room-info h4 {
+    background: #fff;
+    position: absolute;
+    top: 0;
+    transform: translateY(-50%);
+    padding: 0 10px;
+    margin-left: -10px;
+}
+.room-info table {
+    width: 100%;
+}
+.room-info table th, .room-info table td {
+    padding: 5px 12px;
+}
+.room-info table th {
+    width: 30%;
+}
+
+.custom_blocks {
+    height: 50px;
+    border: 1px solid #1177bf;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin: 0 0 4px 0;
+    font-size: 14px;
+    color: #1177bf;
+    background-color: rgba(17, 119, 191, 0.2);
+}
+/**********  User Layout CSS  **********/
+
+.datetimepicker td, .datetimepicker th {
+    width: 30px;
+    height: 20px;
+}
+.datetimepicker {
+    padding: 10px;
+}
+
+/* Updated Designing CSS Start */
+.tooltip-inner {
+    max-width: 100% !important;
+    text-align: left;
+}
+
+.allocated_month {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-size: 16px;
+    color: #222222;
+    font-weight: 500;
+    margin: 0 0 0 0;
+    padding: 7px 0 7px 0;
+    text-align: center;
+    border-bottom: 1px solid #0366d6;
+}
+    .allocated_month:last-child {
+        border-bottom: 0px;
+    }
+
+.tbl_monthly_Dairy_block {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+}
+
+.tbl_monthly_Dairy_block .day_section {
+    resize: none;
+    padding: 5px;
+    border: 1px solid #0366d6;
+    width: 100%;
+    background-color: #e8f3ff;
+    max-height: 110px;
+    margin: 0 0 10px 0;
+    overflow-x: auto;
+}
+
+.tbl_monthly_Dairy td {
+    border: 1px solid #dddddd;
+    padding: 10px;
+    width: 100px;
+}
+
+.tbl_monthly_Dairy_block .block_date {
+    font-weight: 600;
+    color: #222222;
+    font-size: 16px;
+}
+/* Updated Desinging CSS End */
+
+
+/* Custom Slot Table Start */
+.custom_slot_table {
+    width: 100%;
+    position: relative;
+    margin: 0 0 5px 0;
+}
+.custom_slot_table tbody {
+    
+}
+    .custom_slot_table tr {
+        border-bottom: 1px solid #dddddd;
+    }
+    .custom_slot_table tr:first-child {
+        border-top: 1px solid #dddddd;
+    }
+    .custom_slot_table tr td {
+        border-left: 1px solid #dddddd;
+        padding: 10px 10px;
+    }
+        .custom_slot_table tr td:last-child {
+            border-right: 1px solid #dddddd;
+        }
+    .custom_slot_table tr th {
+        padding: 10px 10px;
+    }
+.slot_title {
+    font-size: 14px;
+    font-weight: 500;
+    color: #222222;
+}
+.slot_highlight {
+    background-color: #0366d6;
+    color: #ffffff;
+}
+/* Custom Slot Table End */
+
+
+.roomavl_info{
+
+}
+    .roomavl_info tr th {
+        padding: 10px 10px;
+    }
+.roomavl_info tr td{
+    padding: 10px;
+}
+
+
+/* Scroll Start */
+::-webkit-scrollbar {
+    width: 7px;
+    height: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+    background: #d8dde6;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+    background: #0366d6;
+    border-radius: 20px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+    background: #555;
+}
+
+.table-input-text {
+    background: rgba(90, 141, 238, 0.15);
+    border: none;
+    padding: 10px 10px;
+    width: 60px;
+    text-align: center;
+    border-radius: 5px;
+}
+/* Scroll End */

@@ -1,0 +1,286 @@
+﻿@model Integr8ed.Service.Dto.VisitorDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmVisitor" asp-action="AddEditVisitor" asp-controller="Visitors" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Visitor</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            <input type="hidden" asp-for="IsEmailEdit" />
+            @if (Model.IsEmailEdit == false)
+            {
+        <div class="row">
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column" class="form-label">First Name *</label>
+                    <input type="text" class="form-control" asp-for="Name" name="Name" placeholder="Enter First Name here">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column" class="form-label">Last Name *</label>
+                    <input type="text" class="form-control" asp-for="SurName" name="SurName" placeholder="Enter Last Name here">
+                </div>
+            </div>
+            @if (Model.Id == 0)
+            {
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">Email *</label>
+                        <input type="text" class="form-control" asp-for="Email" id="Email" name="Email" placeholder="Enter Email here">
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">Email *</label>
+                        <input type="text" class="form-control" readonly asp-for="Email" id="Email" name="Email" placeholder="Enter Email here">
+                    </div>
+                </div>
+            }
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column" class="form-label">Mobile Number *</label>
+                    <input type="number" class="form-control" asp-for="Mobile" name="Mobile" placeholder="Enter Mobile Number here">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column" class="form-label">PostCode *</label>
+                    <input type="text" class="form-control" asp-for="PostCode" name="PostCode" placeholder="Enter PostCode here">
+                </div>
+            </div>
+
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column" class="form-label">Telephone </label>
+                    <input type="number" class="form-control" asp-for="Telephone" name="Telephone" placeholder="Enter Telephone here">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea3" class="form-label">Address *</label>
+                    <textarea class="form-control" asp-for="Address" name="Address" id="exampleFormControlTextarea3" placeholder="Enter Address here" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                    <textarea class="form-control" asp-for="Description" name="Description" id="exampleFormControlTextarea1" placeholder="Enter Description here" rows="3"></textarea>
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea2" class="form-label">Notes</label>
+                    <textarea class="form-control" asp-for="Notes" name="Notes" id="exampleFormControlTextarea2" placeholder="Enter Notes here" rows="3"></textarea>
+                </div>
+            </div>
+
+            @*<div class="col-md-6 check_box_center">
+            <div class="checkbox">
+                <input type="checkbox" id="activeRoom" asp-for="IsActive" class="form-check-input">
+                <label for="activeRoom">
+                    Active/Inactive Statistics
+                </label>
+            </div>
+        </div>*@
+        </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">Email *</label>
+                        <input type="text" class="form-control" asp-for="Email" id="Email" name="Email" placeholder="Enter Email here">
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        jQuery.validator.addMethod("nameAndno", function (value, element) {
+        return this.optional(element) || /^([a-zA-Z ]*)$/i.test(value);
+         }, "Please Enter a Valid Name");
+
+        var validationresult = $("#frmVisitor").validate({
+            onfocusout: false,
+            rules: {
+                "Description": {
+                    required: false,
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Name": {
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "SurName": {
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Address": {
+                    required: true,
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "PostCode": {
+                    required: true,
+                    maxlength: 10,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Email": {
+                    required: true,
+                    email: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/Visitors/CheckVisitorEmail",
+                        type: "GET",
+                        data: { Email: $(".Email").val(), Id: $("#Id").val() }
+                    },
+                },
+                "Telephone": {
+                    maxlength: 10,
+                    minlength: 10,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Mobile": {
+                    required: true,
+                    minlength: 10,
+                    maxlength: 12,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Notes": {
+                    required: false,
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+
+                },
+            },
+            messages: {
+                "Description": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "Name": {
+                    required: "Please enter a First Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "SurName": {
+                    required: "Please enter a Last Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Address": {
+                    required: "Please enter a Address",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "PostCode": {
+                    required: "Please enter a PostCode",
+                    maxlength: "More than 10 characters are not allowed !"
+                },
+                "Email": {
+                    required: "Please enter a Email",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Email already exist !"
+                },
+                "Telephone": {
+                    minlength: "Minimum 10 characters are required !",
+                    maxlength: "More than 10 characters are not allowed !"
+                },
+                "Mobile": {
+                    required: "Please enter a Mobile Number",
+                    minlength: "Minimum 10 characters are required !",
+                    maxlength: "More than 12 characters are not allowed !"
+                },
+                "Notes": {
+                    maxlength: "More than 200 characters are not allowed !"
+                }
+            },
+
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblVisitor");
+                        return false;
+
+                    }
+                   // window.location.href = `/ClientAdmin/Visitors/Index`;
+                });
+            }
+        });
+
+
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+            $("#btnSave").hide();
+            
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+        //if ($("#Id").val() != 0 && $("#IsView").val() == "false") {
+        //    $("#Email").rules("remove", "remote");
+
+        //}
+
+
+    });
+</script>

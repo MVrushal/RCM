@@ -1,0 +1,125 @@
+﻿@model Integr8ed.Service.Dto.MenuDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmMenu" asp-action="AddEditMenu" asp-controller="Catering" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Menu</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="DescriptionOFFood" class="form-label">Description of Food *</label>
+                        <textarea class="form-control" asp-for="DescriptionOFFood" name="DescriptionOFFood" id="DescriptionOFFood" placeholder="Enter Description of Food here" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1">Notes</label>
+                        <textarea asp-for="Notes" name="Notes" class="form-control" id="exampleFormControlTextarea1" placeholder="Enter Notes here" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        var validationresult = $("#frmMenu").validate({
+            onfocusout: false,
+            rules: {
+                "Notes": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }//,
+                    //remote: {
+                    //    url: "/ClientAdmin/RoomTypes/CheckTitle",
+                    //    type: "GET",
+                    //},
+                },
+                "DescriptionOFFood": {
+                    required: true,
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/Catering/CheckDescriptionofFood",
+                        type: "GET",
+                        data: { DescriptionOFFood: $(".DescriptionOFFood").val(), Id: $("#Id").val() }
+                    },
+                },
+
+            },
+            messages: {
+                "Notes": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "DescriptionOFFood": {
+                    required: "Please enter a  Description of Food",
+                    maxlength: "More than 200 characters are not allowed !",
+                    remote: "Description of Food already exist !"
+                },
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblMenu");
+                        return false;
+
+                    }
+                    //window.location.href = `/ClientAdmin/Catering/Index`;
+                });
+
+            }
+        });
+
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+        //if ($("#Id").val() != 0 && $("#IsView").val() == "false") {
+
+        //    $("#RoomTitle").rules("remove","remote");
+        //}
+
+    });
+
+</script>

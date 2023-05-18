@@ -1,0 +1,250 @@
+﻿@using Microsoft.AspNetCore.Http
+@using Microsoft.AspNetCore.Mvc.RazorPages
+@using Integr8ed.Service.Enums
+@inject IHttpContextAccessor HttpContextAccessor
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>@ViewData["Title"] - Integr8ed</title>
+
+    <link rel="stylesheet" href="~/css/bootstrap.css">
+
+    <link rel="stylesheet" href="~/css/bootstrap-datetimepicker.min.css" />
+
+    <link href="~/css/clockpicker.css" rel="stylesheet" />
+
+    <link href="~/css/jquery.timepicker.css" rel="stylesheet" />
+    <link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+    <link href="~/css/site.css" rel="stylesheet" />
+    <link href="~/css/sweetalert.css" rel="stylesheet" />
+    <link rel="stylesheet" href="~/vendors/chartjs/Chart.min.css">
+
+    <link rel="stylesheet" href="~/vendors/perfect-scrollbar/perfect-scrollbar.css">
+    <link rel="stylesheet" href="~/css/app.css">
+    
+
+    <link href="~/css/jquery-ui.css" rel="stylesheet" />
+
+    @* Custom CSS *@
+    <link href="~/css/admin-style.css" rel="stylesheet" />
+    <link href="~/css/admin-responsive-style.css" rel="stylesheet" />
+
+    @* Font family *@
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@100;200;300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+    @* Font Awsome Icons *@
+    <link rel="stylesheet" href="https://pro.fontawesome.com/releases/v5.10.0/css/all.css" integrity="sha384-AYmEC3Yw5cVb3ZcuHtOA93w35dYTsvhLPVnYs9eStHfGJvOvKxVfELGroGkvsg+p" crossorigin="anonymous" />
+    <link href="https://cdn.datatables.net/1.10.20/css/jquery.dataTables.css" rel="stylesheet" type="text/css" />
+    @*<link href="https://cdn.datatables.net/responsive/2.2.7/css/responsive.bootstrap4.min.css"/>*@
+    <link rel="shortcut icon" href="~/images/favicon.png" type="image/x-icon">
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+
+    @RenderSection("Head", required: false)
+</head>
+
+<body>
+
+    <div id="main" class="ml-0">
+        <header class="userheader">
+            <nav class="navbar navbar-header navbar-expand navbar-light">
+                <a href="/ClientAdmin/Dashboard/index" class="logo"><img src="/images/Integr8ed Systems_blank.png" alt="" srcset=""></a>
+                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+                    <ul class="navbar-nav d-flex align-items-center navbar-light ml-auto">
+                        <li class="dropdown nav-icon mr-2">
+                            @*<a href="mailto:ams@narola.email?subject=Mail to the admin">*@
+                            <a href="mailto:helpdesk@integr8ed.co.uk?subject=Mail to the admin">
+                                <div class="d-lg-inline-block">
+                                    <svg xmlns="http://www.w3.org/2000/svg" width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather feather-mail"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"></path><polyline points="22,6 12,13 2,6"></polyline></svg>
+                                </div>
+                            </a>
+                        </li>
+                        <li class="dropdown">
+                            <a href="#" data-toggle="dropdown" class="nav-link dropdown-toggle nav-link-lg nav-link-user" aria-expanded="false">
+                                <div class="avatar mr-1">
+                                    <img class="profile-pic" src="/UploadedFiles/User-637431111822545152.png">
+                                </div>
+                                <div class="user_names d-lg-inline-block">Hi, @HttpContextAccessor.HttpContext.Session.GetString("FullName")</div>
+                            </a>
+                            <div class="dropdown-menu dropdown-menu-right">
+                                <form class="form-inline" asp-area="Identity" asp-page="/Account/Logout" asp-route-returnUrl="@Url.Action("Index", "Home", new { area = "" })">
+                                   
+                                    <button type="submit" class="dropdown-item"><i class="fas fa-power-off"></i> Logout</button>
+                                </form>
+                            </div>
+                        </li>
+                    </ul>
+                </div>
+            </nav>
+        </header>
+        @* Render Body Start *@
+        @RenderBody()
+
+        <footer>
+            <div class="footer clearfix mb-0 text-muted">
+                <div class="float-left">
+                    <label class="left_t_l">
+                        Integr8ed systems ltd
+                    </label>
+                    <p class="w_text_r">
+                        Victoria House Woodwared Road
+                        L33 7UY
+                    </p>
+                </div>
+                <div class="float-right right_text">
+                    <p><span> Phone : </span> +(123 - 456 - 789)</p>
+                    <p>Booking Manager 2021</p>
+                    <p><span>Version : </span>1.1</p>
+                </div>
+            </div>
+        </footer>
+    </div>
+    @* Main Section End *@
+    <div class="modal fade admin_modelpop multipopup" id="divModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+            <div class="modal-content">
+                <div id="modalContent"></div>
+            </div>
+        </div>
+    </div>
+    @*</div>*@
+
+    @* script *@
+    @*  <script src="~/lib/jquery/dist/jquery.min.js"></script>
+
+        <script src="~/js/feather-icons/feather.min.js"></script>
+        <script src="~/vendors/perfect-scrollbar/perfect-scrollbar.min.js"></script>
+
+        <script src="~/js/app.js"></script>
+
+        <script src="~/vendors/chartjs/Chart.js"></script>
+        <script src="~/vendors/apexcharts/apexcharts.min.js"></script>
+
+        <script src="~/js/main.js"></script>
+
+        <script src="~/js/site.js" asp-append-version="true"></script>
+    *@
+
+
+    <script src="~/Bundle/Integr8ted_Js.js"></script>
+
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    @RenderSection("Scripts", required: false)
+    <script>
+        $(".panel-heading").parent('.panel').hover(
+            function () {
+                $(this).children('.collapse').collapse('show');
+            },
+            function () {
+                $(this).children('.collapse').collapse('hide');
+            }
+        );
+
+        $(document).on("click", "#btnResetPass", function () {
+            ResetPassword();
+        });
+
+
+        function ResetPassword() {
+            $("#modalContent").load(`/ClientAdmin/Accounts/_ResetOldPassToNewPass`, function () {
+                ShowModal();
+            });
+        }
+
+        $(document).ready(function () {
+            $.ajax({
+                url: `/ClientAdmin/Dashboard/GetBranchList`,
+                type: 'GET',
+                success: function (response) {
+                    var selectlist = `<div class="form-group branch_dropdown">
+                                            <label for="first-name-column" id="dropLabel"> Change Branch :</label>
+<span id="AboveBranch" rel="tooltip"  data-placement="auto"  data-original-title="You don't have permission to change branch">
+                                            <div  class="input-group" >
+                                                <select  class="form-control form-select" data-val="true"  id="BranchId" name="BranchId">
+
+                                                    {options}
+                                                </select>
+                                            </div>
+ </span>
+                                      </div>`;
+                    var options = '';
+
+                    for (let i = 0; i < response.length; i++) {
+                        options += `<option value="${response[i].id}">${ response[i].branchName }</option>`;
+                    }
+                    selectlist = selectlist.replace('{options}', options);
+                    $("#ManageBranch").html(selectlist);
+                    $("#BranchId").val(@HttpContextAccessor.HttpContext.Session.GetString("BranchId"));
+
+                    if (@HttpContextAccessor.HttpContext.Session.GetInt32("IsAdmin") === 1) {
+                        $("#BranchId").prop("disabled", false);
+                        $("#dropLabel").html("Change Branch :");
+                        $("#AboveBranch").attr("data-original-title", "change branch");
+                        $("#AboveBranch").tooltip();
+                    } else {
+                        $("#BranchId").prop("disabled", true);
+                        $("#dropLabel").html("Branch");
+                        $("#AboveBranch").attr("data-original-title", "You don't have permission to change branch");
+                        $("#AboveBranch").tooltip();
+                    }
+
+
+                },
+                error: function () { }
+            });
+
+
+            $(document).off("change", "#BranchId");
+            $(document).on("change", "#BranchId", function () {
+                $.ajax({
+                    url: `/ClientAdmin/Dashboard/changeBranch`,
+                    type: "GET",
+                    data: { id: $("#BranchId").val() },
+                    success: function () {
+
+                        var tableList = $(document).find('table');
+                        var isDiary  = $.grep(tableList, function (a) {
+
+                            var id = $(a).attr("id");
+                            return (id === 'tblDiary');
+                        })
+                        var Url = "ClientAdmin/InternalBooking/Index";
+                        if ($(location).attr("href").indexOf(Url) > 0 && isDiary.length == 0) {
+                            $('#' + $(tableList[0]).attr('id')).DataTable().ajax.reload();
+
+                        } else if (isDiary.length == 0) {
+
+                            $.each(tableList, function (key, ele) {
+
+                                //refresh datatables
+                                $('#' + $(ele).attr('id')).DataTable().ajax.reload();
+
+                            });
+                        } else if (isDiary.length > 0) {
+                            localStorage.setItem("previousSelectedDate", $("#BookingDateFromSent").val());
+                            location.reload();
+
+                        }
+
+                        if (typeof GetdashboardDetail === "function") {
+
+                            GetdashboardDetail();
+                        }
+
+                    },
+                    error: function () { },
+                });
+              //  alert(@HttpContextAccessor.HttpContext.Session.GetString("BranchId"));
+
+            });
+        })
+    </script>
+    @*@RenderSection("Scripts", required: false)*@
+
+</body>
+</html>
+

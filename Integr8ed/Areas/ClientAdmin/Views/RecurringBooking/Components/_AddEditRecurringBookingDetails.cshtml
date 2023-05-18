@@ -1,0 +1,993 @@
+﻿@model Integr8ed.Service.Dto.RecurringBookingsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@using static Integr8ed.Enums.Enum;
+
+<div class="modal-content">
+    <form id="frmRecurringbooking" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Add New Recurring Booking</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IsView" />
+                <input type="hidden" asp-for="UserName" />
+                <input type="hidden" asp-for="RoomTypeName" />
+
+                <div class="row">
+                    <div class="col-md-6" id="IsExtBook">
+                        <div class="form-group">
+                            <input type="checkbox" name="IsExternalBooking" id="IsExternalBooking" class="form-check-input">
+                            <label for="ReturnedBookingForm">
+                                Is External Booking
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-md-6" id="UserList">
+                        <div class="form-group">
+                            @if (!ViewBag.IsUserEmpty)
+                            {
+                                <label>Select User *</label>
+
+                                @Html.DropDownListFor(x => x.ExternalBookingClientId, ViewBag?.UserList as IEnumerable<SelectListItem>, "Select User", new { @class = "form-control form-select", @id = "ExternalBookingClientId", @Name = "ExternalBookingClientId" })
+
+                            }
+
+                            else
+                            {
+                                <label style="color:red">Please Add User First !</label>
+                            }
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Event Title *</label>
+                            <input type="text" class="form-control" name="EventTitle" id="EventTitle" asp-for="EventTitle" placeholder="Enter Event Title here">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            @if (!ViewBag.IsRoomTypeEmpty)
+                            {
+                                <label>Room Type *</label>
+
+                                @Html.DropDownListFor(x => x.RoomTypeId, ViewBag?.RoomType as IEnumerable<SelectListItem>, "Select Room Type", new { @class = "form-control form-select", @id = "RoomTypeId", @Name = "RoomTypeId", required = "Select Room Type" })
+
+                            }
+                            else
+                            {
+                                <label style="color:red">Please Add Room Type First !</label>
+                            }
+
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @if (!ViewBag.IsUserGroupEmpty)
+                            {
+                                <label>User Group *</label>
+
+                                @Html.DropDownListFor(x => x.UserGroupId, ViewBag?.UserGroup as IEnumerable<SelectListItem>, "Select User Group", new { @class = "form-control form-select", @id = "UserGroupId", @Name = "UserGroupId", required = "Select User Group" })
+
+                            }
+                            else
+                            {
+                                <label style="color:red">Please Add User Group First !</label>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-md-6 col-sm-6">
+                        <div class="form-group">
+                            @if (!ViewBag.IsMeetingTypeEmpty)
+                            {
+                                <label>Meeting type *</label>
+
+                                @Html.DropDownListFor(x => x.MeetingTypeId, ViewBag?.MeetingType as IEnumerable<SelectListItem>, "Select Meeting type", new { @class = "form-control form-select", @id = "MeetingTypeId", @Name = "MeetingTypeId", required = "Select Meeting type" })
+
+                            }
+                            else
+                            {
+                                <label style="color:red">Please Add Meeting type First !</label>
+                            }
+
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            <label for="Every">Select Name Of Days</label>
+                            <div class="multiselect_dropdown">
+                                <span id="Every" class="autocomplete-select"></span>
+                                <button type="button" class="btn btn-primary" id="resetAutocomplete">
+                                    <i class="fas fa-sync-alt"></i>
+                                </button>
+                            </div>
+
+                            @*@if (!ViewBag.IsBookingStatusEmpty)
+                                {
+                                    <label>Every *</label>
+
+                                    @Html.DropDownListFor(x => x.Every, ViewBag?.NameOfDays as IEnumerable<SelectListItem>, "Select Name Of Days", new { @class = "form-control form-select", @id = "Every", @Name = "Every", required = "Select Name Of Days" })
+
+                                }
+                                else
+                                {
+                                    <label style="color:red">Please Add Name Of Days First !</label>
+                                }*@
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Booking Contact Name *</label>
+                            <input type="text" class="form-control" asp-for="BookingContact" name="BookingContact" placeholder="Enter Booking Contact Name here">
+                        </div>
+                    </div>
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label>Mobile Number *</label>
+                            <input type="text" class="form-control" asp-for="Mobile" name="Mobile" placeholder="Enter Mobile here">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group input-append date form_datetime">
+                            <label for="first-name-column">Date From *</label>
+                            <div class="input-group date form_date col-md-5" data-date="DateFrom" data-date-format="dd MM yyyy" data-link-field="DateFrom" data-link-format="dd-mm-yyyy">
+                                <input class="form-control" size="16" asp-for="DateFrom" autocomplete="off" name="DateFrom" id="DateFrom" type="text" readonly placeholder="Enter Date From here">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group input-append date form_datetime">
+                            <label for="first-name-column">Date To *</label>
+                            <div class="input-group date form_date col-md-5" data-date="DateTo" data-date-format="dd MM yyyy" data-link-field="DateTo" data-link-format="dd-mm-yyyy">
+                                <input class="form-control" size="16" asp-for="DateTo" autocomplete="off" name="DateTo" id="DateTo" type="text" readonly placeholder="Enter Date To here">
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-6">
+                        <div class="form-group">
+                            @if (!ViewBag.IsBookingStatusEmpty)
+                            {
+                                <label>Booking Status *</label>
+
+                                @Html.DropDownListFor(x => x.BookingStatus, ViewBag?.BookingStatus as IEnumerable<SelectListItem>, "Select Booking Status", new { @class = "form-control form-select", @id = "BookingStatus", @Name = "BookingStatus", required = "Select Booking Status" })
+
+                            }
+                            else
+                            {
+                                <label style="color:red">Please Add Booking Status First !</label>
+                            }
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="demo form-group">
+                            <label>Time Start *</label>
+                            <input class="form-control" type="time" autocomplete="off" asp-for="TimeStart" name="TimeStart" id="TimeStart" placeholder="Enter Time Start here" />
+                            @*<input type="text" autocomplete="off" class="time form-control" disabled asp-for="TimeStart" name="TimeStart" placeholder="Enter Time Start here">*@
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="demo form-group">
+                            <label>Time End *</label>
+                            <input class="form-control" type="time" autocomplete="off" asp-for="TimeEnd" name="TimeEnd" id="TimeEnd" placeholder="Enter Time End" />
+                            @*<input type="text" class="time form-control" autocomplete="off" disabled asp-for="TimeEnd" name="TimeEnd" placeholder="Enter Time End here">*@
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label>Car Spaces Req.</label>
+                            <input type="number" class="form-control" asp-for="CarSpaceRequired" name="CarSpaceRequired" placeholder="Enter Car Spaces Req. here">
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-sm-6">
+                        <div class="form-group">
+                            <label>No of Attending *</label>
+                            <input type="number" class="form-control" asp-for="NumberOfAttending" name="NumberOfAttending" placeholder="Enter No of Attending here">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="loading">
+                    <span>Existing Booking Details 
+                    <button type="button" id="btnPrint" class="btn btn-secondary">
+                    Print
+                    </button></span>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnDetailSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/jquery.timepicker.js"></script>
+<script src="~/js/bootstrap-datepicker.js"></script>
+<script src="~/js/bundle.min.js"></script>
+
+<script type="text/javascript">
+
+
+    var rowModel = "";
+    var bookingType = "";
+    var roomTypeName = "";
+    var multiSelectDropDown;
+    var noofDatesForBooking;
+    var eventTitle;
+    var selectedDay = "";
+
+    $(document).ready(function () {
+
+        $('.loading').hide();
+        $(document).off("change", "#TimeEnd");
+        $(document).on("change", "#TimeEnd", function () {
+            var result = new Date('1/1/1999 ' + $("#TimeEnd").val()) > new Date('1/1/1999 ' + $("#TimeStart").val());
+            if (!result) {
+                $("#TimeEnd").val('');
+                swal("error", "Invalid finish time");
+            }
+        });
+
+
+        $(document).on("change", "#ExternalBookingClientId", function () {
+	$("#ExternalBookingClientId-error").html("");
+	$("#ExternalBookingClientId").removeClass("error");
+        });
+
+        $(document).on("change", "#RoomTypeId", function () {
+	$("#RoomTypeId-error").html("");
+	$("#RoomTypeId").removeClass("error");
+        });
+
+        $(document).on("change", "#MeetingTypeId", function () {
+            $("#MeetingTypeId-error").html("");
+            $("#MeetingTypeId").removeClass("error");
+        });
+
+
+        $(document).on("change", "#UserGroupId", function () {
+	$("#UserGroupId-error").html("");
+	$("#UserGroupId").removeClass("error");
+        });
+
+        $(document).on("change", "#BookingStatus", function () {
+	$("#BookingStatus-error").html("");
+	$("#BookingStatus").removeClass("error");
+});
+
+         $.ajax({
+            url: "/ClientAdmin/RecurringBooking/GetNameofDays",
+            type: "GET",
+            async: false,
+            success: function (response) {
+                AppendMultiselectDropdown(response);
+            },
+            error: function (data) {
+                console.log(data);
+            }
+         });
+
+        $(document).on("click", "#btnDetailSave", function () {
+                //Validate();
+                CheckDateValidation();
+            });
+        });
+
+
+
+    
+
+        function Validate() {
+            var nameofDays = $("#Every").val();
+            if (nameofDays == null || nameofDays == "") {
+                Integr8ed.HandleResponse({status: 0, message: "Please select name of days !", data: null});
+                return false;
+            }
+            return true;
+        }
+
+
+        function AppendMultiselectDropdown(data) {
+
+            var data = '@ViewBag.NameofDays.Value.Data' == 'null' ? data.data : '@ViewBag.NameofDays.Value.Data';
+            var valId = ($("#Every").val() == "") ? [] : ($("#Every").val().split(','));
+            var JSONData = JSON.parse(data.replaceAll("&quot;", '"'));
+
+                var autocomplete = new SelectPure(".autocomplete-select", {
+                    options: JSONData,
+                    value: valId,//["1","2"],
+                    multiple: true,
+                    autocomplete: true,
+                    placeholder: "Select name of days",
+                    icon: "fa fa-times",
+                    id: "Every",
+                    select: function (event, ui) {
+                    },
+                    onChange: value => { selectedDay = value},
+                    classNames: {
+                        select: "select-pure__select",
+                        dropdownShown: "select-pure__select--opened",
+                        multiselect: "select-pure__select--multiple",
+                        label: "select-pure__label",
+                        placeholder: "select-pure__placeholder",
+                        dropdown: "select-pure__options",
+                        option: "select-pure__option",
+                        optionDisabled: "select-pure__option--disabled",
+                        autocompleteInput: "select-pure__autocomplete",
+                        selectedLabel: "select-pure__selected-label",
+                        selectedOption: "select-pure__option--selected",
+                        placeholderHidden: "select-pure__placeholder--hidden",
+                        optionHidden: "select-pure__option--hidden",
+                    },
+                });
+
+            multiSelectDropDown = autocomplete;
+        }
+
+    $(document).on("click", "#resetAutocomplete", function () {
+
+            multiSelectDropDown.reset();
+        });
+
+
+          if ($("#ExternalBookingClientId").val() == "")
+            $("#UserList").hide();
+        else
+            $("#IsExternalBooking").prop("checked", true);
+
+        $('input[type="checkbox"]').click(function () {
+            if ($(this).prop("checked") == true) {
+                $("#UserList").show();
+                //$("#IsExtBook").hide();
+            }
+            else {
+                $("#UserList").hide();
+            }
+        });
+
+
+   jQuery.validator.addMethod("nameAndno", function (value, element) {
+        return this.optional(element) || /^([a-zA-Z ]*)$/i.test(value);
+         }, "Please Enter a Valid Name");
+
+		$('#TimeStart').timepicker({
+		    'show2400': true,
+		    'timeFormat': 'H:i',
+            'step': 60,
+            'disableTextInput': false,
+            'minTime': '1:00',
+            'maxTime': '23:00'
+        });
+
+    $("#TimeStart").on("changeTime", function () {
+
+            $("#TimeEnd").val('');
+
+            $('#TimeEnd').timepicker({
+                'show2400': true,
+                'timeFormat': 'H:i',
+                'step': 60,
+                'disableTextInput': false,
+                'minTime': moment($("#TimeStart").val(), "H:i").add(60, 'minutes').format("H:i"),
+                'maxTime': '23:00',
+                'showDuration': false
+            });
+
+        });
+
+
+        //function parseDate(str) {
+        //    var mdy = str.split('-');
+        //    return new Date(mdy[2], mdy[0]-1, mdy[1]);
+        //}
+
+        //function datediff(first, second) {
+        //    return Math.round((second-first)/(1000*60*60*24)/366);
+        //}
+
+
+        $("#DateTo").on("change", function () {
+            CheckDateValidation();
+        });
+
+    function CheckDateValidation() {
+        var DateFrom = moment($("#DateFrom").val(), 'DD-MM-YYYY').format('yyyy-MM-DD');
+        var DateTo = moment($("#DateTo").val(), 'DD-MM-YYYY').format('yyyy-MM-DD');
+
+        if (DateFrom > DateTo || DateFrom == DateTo) {
+            Integr8ed.HandleResponse({ status: 0, message: "To Date is not minimum or equal than From Date !", data: null });
+             $("#btnDetailSave").hide();
+            return false;
+        }
+        else {
+            selectedDays = new Array();
+            $(".multiselect_dropdown .select-pure__option--selected").each(function (key, val) {
+                selectedDays.push($(val).data('value'));
+            })
+
+            if ($("#DateTo").val() != "") {
+                $.ajax({
+                    url: "/ClientAdmin/RecurringBooking/GetTotalDays",
+                    data: {
+                        startDate: moment($('#DateFrom').val(), 'DD-MM-YYYY').format('yyyy-MM-DD'),
+                        endDate: moment($('#DateTo').val(), 'DD-MM-YYYY').format('yyyy-MM-DD'),
+                        days: selectedDays.toString()
+                    },
+                    type: "GET",
+                    async: false,
+                    success: function (response) {
+                        noofDatesForBooking = response.dateTimes;
+                        //if (response.count > 10) {
+                        //    Integr8ed.HandleResponse({ status: 0, message: "More than 10 bookings are not allowed at same time !", data: null });
+                        //    $("#btnDetailSave").hide();
+                        //}
+                        //else
+                            $("#btnDetailSave").show();
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+        }
+    }
+
+        var d = new Date();
+        var currMonth = d.getMonth();
+        var currYear = d.getFullYear();
+        var currDate = d.getDate();
+
+        var startDate = new Date(currYear, currMonth, currDate);
+
+
+        $('.form_date').datetimepicker({
+            language: 'en',
+            weekStart: 1,
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            format: 'dd-mm-yyyy',
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+        });
+
+
+        if ($("#DateFrom").val() == "") {
+            $(".form_date").datetimepicker("setDate", startDate);
+        }
+
+        //if ($("#DateTo").val() == "") {
+        //    $("#DateTo").datetimepicker("startDate", $("#DateFrom").val());
+        //}
+
+
+
+        if ('@ViewBag.IsRoomTypeEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnDetailSave").hide();
+        }
+
+        else if ('@ViewBag.IsUserGroupEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnDetailSave").hide();
+        }
+             else if ('@ViewBag.IsBookingStatusEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnDetailSave").hide();
+        }
+             else if ('@ViewBag.IsBookingTypeEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnDetailSave").hide();
+        }
+             else if ('@ViewBag.IsNameOfDaysEmpty' == "true") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnDetailSave").hide();
+        }
+
+        else {
+            if ($("#IsView").val() == "true") {
+                var allElement = $(document).find('input[type="text"],textarea,input[type="number"],input[type="number"], input[type="checkbox"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", true);
+                });
+                $("#UserGroupId").prop("disabled", true);
+                $("#RoomTypeId").prop("disabled", true);
+                $("#MeetingTypeId").prop("disabled", true);
+                $("#BookingStatus").prop("disabled", true);
+                $("#Every").prop("disabled", true);
+                $("#BookingType").prop("disabled", true);
+                $("#btnDetailSave").hide();
+            }
+            else {
+                var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"],input[type="select"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", false);
+                });
+                $("#btnDetailSave").show();
+            }
+        }
+
+
+    jQuery.validator.addMethod("noOnly", function (value, element) {
+        return this.optional(element) || /^\d{0,20}$/i.test(value);
+         }, "You can't enter decimal value");
+
+
+    var validationresult = $("#frmRecurringbooking").validate({
+        onfocusout: false,
+        rules: {
+            "ExternalBookingClientId": {
+                required: '#IsExternalBooking:checked'
+            },
+            "EventTitle": {
+                ignore: false,
+                required: true,
+                maxlength: 50,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            "BookingType": {
+                ignore: false,
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            "DateFrom": {
+                ignore: false,
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            "DateTo": {
+                ignore: false,
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            "Every": {
+                ignore: false,
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            "TimeStart": {
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                }
+            },
+            "TimeEnd": {
+                ignore: false,
+                required: true,
+                normalizer: function (value) {
+                    return $.trim(value);
+                },
+                remote: {
+                    url: "/ClientAdmin/RecurringBooking/CheckIsBookingDetailAvailableRecurring",
+                    type: "POST",
+                    data: {
+                        DateFrom: function () { return moment($('#DateFrom').val(), 'DD-MM-YYYY').format('yyyy-MM-DD') },
+                        DateTo: function () { return moment($('#DateTo').val(), 'DD-MM-YYYY').format('yyyy-MM-DD') },
+                        TimeStart: function () { return $("#TimeStart").val() },
+                        TimeEnd: function () { return $("#TimeEnd").val() },
+                        RoomTypeId: function () { return $("#RoomTypeId").val() },
+                        BookingDay: function () { return selectedDay },
+                        
+                    },
+                    complete: function () {
+                        $('.loading').show();
+                    }
+                    },
+                },
+                "BookingStatus": {
+                    ignore: false,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+
+                "NumberOfAttending": {
+                    ignore: false,
+                    required: true,
+                    min: 1,
+                    maxlength: 10,
+                    number: true,
+                    noOnly: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/InternalBooking/validateMaxPerson",
+                        type: "GET",
+                        data: {
+                            TotalPerson: function () { return $("#NumberOfAttending").val() },
+                            RoomTypeId: function () { return $("#RoomTypeId").val() }
+                        }
+                    },
+                },
+                "CarSpaceRequired": {
+                    ignore: false,
+                    required: false,
+                    min: 0,
+                    maxlength: 10,
+                    number: true,
+                    noOnly: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "BookingContact": {
+                    ignore: false,
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Mobile": {
+                    ignore: false,
+                    required: true,
+                    minlength: 10,
+                    maxlength: 12,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "UserGroupId": {
+                    ignore: false,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "RoomTypeId": {
+                    ignore: false,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "MeetingTypeId": {
+                    ignore: false,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+            messages: {
+                "ExternalBookingClientId": {
+                    required: "Please enter a User Name",
+                },
+                "BookingType": {
+                    required: "Please enter a Booking Type"
+                },
+                "EventTitle": {
+                    required: "Please enter a Event Title",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Event Title already exist !"
+                },
+                "DateFrom": {
+                    required: "Please enter a Date From"
+                },
+                "DateTo": {
+                    required: "Please enter a Date To"
+                },
+                "Every": {
+                    required: "Please enter a Name Of Days"
+                },
+                "TimeStart": {
+                    required: "Please enter a Time Start"
+                },
+                "TimeEnd": {
+                    required: "Please enter a Time End",
+                    remote:"Booking found in the given slot , please check room availblity once !"
+                },
+                "BookingStatus": {
+                    required: "Please enter a Booking Status"
+                },
+                "NumberOfAttending": {
+                    required: "Please enter a  Number of Attending",
+                    min: "Invalid Number of Attending",
+                    maxlength: "More than 10 digits are not allowed !",
+                    remote: "Attendee exceeded from room capacity",
+                },
+                "CarSpaceRequired": {
+                    min: "Invalid Number of Car Space",
+                    maxlength: "More than 10 digits are not allowed !"
+                },
+                "BookingContact": {
+                    required: "Please enter a Booking Contact Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Mobile": {
+                    required: "Please enter a Mobile Number",
+                    minlength: "Minimum 10 characters are required !",
+                    maxlength: "More than 12 characters are not allowed !"
+                },
+                "UserGroupId": {
+                    required: "Please enter a User Group",
+                    min: "Invalid User Group",
+                    maxlength: "More than 5 characters are not allowed !",
+                    remote: "User Group already exist !"
+                },
+
+                "RoomTypeId": {
+                    required: "Please enter a Room Type",
+                    min: "Invalid Room Type",
+                    maxlength: "More than 5 characters are not allowed !",
+                    remote: "Room Type already exist !"
+                },
+                "MeetingTypeId": {
+                    required:"Please  select meeting type"
+                }
+            },
+
+            submitHandler: function (form) {
+                if ($("#tblRecurringBooking tbody tr").text() == "No data available in table")
+                    $("#tblRecurringBooking tbody tr").remove();
+
+                rowModel = {
+                    dateFrom: $("#DateFrom").val(),
+                    dateTo: $("#DateTo").val(),
+                    timeStart: $("#TimeStart").val(),
+                    timeEnd: $("#TimeEnd").val(),
+                    roomTypeId: parseFloat($("#RoomTypeId").val()),
+                    meetingTypeId: parseFloat($("#MeetingTypeId").val()),
+                    meetingType: $("#MeetingTypeId").text(),
+                    eventTitle: $("#EventTitle").val(),
+                    externalBookingClientId: parseFloat($("#ExternalBookingClientId").val()),
+                    bookingDate: "",
+                    userGroupId: $("#UserGroupId").val(),
+                    bookingContact: $("#BookingContact").val(),
+                    mobile: $("#Mobile").val(),
+                    bookingStatus: $("#BookingStatus").val(),
+                    carSpaceRequired: $("#CarSpaceRequired").val(),
+                    numberOfAttending: $("#NumberOfAttending").val()
+                };
+
+                GetBookingDetailById();
+                closeModal();
+            }
+    });
+
+
+    function GetBookingDetailById() {
+         $.ajax({
+                    url: "/ClientAdmin/RecurringBooking/GetBookingDetailById",
+                    data: { ExternalBookingClientId: $("#ExternalBookingClientId").val(), RoomTypeId : $("#RoomTypeId").val() },
+                    type: "GET",
+                    success: function (response) {
+                        $("#UserName").val(response.data.userName);
+                        $("#RoomTypeName").val(response.data.roomTypeName);
+                        $("#RoomTypeId").val(response.data.roomTypeId);
+
+                     $("#ExternalBookingClientId").val(response.data.externalBookingClientId);
+
+                     bookingType = (rowModel.externalBookingClientId > 0) ? "External (" + response.data.userName + ")" : "Internal";
+                     roomTypeName = response.data.roomTypeName;
+
+                     //var daylist = getDaysArray(new Date(rowModel.dateFrom), new Date(rowModel.dateTo));
+
+                        $.each(noofDatesForBooking, function (index, value) {
+
+                            var finalRowModel = [];
+
+                            //var month = $(this)[0].getMonth()+1;
+                            //var day = $(this)[0].getDate();
+
+                            //        var bookingDate = $(this)[0].getFullYear() + '-' + (month < 10 ? '0' : '') + month + '-' + (day < 10 ? '0' : '') + day;
+                            finalRowModel = {
+                                dateFrom: rowModel.dateFrom,
+                                dateTo: rowModel.dateTo,
+                                timeStart: rowModel.timeStart,
+                                timeEnd: rowModel.timeEnd,
+                                roomTypeId: rowModel.roomTypeId,
+                                eventTitle: rowModel.eventTitle,
+                                externalBookingClientId: rowModel.externalBookingClientId,
+                              //  bookingDateRecurring: value,
+                                bookingDateRecurring: moment(value, "DD/MM/yyyy").format("YYYY-MM-DD"),
+                                userGroupId: rowModel.userGroupId,
+                                bookingContact: rowModel.bookingContact,
+                                mobile: rowModel.mobile,
+                                bookingStatus: rowModel.bookingStatus,
+                                carSpaceRequired: rowModel.carSpaceRequired,
+                                numberOfAttending: rowModel.numberOfAttending,
+                                bookingType: bookingType,
+                                roomTypeName: roomTypeName,
+                                meetingTypeId: rowModel.meetingTypeId,
+                                meetingType: rowModel.meetingType
+
+                            };
+
+                            BookingDetailList.push(finalRowModel);
+                            CheckIsBookingAvailable(finalRowModel);
+
+
+                        });
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+    }
+
+        //var getDaysArray = function(start, end) {
+        //    for(var arr=[],dt=new Date(start); dt<=end; dt.setDate(dt.getDate()+1)){
+        //        arr.push(new Date(dt));
+        //    }
+        //    return arr;
+        //};
+
+    function CheckIsBookingAvailable(model) {
+
+
+         $.ajax({
+             url: "/ClientAdmin/RecurringBooking/CheckIsBookingAvailable",
+             data: model,
+             type: "POST",
+             success: function (response) {
+
+                    if (response.status == 1) {
+                        $("#tblRecurringBooking tbody ").append(`<tr data-id="${model.roomTypeId}" role="row" class="odd">
+                      <td class="booking-error invoicetitle" title="${response.message}" >${moment(model.bookingDateRecurring, "YYYY-MM-DD").format("DD-MM-yyyy")} ( ${model.timeStart} - ${model.timeEnd} )</td>
+                      <td class="booking-error invoiceItem" title="${response.message}" >${roomTypeName}</td>
+                      <td class="booking-error invoiceItem" title="${response.message}" >${model.eventTitle}</td>
+                      <td class="booking-error invoiceItem" title="${response.message}" >${bookingType}</td>
+                      <td class="booking-error invoiceItem" title="${response.message}" ><a data-json='${JSON.stringify(model)}' class="editAsset icon_cust_button EditBookingDetail" title="Edit"><i class="far fa-edit"></i></a> | <a id="DeleteInvoiceItem" onclick="RemoveDetail();" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a></span></td>
+                      </tr>`);
+
+                        $("#btnSaveData").hide();
+
+                    }
+                    else {
+                        $("#tblRecurringBooking thead th").removeClass("sorting");
+                        $("#tblRecurringBooking tbody ").append(`<tr data-id="${model.roomTypeId}" role="row" class="odd highlight_td">
+                      <td class="invoicetitle">${moment(model.bookingDateRecurring, "YYYY-MM-DD").format("DD-MM-yyyy")} ( ${model.timeStart} - ${model.timeEnd} )</td>
+                      <td class="invoiceItem">${roomTypeName}</td>
+                      <td class="invoiceItem">${model.eventTitle}</td>
+                      <td class="invoiceItem">${bookingType}</td>
+                      <td class="invoiceItem"><a id="DeleteInvoiceItem" onclick="RemoveDetail();" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a></span></td>
+                      </tr>`);
+
+                        $("#btnSaveData").show();
+
+                 }
+
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+         });
+    }
+
+    $(document).off("click", ".EditBookingDetail");
+    $(document).on("click", ".EditBookingDetail", function () {
+
+        var model = JSON.parse($(this).attr("data-json"));
+        $(document).find("#tblRecurringBooking tbody tr").on("click", function () {
+
+            //currentRow = $(this)[0].outerHTML;
+            eventTitle = model.eventTitle;
+            bookingType = model.bookingType;
+            roomTypeName = model.roomTypeName;
+
+            $(this).remove();
+
+            $.ajax({
+                url: "/ClientAdmin/RecurringBooking/_EditRecurringBookingDetails",
+                data: model,
+                type: "GET",
+                success: function (response) {
+
+                    $("#modalContentCustom").html(response);
+                    $("#divModalCustom").modal('show');
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+
+        });
+    });
+
+
+    //function EditRecurringBooking(model) {
+    //
+
+    //    var modelData = JSON.parse(model);
+    //    const qs = Object.keys(model)
+    //        .map(key => `${key}=${model[key]}`)
+    //        .join('&');
+
+    //    $("#modalContentCustom").load(`/ClientAdmin/RecurringBooking/_EditRecurringBookingDetails`, function () {
+    //        $("#divModalCustom").modal('show');
+    //    });
+
+    //    $("#EventTitle").val($(this).closest('tr').find(".invoicetitle")[0].innerHTML);
+    //}
+
+    $(document).off("click", "#btnPrint");
+    $(document).on("click", "#btnPrint", function () {
+
+        window.open(`/ClientAdmin/RecurringBooking/IsBookingDetailAvailableRecurring?DateFrom=${moment($('#DateFrom').val(), 'DD-MM-YYYY').format('yyyy-MM-DD')}&DateTo=${moment($('#DateTo').val(), 'DD-MM-YYYY').format('yyyy-MM-DD')}&TimeStart=${$("#TimeStart").val()}&TimeEnd=${$("#TimeEnd").val()}&RoomTypeId=${$("#RoomTypeId").val()}&BookingDay=${selectedDay}`);
+
+    });
+
+    function RemoveDetail() {
+        $(document).find("#tblRecurringBooking tbody tr").on("click", function () {
+
+            BookingDetailList.splice(BookingDetailList.findIndex(function (j) {
+
+                j == $(this)
+             }), 1);
+
+            $(this).remove();
+        });
+    }
+</script>
+@*$(this).closest('tr').find(".invoicetitle")[0].innerHTML*@

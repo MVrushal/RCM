@@ -1,0 +1,225 @@
+
+/*  === Responsive ===  */
+
+/*X-Large devices (large desktops, less than 1400px)*/
+@media (max-width: 1400px) {
+}
+
+/*Large devices (desktops, less than 1200px)*/
+@media (max-width: 1199px) {
+    .dashbord_panel .cust_col_btn {
+        width: 16%;
+    }
+
+    .dashbord_panel .cust_col {
+        width: 30%;
+    }
+
+    #main .main-content .page-title h3 {
+        font-size: 22px;
+        padding: 0 0 15px 0;
+    }
+
+        #main .main-content .page-title h3:before {
+            width: 90px;
+        }
+
+    .tab-content {
+        padding: 10px 10px 10px 10px;
+    }
+}
+
+/*Medium devices (tablets, less than 992px)*/
+@media (max-width: 991px) {
+    .dashbord_panel .cust_col_btn {
+        width: 100%;
+    }
+
+    .dashbord_panel .cust_col {
+        width: 50%;
+    }
+
+    .user_names {
+        display: none;
+    }
+
+    .panel-title span {
+        font-size: 14px;
+    }
+
+    .sidebar-wrapper .menu .sidebar-link > span {
+        font-size: 14px;
+    }
+
+    dashbord_chart_sec {
+        min-height: 285px;
+    }
+
+    .dataTables_wrapper .dataTables_length {
+        margin: 0 0 10px 0px;
+    }
+
+    .dataTables_wrapper .dataTables_filter {
+        margin: 0 0 10px 0px;
+    }
+    .card-header {
+        padding: 15px 15px 15px 0;
+    }
+}
+
+/*Small devices (landscape phones, less than 768px)*/
+@media (max-width: 767px) {
+    .sidebar-wrapper .sidebar-header {
+        padding: 10px 20px 20px 10px;
+        position: relative;
+    }
+
+    .sidebar-toggler svg {
+        width: 24px;
+        height: 24px;
+    }
+
+    .sidebar-wrapper .sidebar-toggler.x {
+        display: block;
+        padding: 5px 5px;
+        position: absolute;
+        right: 10px;
+        bottom: -50px;
+        top: inherit;
+        border: 1px solid #ddd;
+    }
+
+    .dashbord_note_data {
+        margin: 10px 0 15px 0;
+    }
+
+    .card .card-body {
+        padding: 10px 15px;
+    }
+
+    table.dataTable.no-footer {
+        margin: 10px 0px 10px 0px;
+    }
+
+    .k-custom-accordian .panel-title {
+        font-size: 14px;
+    }
+
+    .k-custom-accordian .panel-heading {
+        padding: 10px 10px 10px 15px;
+    }
+
+    .k-custom-accordian .panel-default {
+        margin-bottom: 15px;
+    }
+
+    #main .main-content .page-title h3 {
+        padding: 0 0 15px 0;
+        text-align: center;
+        margin: 0 0 15px 0;
+    }
+
+        #main .main-content .page-title h3:before {
+            width: 90px;
+            left: 50%;
+            bottom: 0;
+            transform: translate(-50%, -50%);
+        }
+
+    .breadcrumb-header .breadcrumb {
+        font-size: 13px;
+        margin: 0 0 10px 0px;
+        justify-content: center;
+    }
+
+    .breadcrumb-header {
+        justify-content: center;
+    }
+    .dt-buttons {
+        position: relative;
+        margin: 0 0 10px 0;
+        top: 0px;
+    }
+}
+
+/*X-Small devices (portrait phones, less than 576px)*/
+@media (max-width: 576px) {
+    .upload_form {
+        flex-wrap: wrap;
+    }
+
+        .upload_form .col-md-6 {
+            padding: 0 15px 0px 0;
+            width: 100%;
+        }
+
+    .upload_form {
+        padding: 30px 0px 0px 15px;
+    }
+
+        .upload_form button.add_form_button {
+            right: 15px;
+            bottom: inherit;
+            top: 12px;
+        }
+
+    .section_formd_title {
+        top: -13px;
+        padding: 3px 10px 3px 10px;
+        font-size: 16px;
+    }
+    /*.prints_texts{
+        display: none;
+    }*/
+    /*.buttons-print {
+        padding: 8px 3px 6px 7px;
+        margin-right: 0 !important;
+    }*/
+}
+
+/*X-Small devices (portrait phones, less than 576px)*/
+@media (max-width: 420px) {
+    .dashbord_panel .cust_col {
+        width: 100%;
+    }
+
+    .dashbord_panel .cust_col_btn {
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+
+    #main .main-content .page-title h3 {
+        font-size: 17px;
+    }
+    .dataTables_wrapper .dataTables_filter input {
+        min-width: 190px;
+    }
+    .footer .float-left {
+        width: 100%;
+        text-align: center;
+    }
+    .footer .w_text_r {
+        width: 100%;
+        margin-bottom: 15px;
+    }
+    .footer .float-right {
+        float: right !important;
+        text-align: center;
+        width: 100%;
+    }
+}
+
+
+/*X-Small devices (portrait phones, less than 576px)*/
+@media (max-width: 380px) {
+    .card-header {
+        padding: 15px 15px 15px 15px;
+        flex-wrap: wrap;
+        justify-content: center !important;
+    }
+    .card-header .cust_btn {
+        margin: 0 0 10px 0;
+    }
+}
+

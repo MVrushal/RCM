@@ -1,0 +1,346 @@
+﻿@model Integr8ed.Service.Dto.ItemsToInvoiceDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<style>
+    input[type="checkbox"][readonly] {
+        pointer-events: none;
+    }
+</style>
+
+<div class="modal-content">
+    <form id="frmInvoice" asp-action="AddEditInvoiceItem" asp-controller="InternalBooking" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsViewForInvItem ? "View" : "Add New") Invoice Item</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+                <div id="itemValidate" class="text-danger"></div>
+                <div class="row">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsViewForInvItem" />
+                    <input type="hidden" asp-for="InvoiceDetailsId" />
+                    <input type="hidden" asp-for="Invoice.Title" id="InvoiceItemTitle" />
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            @if (!ViewBag.IsinvoiceEmpty)
+                            {
+                                <label>Select Title *</label>
+
+                                @Html.DropDownListFor(x => x.InvoiceMasterId, ViewBag?.InvoiceList as IEnumerable<SelectListItem>, "Select Title", new { @class = "form-control form-select", @id = "InvoiceMasterId", @Name = "InvoiceMasterId", required = "Select Title" })
+                            }
+
+                            else
+                            {
+                                <label style="color: red">Please Add Invoice First !</label>
+                            }
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Vat Rate *</label>
+                            <input type="text" class="form-control" name="Vate" readonly asp-for="Invoice.Vate" id="Vate" placeholder="Enter Vat Rate here">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Item Cost *</label>
+                            <input type="text" class="form-control" asp-for="Invoice.IteamCost" id="IteamCost" readonly name="IteamCost" placeholder="Enter Item Cost here">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Budget Code *</label>
+                            <input type="text" class="form-control" asp-for="Invoice.BudgetRate" id="BudgetRate" readonly name="BudgetRate" placeholder="Enter Budget Code here">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Quantity *</label>
+                            <input type="text" class="form-control" asp-for="Quantity" name="Quantity" placeholder="Enter Quantity here">
+                        </div>
+                    </div>
+                    <div class="col-md-12 check_box_center mb-3">
+                        <div class="checkbox p-0 ">
+                            <input type="checkbox" id="IsIteamVatable" name="IsIteamVatable" asp-for="Invoice.IsIteamVatable" class="form-check-input" readonly>
+                            <label disabled readonly for="IsIteamVatable">
+                                Is Item vatable ?
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnItemSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+    $(document).ready(function () {
+
+        $(document).on("change", "#InvoiceMasterId", function () {
+	$("#InvoiceMasterId-error").html("");
+	$("#InvoiceMasterId").removeClass("error");
+});
+
+          if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        $("#InvoiceItemTable_info").html("");
+        $("#InvoiceItemTable_paginate").html("");
+
+        var frmMeetingType = $("#frmInvoice").validate({
+            onfocusout: false,
+            rules: {
+                "InvoiceMasterId": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/InternalBooking/CheckInvoiceTitle",
+                        type: "GET",
+                        data: { InvoiceMasterId: $(".InvoiceMasterId").val(), Id: $("#Id").val(), InvoiceDetailsId: $("#InvoiceDetailsId").val() }
+                    },
+                },
+                "Vate": {
+                    required: true,
+                    maxlength: 10,
+                    min: 1,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "IteamCost": {
+                    required: true,
+                    maxlength: 10,
+                    min: 1,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "BudgetRate": {
+                    required: true,
+                    maxlength: 20,
+                    minlength: 1,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Quantity": {
+                    required: true,
+                    maxlength: 10,
+                    min: 1,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+            },
+            messages: {
+                "InvoiceMasterId": {
+                    required: "Please enter a  Title",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Title already exist !"
+                },
+                "Vate": {
+                    required: "Please enter a Vat Rate",
+                    min: "Invalid Vat Rate",
+                    maxlength: "More than 10 digits are not allowed !"
+                },
+                "IteamCost": {
+                    required: "Please enter a Item Cost",
+                    min: "Invalid Item Cost",
+                    maxlength: "More than 10 digits are not allowed !"
+                },
+                "BudgetRate": {
+                    required: "Please enter a  Budget Code",
+                    minlength: "Invalid Budget Code",
+                    maxlength: "More than 20 characters are not allowed !"
+                },
+                "Quantity": {
+                    required: "Please enter a Quantity",
+                    min: "Invalid Quantity",
+                    maxlength: "More than 10 digits are not allowed !"
+                }
+            },
+            submitHandler: function (form) {
+
+                let post_url = form.action;
+                invItemform_data = form;
+
+                invoiceAmount = 0;
+                vatAmount = 0;
+                grossAmount = 0;
+
+                modelData.invoices.push({ id: $("#InvoiceMasterId").val(), quantity: $("#Quantity").val() ,title:$("#InvoiceItemTitle").val()});
+
+                if ($("#InvoiceItemTable tbody tr").text() == "No data available in table")
+                    $("#InvoiceItemTable tbody tr").remove();
+
+                var qty = $("#Quantity").val().replace(/^0+/, '');
+                $("#Quantity").val(qty);
+
+               $("#InvoiceItemTable tbody ").append(`<tr role="row" class="odd">
+              <td class="invoicetitle">${$("#InvoiceItemTitle").val()}</td>
+              <td class="invoiceItem">${$("#Vate").val()} %</td>
+              <td class="invoiceItem">${($("#IsIteamVatable").val() == "true") ? "Y" : "N"}</td>
+              <td class="invoiceItem">${$("#IteamCost").val()}</td>
+              <td class="invoiceItem">${$("#BudgetRate").val()}</td>
+              <td class="invoiceItem">${$("#Quantity").val()}</td>
+              <td class="invoiceItem"><a id="DeleteInvoiceItem" onclick="RemoveItem();" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a></span></td>
+              </tr>`);
+
+                closeModal();
+
+                var i = 0;
+                while ($("#InvoiceItemTable tbody tr").children()[i] != undefined) {
+                    grossAmount = 0;
+                    invoiceAmount += parseFloat($("#InvoiceItemTable tbody tr").children()[3+i].textContent) * parseFloat($("#InvoiceItemTable tbody tr").children()[5+i].textContent);
+                    vatAmount += parseFloat(($("#InvoiceItemTable tbody tr").children()[3+i].textContent) * parseFloat($("#InvoiceItemTable tbody tr").children()[1+i].textContent)) / parseFloat($("#InvoiceItemTable tbody tr").children()[3+i].textContent);
+                    grossAmount += invoiceAmount + vatAmount;
+                    i = i + 7;
+                }
+
+                $("#InvoiceAmount").val(invoiceAmount);
+                $("#VatAmount").val(vatAmount);
+                $("#GrossAmount").val(grossAmount);
+
+
+                //$.post(post_url, form_data, function (response) {
+
+                //    Integr8ed.HandleResponse(response);
+                //    if (response.status === 1) {
+                //        closeModal();
+                //        refreshDatatable("#tblNewInvoiceItem");
+                //        return false;
+                //    }
+                //    // window.location.href = `/ClientAdmin/InvoiceItem/Index`;
+                //});
+
+            }
+        });
+
+
+        $(document).off("change", "#InvoiceMasterId");
+        $(document).on("change", "#InvoiceMasterId", function () {
+
+            if (!invoiceItem.includes($("#InvoiceMasterId").val())) {
+
+                invoiceItem.push($("#InvoiceMasterId").val());
+                $("#itemValidate").html("");
+                $("#btnItemSave").show();
+
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/GetInvoiceItemDetailById",
+                    data: { Id: $("#InvoiceMasterId").val() },
+                    type: "GET",
+                    success: function (response) {
+                        $("#InvoiceItemTitle").val(response.title);
+                        $("#Vate").val(response.vate);
+                        $("#IteamCost").val(response.iteamCost);
+                        $("#BudgetRate").val(response.budgetRate);
+                        $("#IsIteamVatable").val(response.isIteamVatable);
+                        $("#IsIteamVatable").prop("checked", response.isIteamVatable);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+
+            }
+            else {
+
+
+                var found = modelData.invoices.findIndex(i => i.id == $("#InvoiceMasterId").val());
+
+                if (found == 0) {
+                    $("#itemValidate").html("Item alredy added!");
+                    $("#btnItemSave").hide();
+                }
+            }
+
+        });
+
+    });
+
+    if ('@ViewBag.IsinvoiceEmpty' == "True") {
+
+        var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+        $.each(allElement, function (key, value) {
+            $(value).prop("disabled", true);
+        });
+
+        $("#btnItemSave").hide();
+    }
+    else {
+
+        if ($("#IsViewForInvItem").val() == "True") {
+
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#InvoiceMasterId").prop("disabled", true);
+            $("#btnItemSave").hide();
+
+        }
+        else {
+                var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", false);
+                });
+
+                $("#btnItemSave").show();
+            }
+    }
+    function RemoveItem()
+    {
+
+        $(document).find("#InvoiceItemTable tbody tr").on("click", function () {
+
+            if ($(document).find("#InvoiceItemTable tbody tr").length > 0) {
+                var deletedInvAmt = 0;
+                var deletedVatAmt = 0;
+                var deletedGroAmt = 0;
+                deletedInvAmt = parseFloat($(this).children()[3].textContent) * parseFloat($(this).children()[5].textContent);
+                deletedVatAmt = parseFloat(($(this).children()[3].textContent) * parseFloat($(this).children()[1].textContent)) / parseFloat($(this).children()[3].textContent);
+                deletedGroAmt = deletedInvAmt + deletedVatAmt;
+
+                invoiceAmount = invoiceAmount - deletedInvAmt;
+                vatAmount = vatAmount - deletedVatAmt;
+                grossAmount = grossAmount - deletedGroAmt;
+
+                $("#InvoiceAmount").val(invoiceAmount);
+                $("#VatAmount").val(vatAmount);
+                $("#GrossAmount").val(grossAmount);
+
+                $(this).find(".invoicetitle").val();
+                var Title = $(this).children()[0].textContent;
+                var ItemId = "";
+                modelData.invoices.splice(modelData.invoices.findIndex(function (i) {
+                    ItemId = i.id;
+                    return i.title === Title;
+                }), 1);
+
+                invoiceItem.splice(invoiceItem.findIndex(function (j) {
+                    return j == ItemId;
+                }), 1);
+
+                $(this).remove();
+            }
+        });
+    }
+
+</script>

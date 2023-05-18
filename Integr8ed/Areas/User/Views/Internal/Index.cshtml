@@ -1,0 +1,653 @@
+﻿
+@{
+    ViewData["Title"] = "InternalBooking";
+    Layout = "~/Areas/User/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Internal Booking</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="#">Dashboard</a></li>
+                    <li class="breadcrumb-item active" aria-current="page">Internal Booking</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <form class="form">
+                                <div class="row">
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="first-name-column">Booking Number</label>
+                                            <input type="text" class="form-control" placeholder="Room Type">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 ml-md-auto">
+                                        <div class="form-group">
+                                            <label for="first-name-column">User Name</label>
+                                            <input type="text" class="form-control" placeholder="Room Type">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3">
+                                        <div class="form-group">
+                                            <label for="first-name-column">Date Requested</label>
+                                            <input type="text" class="form-control" placeholder="Room Type">
+                                        </div>
+                                    </div>
+                                </div>
+                            </form>
+                            <div class="form_tab_section custom_tabs">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-xs-12 p-0">
+                                            <nav>
+                                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="nav-home-tab" data-toggle="tab" href="#nav-home" role="tab" aria-controls="nav-home" aria-selected="true">Booking Details</a>
+                                                    <a class="nav-item nav-link" id="nav-profile-tab" data-toggle="tab" href="#nav-profile" role="tab" aria-controls="nav-profile" aria-selected="false">Catering Details</a>
+                                                    <a class="nav-item nav-link" id="nav-invoice-tab" data-toggle="tab" href="#nav-invoice" role="tab" aria-controls="nav-invoice" aria-selected="false">Invoice Details</a>
+                                                    <a class="nav-item nav-link" id="nav-security-tab" data-toggle="tab" href="#nav-security" role="tab" aria-controls="nav-security" aria-selected="false">Security</a>
+                                                    <a class="nav-item nav-link" id="nav-contact-tab" data-toggle="tab" href="#nav-contact" role="tab" aria-controls="nav-contact" aria-selected="false">Contact Details</a>
+                                                    <a class="nav-item nav-link" id="nav-delegates-tab" data-toggle="tab" href="#nav-delegates" role="tab" aria-controls="nav-delegates" aria-selected="false">Delegates</a>
+                                                    <a class="nav-item nav-link" id="nav-notes-tab" data-toggle="tab" href="#nav-notes" role="tab" aria-controls="nav-notes" aria-selected="false">Notes</a>
+                                                    <a class="nav-item nav-link" id="nav-equipment-tab" data-toggle="tab" href="#nav-equipment" role="tab" aria-controls="nav-equipment" aria-selected="false">Equipment Req.</a>
+                                                    <a class="nav-item nav-link" id="nav-call-tab" data-toggle="tab" href="#nav-call" role="tab" aria-controls="nav-call" aria-selected="false">Call Logging</a>
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content" id="nav-tabContent">
+
+                                                @* nav-home-tab *@
+                                                <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                                                    <form class="form">
+                                                        <div class="row">
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>User Group</label>
+                                                                    <input type="text" class="form-control" placeholder="User Group">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Start Date</label>
+                                                                    <input type="text" class="form-control" placeholder="Start Date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Car Spaces Req.</label>
+                                                                    <input type="text" class="form-control" placeholder="Car Spaces Req.">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>-----</label>
+                                                                    <input type="text" class="form-control" placeholder="Dentists">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Start Date</label>
+                                                                    <input type="text" class="form-control" placeholder="Start Date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>End Date</label>
+                                                                    <input type="text" class="form-control" placeholder="End Date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label>Meeting Code</label>
+                                                                    <input type="text" class="form-control" placeholder="End Date">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label>Number Attending</label>
+                                                                    <input type="text" class="form-control" placeholder="Number Attending">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label>Meeting type</label>
+                                                                    <input type="text" class="form-control" placeholder="Meeting type">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-4">
+                                                                <div class="form-group">
+                                                                    <label>Title of Meeting</label>
+                                                                    <input type="text" class="form-control" placeholder="Title of Meeting">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        HouseKeeping Requierd
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        Sequrity Requierd
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-md-12 second_form_section">
+                                                                <div class="row">
+
+                                                                </div>
+                                                            </div>
+
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="reset" class="btn btn-light-secondary cancel_btn mr-2">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary mr-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @* nav-home-tab *@
+
+                                                @* nav-profile-tab *@
+                                                <div class="tab-pane fade" id="nav-profile" role="tabpanel" aria-labelledby="nav-profile-tab">
+                                                    <div class="row">
+                                                        <div class="col-md-12">
+                                                            <div class="table-responsive">
+                                                                <table class="table table-bordered mb-0">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th>Equipment Description</th>
+                                                                            <th>Equipment Code</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                    <tbody>
+                                                                        <tr>
+                                                                            <td class="text-bold-500">Michael Right</td>
+                                                                            <td>$15/hr</td>
+                                                                        </tr>
+                                                                        <tr>
+                                                                            <td class="text-bold-500">Morgan Vanblum</td>
+                                                                            <td>$13/hr</td>
+                                                                        </tr>
+                                                                    </tbody>
+                                                                </table>
+                                                            </div>
+                                                        </div>
+                                                        <div class="col-12 d-flex mt-3">
+                                                            <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#new_equipemnt">
+                                                                New Equipment
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                                @* nav-profile-tab *@
+
+                                                @* nav-Invoice-tab *@
+                                                <div class="tab-pane fade" id="nav-invoice" role="tabpanel" aria-labelledby="nav-invoice-tab">
+                                                    <form class="form">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Floor</label>
+                                                                    <input type="text" class="form-control" placeholder="Floor">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">hourly rate</label>
+                                                                    <input type="text" class="form-control" placeholder="hourly rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Sunday rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Sunday rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Saturday Rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Saturday Rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Max. Persons</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        Include Room In Room Booking Active/Inactive Statistics
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="reset" class="btn btn-light-secondary cancel_btn mr-2">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary mr-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @* nav-Invoice-tab *@
+
+                                                @* nav-security-tab *@
+                                                <div class="tab-pane fade" id="nav-security" role="tabpanel" aria-labelledby="nav-security-tab">
+                                                    <form class="form">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Floor</label>
+                                                                    <input type="text" class="form-control" placeholder="Floor">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">hourly rate</label>
+                                                                    <input type="text" class="form-control" placeholder="hourly rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Sunday rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Sunday rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Saturday Rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Saturday Rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Max. Persons</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        Include Room In Room Booking Active/Inactive Statistics
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="reset" class="btn btn-light-secondary cancel_btn mr-2">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary mr-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @* nav-security-tab *@
+
+                                                @* nav-contact-tab *@
+                                                <div class="tab-pane fade" id="nav-contact" role="tabpanel" aria-labelledby="nav-contact-tab">
+                                                    <form class="form">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Floor</label>
+                                                                    <input type="text" class="form-control" placeholder="Floor">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">hourly rate</label>
+                                                                    <input type="text" class="form-control" placeholder="hourly rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Sunday rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Sunday rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Saturday Rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Saturday Rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Max. Persons</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        Include Room In Room Booking Active/Inactive Statistics
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="reset" class="btn btn-light-secondary cancel_btn mr-2">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary mr-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @* nav-contact-tab *@
+
+                                                @* nav-delegates *@
+                                                <div class="tab-pane fade" id="nav-delegates" role="tabpanel" aria-labelledby="nav-delegates-tab">
+                                                    <form class="form">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Floor</label>
+                                                                    <input type="text" class="form-control" placeholder="Floor">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">hourly rate</label>
+                                                                    <input type="text" class="form-control" placeholder="hourly rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Sunday rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Sunday rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Saturday Rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Saturday Rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Max. Persons</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        Include Room In Room Booking Active/Inactive Statistics
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="reset" class="btn btn-light-secondary cancel_btn mr-2">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary mr-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @* nav-delegates *@
+
+                                                @* nav-notes-tab *@
+                                                <div class="tab-pane fade" id="nav-notes" role="tabpanel" aria-labelledby="nav-notes-tab">
+                                                    <form class="form">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Floor</label>
+                                                                    <input type="text" class="form-control" placeholder="Floor">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">hourly rate</label>
+                                                                    <input type="text" class="form-control" placeholder="hourly rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Sunday rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Sunday rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Saturday Rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Saturday Rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Max. Persons</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        Include Room In Room Booking Active/Inactive Statistics
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="reset" class="btn btn-light-secondary cancel_btn mr-2">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary mr-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @* nav-notes-tab *@
+
+                                                @* nav-equipment-tab *@
+                                                <div class="tab-pane fade" id="nav-equipment" role="tabpanel" aria-labelledby="nav-equipment-tab">
+                                                    <form class="form">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Floor</label>
+                                                                    <input type="text" class="form-control" placeholder="Floor">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">hourly rate</label>
+                                                                    <input type="text" class="form-control" placeholder="hourly rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Sunday rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Sunday rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Saturday Rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Saturday Rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Max. Persons</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        Include Room In Room Booking Active/Inactive Statistics
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="reset" class="btn btn-light-secondary cancel_btn mr-2">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary mr-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @* nav-equipment-tab *@
+
+                                                @* nav-call-tab *@
+                                                <div class="tab-pane fade" id="nav-call" role="tabpanel" aria-labelledby="nav-call-tab">
+                                                    <form class="form">
+                                                        <div class="row">
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Description</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-12">
+                                                                <div class="form-group">
+                                                                    <label for="exampleFormControlTextarea1" class="form-label">Example textarea</label>
+                                                                    <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Floor</label>
+                                                                    <input type="text" class="form-control" placeholder="Floor">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">hourly rate</label>
+                                                                    <input type="text" class="form-control" placeholder="hourly rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Sunday rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Sunday rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Saturday Rate</label>
+                                                                    <input type="text" class="form-control" placeholder="Saturday Rate">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <div class="form-group">
+                                                                    <label for="first-name-column">Max. Persons</label>
+                                                                    <input type="text" class="form-control" placeholder="Description">
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-md-5 check_box_center">
+                                                                <div class="checkbox">
+                                                                    <input type="checkbox" id="checkbox1" class="form-check-input" checked="">
+                                                                    <label for="checkbox1">
+                                                                        Include Room In Room Booking Active/Inactive Statistics
+                                                                    </label>
+                                                                </div>
+                                                            </div>
+                                                            <div class="col-12 d-flex justify-content-end">
+                                                                <button type="reset" class="btn btn-light-secondary cancel_btn mr-2">Cancel</button>
+                                                                <button type="submit" class="btn btn-primary mr-1">Save</button>
+                                                            </div>
+                                                        </div>
+                                                    </form>
+                                                </div>
+                                                @* nav-call-tab *@
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>

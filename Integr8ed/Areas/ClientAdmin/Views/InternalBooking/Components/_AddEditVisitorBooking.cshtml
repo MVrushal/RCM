@@ -1,0 +1,343 @@
+﻿@model Integr8ed.Service.Dto.VisitorDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmVisitorBooking" asp-action="AddEditVisitorAndVisitorBooking" asp-controller="Internalbooking" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Visitor</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+          
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            <div class="row">
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">Mobile Number *</label>
+                        <input type="text" class="form-control" asp-for="Mobile" name="Mobile" placeholder="Enter Mobile Number here">
+                        <div id="suggesstion-box" style="display:none"></div>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">First Name *</label>
+                        <input type="text" class="form-control" asp-for="Name" name="Name" placeholder="Enter First Name here">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">Last Name *</label>
+                        <input type="text" class="form-control" asp-for="SurName" name="SurName" placeholder="Enter Last Name here">
+                    </div>
+                </div>
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">PostCode *</label>
+                        <input type="text" class="form-control" asp-for="PostCode" name="PostCode" placeholder="Enter PostCode here">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">Email *</label>
+                        <input type="text" class="form-control" asp-for="Email" id="Email" name="Email" placeholder="Enter Email here">
+                    </div>
+                </div>
+
+
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">Telephone </label>
+                        <input type="number" class="form-control" asp-for="Telephone" name="Telephone" placeholder="Enter Telephone here">
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea3" class="form-label">Address *</label>
+                        <textarea class="form-control" asp-for="Address" name="Address" placeholder="Enter Address here" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        <textarea class="form-control" asp-for="Description" name="Description" placeholder="Enter Description here" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea2" class="form-label">Notes</label>
+                        <textarea class="form-control" asp-for="Notes" name="Notes" placeholder="Enter Notes here" rows="3"></textarea>
+                    </div>
+                </div>
+
+                @*<div class="col-md-6 check_box_center">
+            <div class="checkbox">
+                <input type="checkbox" id="activeRoom" asp-for="IsActive" class="form-check-input">
+                <label for="activeRoom">
+                    Active/Inactive Statistics
+                </label>
+            </div>
+        </div>*@
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+@*<script src="https://code.jquery.com/ui/1.10.2/jquery-ui.min.js"></script>*@
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $("#Mobile").autocomplete({
+            source: function (request, response) {
+                $.ajax({
+                    url: "/ClientAdmin/InternalBooking/loadUserMobile",
+                    type: "GET",
+                    dataType: "json",
+                    data: { Mobile: function () { return $("#Mobile").val() } },
+                    success: function (data) {
+                        
+                        if (data.length == 0) {
+                            $.each($("#frmVisitorBooking").find("input,textarea"), function (key, ele) {
+                                if ($(ele).attr("id") != "Mobile")
+                                        $(ele).val("");
+                            });
+                        } else {
+                         
+                           
+                            response($.map(data, function (item) {
+                            return {
+                                label: item.mobile + "  " + item.name,
+                                value: item.mobile,
+                                firstName: item.name,
+                                lastName: item.surName,
+                                postCode: item.postCode,
+                                email: item.email,
+                                mobileNumber: item.mobile,
+                                telephone: item.telephone,
+                                description: item.description,
+                                address: item.address,
+                                id: item.id
+                            };
+                            }))
+
+                        }
+
+                    }
+                    
+                })
+            },
+            //data: {
+            //    Mobile: function () { return $("#Mobile").val(); }
+            //},
+            minLength: 2,
+            select: function (event, ui) {
+                
+                $("#Id").val(ui.item.id);
+                $("#Address").val(ui.item.address);
+                $("#Description").val(ui.item.description);
+                $("#Email").val(ui.item.email);
+                $("#Email").rules('remove');
+                $("#Name").val(ui.item.firstName);
+                $("#SurName").val(ui.item.lastName);
+                $("#Mobile").val(ui.item.mobileNumber);
+                $("#PostCode").val(ui.item.postCode);
+                $("#Telephone").val(ui.item.telephone);
+                $.each($("#frmVisitorBooking").find("input,textarea"), function (key, ele) {
+                    if ($(ele).attr("id") != "Mobile")
+                        $(ele).attr('readonly', true);
+                });
+            }
+        });
+
+       
+        //$("#Mobile").autocomplete({
+        //    source: function (request, response) {
+        //        $.getJSON("/ClientAdmin/InternalBooking/loadUserMobile", { Mobile: $('#Mobile').val() },
+        //            response);
+        //    },
+        //    minLength: 2,
+        //    select: function (event, ui) {
+
+        //        log("Selected: " + ui.item.value + " aka " + ui.item.id);
+        //        //action
+        //    }
+        //});
+
+        if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        jQuery.validator.addMethod("nameAndno", function (value, element) {
+            return this.optional(element) || /^([a-zA-Z ]*)$/i.test(value);
+        }, "Please Enter a Valid Name");
+
+        var validationresult = $("#frmVisitorBooking").validate({
+            onfocusout: false,
+            rules: {
+                "Description": {
+                    required: false,
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Name": {
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "SurName": {
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Address": {
+                    required: true,
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "PostCode": {
+                    required: true,
+                    maxlength: 10,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Email": {
+                    required: true,
+                    email: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/Visitors/CheckVisitorEmail",
+                        type: "GET",
+                        data: { Email: $(".Email").val(), Id: $("#Id").val() }
+                    },
+                },
+                "Telephone": {
+                    maxlength: 10,
+                    minlength: 10,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Mobile": {
+                    required: true,
+                    minlength: 10,
+                    maxlength: 12,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Notes": {
+                    required: false,
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+
+                },
+            },
+            messages: {
+                "Description": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "Name": {
+                    required: "Please enter a First Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "SurName": {
+                    required: "Please enter a Last Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Address": {
+                    required: "Please enter a Address",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "PostCode": {
+                    required: "Please enter a PostCode",
+                    maxlength: "More than 10 characters are not allowed !"
+                },
+                "Email": {
+                    required: "Please enter a Email",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Email already exist !"
+                },
+                "Telephone": {
+                    minlength: "Minimum 10 numbers are required !",
+                    maxlength: "More than 10 numbers are not allowed !"
+                },
+                "Mobile": {
+                    required: "Please enter a Mobile Number",
+                    minlength: "Minimum 10 numbers are required !",
+                    maxlength: "More than 12 numbers are not allowed !"
+                },
+                "Notes": {
+                    maxlength: "More than 200 characters are not allowed !"
+                }
+            },
+
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblVisitor");
+                        return false;
+
+                    }
+                    // window.location.href = `/ClientAdmin/Visitors/Index`;
+                });
+            }
+        });
+
+
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+            $("#btnSave").hide();
+
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+        //if ($("#Id").val() != 0 && $("#IsView").val() == "false") {
+        //    $("#Email").rules("remove", "remote");
+
+        //}
+
+
+    });
+</script>

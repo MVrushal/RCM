@@ -1,0 +1,220 @@
+﻿
+@{
+    ViewData["Title"] = "User Access";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>User Access</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Manage Users</li>
+                    <li class="breadcrumb-item active" aria-current="page">User Access</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-end mb-2">
+                                    <button type="button" class="btn btn-primary" id="btnAddUser">
+                                        Add New User
+                                    </button>
+                                </div>
+                                <div>
+                                    <div class="table-responsive">
+                                        <table class='table table-bordered table-striped' id="tblUserDetail">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"> Full Name</th>
+                                                    <th scope="col"> Email</th>
+                                                    <th scope="col" class="action_th"> Action</th>
+                                                    <th scope="col" style="display:none"> Is Admin</th>
+                                                    <th scope="col"> Manage Access</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody></tbody>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+            bindMeeting("#tblUserDetail");
+        });
+
+        $(document).on("click", "#btnAddUser", function () {
+            AddUser();
+        });
+
+
+        function AddUser(Id = 0, IsView = false, IsEmailEdit = false) {
+
+            $("#modalContent").load(`/ClientAdmin/UserAccess/_AddUser?Id=${Id}&IsView=${IsView}&IsEmailEdit=${IsEmailEdit}`, function () {
+                ShowModal();
+            });
+        }
+
+        function AddAccess(id = 0) {
+
+            $("#modalContent").load(`/ClientAdmin/UserAccess/_AddAccess/${id}`, function () {
+                ShowModal();
+            });
+        }
+
+
+
+        $("#tblUserDetail").on("change", ".switch", function (e) {
+            
+            const current = $(e.currentTarget).find("input");
+            const id = $(current).data("id");
+            var isChecked = $(e.currentTarget).find("input").prop("checked");
+            if (isChecked) {
+                
+                $(e.currentTarget).find("input").parent().parent().next().find('a').addClass("DisableAccess");
+            } else { $(e.currentTarget).find("input").parent().parent().next().find('a').removeClass("DisableAccess") }
+            $.ajax({
+                url: "/ClientAdmin/UserAccess/ManageIsAdmin",
+                data: { id: id },
+                type: "POST",
+                success: function (response) {
+                    Integr8ed.HandleResponse(response);
+                },
+                error: function (data) {
+                }
+            });
+        });
+
+
+        function DeleteUser(id) {
+
+            Integr8ed.Confirm("Delete User", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/UserAccess/RemoveUser",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+                        bindMeeting("#tblUserDetail");
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+        function bindMeeting(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblMeetingDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/UserAccess/GetCompanyUserList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblUserDetail_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblUserDetail_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_Users",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Users"
+                    },
+                    "columns": [
+                        {
+                            "data": "id",
+                            "searchable": true,
+                            "orderable": true,
+                            "render": function (data, type, row) {
+
+                                return row.firstName + " " + row.lastName
+                            }
+
+                        },
+                        {
+                            "data": "email",
+                            "searchable": true,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddUser('${row.id}', false, true);" title="Edit Email" class="editAsset icon_cust_button"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+| <a onclick="AddUser('${row.id}');" class="editAsset icon_cust_button"><i class="far fa-edit" title="Edit"></i></a> | <a onclick="AddUser('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="DeleteUser('${row.id}');" title="Delete" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        },
+                        {
+                            "data": "isAdmin",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "visible":false,
+                            "render": function (data, type, row) {
+                                
+                                var ischecked = data == true ? 'checked' : '';
+                                var element = `<label class="switch">
+                                                          <input data-id="${row.id}"  type="checkbox" ${ischecked}>
+                                                          <span class="slider round"></span>
+                                                   </label>`;
+                                return element;
+                            }
+                        },
+
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var clickEvent = row.isAdmin ? 'DisableAccess' : ``;
+                                var element = `<a  onclick = "AddAccess('${data}');"  class=" ${clickEvent}  editAsset icon_cust_button"><i class="far fa-edit"></i></a> `;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+        };
+
+    </script>
+}

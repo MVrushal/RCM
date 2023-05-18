@@ -1,0 +1,231 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<main class="app-content">
+    <div class="main-content container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-first">
+                <div class="page-title">
+                    <h3>External Booking  Request</h3>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-last">
+                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                    <ol class="breadcrumb">
+                        @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                        <li class="breadcrumb-item" aria-current="page">ClientAdmin</li>
+                        <li class="breadcrumb-item active" aria-current="page">External Booking  Request</li>
+                    </ol>
+                </nav>
+                
+            </div>
+        </div>
+        <div class="row pharmacies_form admin_tabel">
+            <!--<ul class="nav nav-tabs" role="tablist" id="myTab1">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#PendingTab" role="tab" data-toggle="tab">New Booking</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#AcceptedTab" role="tab" data-toggle="tab">Accepted Booking</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#RejectedTab" role="tab" data-toggle="tab">Rejected Booking</a>
+                </li>
+            </ul>
+            <div class="col-12">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane in active" id="PendingTab">
+                        <div class="tile-body">
+                            <div class="dataTables_wrapper no-footer">
+                                <table class="table table-hover table-bordered dataTable no-footer table_bordered_sec" id="dtPendingRequest" role="grid" aria-describedby="sampleTable_info">
+                                    <thead>
+                                        <tr role="row" class="title_datatable">
+                                            <th>Action</th>
+                                            <th>Email</th>
+                                            <th>Booking Date</th>
+                                            <th>Time</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="AcceptedTab">
+                        <div class="tile-body">
+                            <div class="dataTables_wrapper no-footer">
+                                <table class="table table-hover table-bordered dataTable no-footer table_bordered_sec" id="dtAcceptedRequest" role="grid" aria-describedby="sampleTable_info">
+                                    <thead>
+                                        <tr role="row" class="title_datatable">
+                                            <th>Action</th>
+                                            <th>Email</th>
+                                            <th>Booking Date</th>
+                                            <th>Time</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="RejectedTab">
+                        <div class="tile-body">
+                            <div class="dataTables_wrapper no-footer">
+                                <table class="table table-hover table-bordered dataTable no-footer table_bordered_sec" id="dtRejectedRequest" role="grid" aria-describedby="sampleTable_info">
+                                    <thead>
+                                        <tr role="row" class="title_datatable">
+                                            <th>Action</th>
+                                            <th>Email</th>
+                                            <th>Booking Date</th>
+                                            <th>Time</th>
+                                            <th>Cost</th>-->
+            @*<th>Address</th>*@
+            <!--</tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="col-12 d-flex justify-content-end mb-2">
+                                <a href="~/Uploads/AddVisitor.xls" class="btn btn-primary">Download Sample Visitor Excel Report</a>
+
+                            </div>
+
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class='table table-bordered table-striped' id="tbBookingRequest">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"> Email</th>
+                                                <th scope="col"> Roomtype</th>
+                                                <th scope="col"> Slot</th>
+                                                <th scope="col"> Status</th>
+                                                <th scope="col"> Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            bindRequest("#tbBookingRequest");
+
+        });
+        function AddNewBooking(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/BookingRequest/_AddEditBookingDetails?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+
+            });
+        }
+
+        function UploadVisitor(id = 0) {
+            $("#modalContent").load(`/ClientAdmin/BookingRequest/_uploadVisitor?id=${id}`, function () {
+                ShowModal();
+
+            });
+        }
+
+        function bindRequest(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblEntryType = $("#tbBookingRequest")
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/BookingRequest/GetRequestList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Requests",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Requests"
+                    },
+                    "columns": [
+                        {
+                            "data": "email",
+                            //"width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "roomType",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true
+                        },
+                        {
+                            "data": "slot",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true
+                        },
+                        {
+                            "data": "bookingStatus",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                
+                                switch (data) {
+                                    case 1:
+                                        return "Confirmed";
+                                        break;
+                                    case 2:
+                                        return "Cancelled";
+                                        break;
+                                    case 3:
+                                        return "Pending";
+                                        break;
+                                    default:
+                                        return "Other";
+                                }
+                            }
+                        },
+                        {
+                            "data": "requestId",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                            /*    <a href="/Uploads/AddVisitor.xlsx" class="editAsset icon_cust_button" title="Download Excel"><i class="far fa-download"></i></a> |*/
+                                var element = `<a onclick="AddNewBooking('${data}');" class="editAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> |<a onclick="UploadVisitor(${data})" class=" icon_cust_button" title="Upload Excel"><i class="far fa-upload"></i></a> `;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+        };
+
+        $(document).off("change", ".bStatus");
+        $(document).on("change", ".bStatus", function () { RemoveBranch($(this).data("id")); })
+
+    </script>
+
+
+}

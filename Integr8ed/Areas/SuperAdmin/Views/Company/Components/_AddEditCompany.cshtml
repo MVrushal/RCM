@@ -1,0 +1,249 @@
+﻿@model Integr8ed.Service.Dto.CompanyDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="modal-content">
+    <form id="frmCompany" asp-action="AddEditCompany" asp-controller="Company" asp-area="SuperAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">@(Model.IsView? (Model.Id!=0?"View": "Edit") :"Add New") Company Admin</h5>
+            
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-body">
+                <div class="row">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsView" />
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-6">
+                        <div class="form-group">
+                            <label asp-for="FirstName">First Name *</label>
+                            <input type="text" asp-for="FirstName" placeholder="Enter First Name here" name="FirstName" class="form-control">
+
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="SurName">Last Name *</label>
+                            <input type="text" asp-for="SurName" name="SurName" placeholder="Enter Last Name here" class="form-control">
+
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="Email">Email *</label>
+                            <input type="text" asp-for="Email" name="Email" id="Email" placeholder="Enter Email here" class="form-control" autocomplete="off">
+
+                        </div>
+                    </div>
+
+                    @if (Model.Id == 0)
+                    {
+
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="Password">Password *</label>
+                                <input type="password" asp-for="Password" name="Password" placeholder="Enter Password here" class="form-control" autocomplete="off">
+                            </div>
+                        </div>
+                    }
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="OrganisationName">Organisation Name *</label>
+                            <input type="text" class="form-control" name="OrganisationName" placeholder="Enter Organisation Name here" asp-for="OrganisationName">
+                        </div>
+                    </div>
+                    <div class="col-12">
+                        <div class="form-group">
+                            <label asp-for="Address">Address *</label>
+                            <textarea class="form-control" name="Address" asp-for="Address" placeholder="Enter Address here" rows="3"></textarea>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="PostCode">Post Code *</label>
+                            <input type="text" class="form-control" name="PostCode" placeholder="Enter Post Code here" asp-for="PostCode">
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="form-group">
+                            <label asp-for="Telephone">Mobile Number *</label>
+                            <input type="number" class="form-control" name="Telephone" placeholder="Enter Mobile Number here" asp-for="Telephone">
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $("#" + value.id).prop("disabled", true);
+            });
+            $("#Email").prop("disabled", true);
+            $("#btnSave").hide();
+            $("#exampleModalLabel").text("View Company Admin");
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $("#" + value.id).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+        if ($("#Id").val() != 0 && $("#IsView").val() == "false") {
+            
+            $("#Email").prop("disabled", true);
+            $("#exampleModalLabel").text("Edit Company Admin");
+
+        } 
+
+
+      
+
+        var validationresult = $("#frmCompany").validate({
+            onfocusout: false,
+            rules: {
+                "FirstName": {
+                    maxlength: 50,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "SurName": {
+                    maxlength: 50,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Email": {
+                    required: true,
+                    maxlength: 50,
+                    email:true,
+                    remote: {
+                        url: "/SuperAdmin/Company/CheckForEmail",
+                        type: "GET",
+                        data: { Email:$(".Email").val(), Id: $("#Id").val() }
+                    },
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Password": {
+                    minlength: 8,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "OrganisationName": {
+                    maxlength:30,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Address": {
+                    maxlength:200,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "PostCode": {
+                    maxlength:10,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Telephone": {
+                    maxlength: 12,
+                    minlength: 10,
+                    number:true,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+
+
+            },
+            messages: {
+                "FirstName": {
+                    required: "Please enter a First Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "SurName": {
+                    required: "Please enter a Last Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Email": {
+                    required: "Please enter a  Email",
+                    remote: "Email is already taken",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Password": {
+                    required: "Please enter a Password",
+                    minlength: "Minimum 8 characters are required !"
+                },
+                "OrganisationName": {
+                    required: "Please enter a Organisation Name",
+                    maxlength: "More than 30 characters are not allowed !"
+                },
+                "Address": {
+                    required: "Please enter a Address",
+                    maxlength: "More than 100 characters are not allowed !"
+                },
+                "PostCode": {
+                    required: "Please enter a Post Code",
+                    maxlength: "More than 10 characters are not allowed !"
+               },
+                "Telephone": {
+                    required: "Please enter a Mobile Number",
+                    maxlength: "More than 12 digits are not allowed !",
+                    minlength: "Minimum 10 digits are required !"
+                },
+            },
+
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+                    //console.log(response)
+                    closeModal();
+                    setTimeout(function () {
+                        //bindCompnay("#tblCompanyDetail");
+                        window.location.href = `/SuperAdmin/Company/index`;
+                        return false;
+                    }, 1000);
+                  //      
+                    return false;
+                   // bindCompnay("#tblCompanyDetail");
+                    
+                });
+             
+              
+               // window.location.href = `/SuperAdmin/Company/index`;    
+                return false;
+
+            }
+        });
+
+    });
+
+</script>

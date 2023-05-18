@@ -1,0 +1,163 @@
+﻿@model Integr8ed.Service.Dto.UserGroupDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "User Group";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>User Group</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Datatable Menu</li>
+                    <li class="breadcrumb-item active" aria-current="page">User Group</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-end mb-2">
+                                    <button type="button" id="btnAddNewUserGroup" class="btn btn-primary" data-toggle="modal" data-target="#new_add_usergroup">
+                                        New User Group
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="col-md-12">
+                             
+                                <div class="table-responsive user_customs_group">
+                                    <table class='table table-bordered table-striped' id="tblUserGroup">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col" class="user_title_s"> Title</th>
+                                                <th scope="col"> Description</th>
+                                                <th scope="col" class="action_th">Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+
+                                </div>
+                           
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+
+@section Scripts{
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            bindUserGroup("#tblUserGroup");
+        });
+           $(document).on("click", "#btnAddNewUserGroup", function () {
+           AddUserGroup();
+        });
+
+        function bindUserGroup(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblCompanyDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/UserGroup/GetUserGroupList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblUserGroup_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblUserGroup_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ RoomTypes",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 RoomTypes"
+                    },
+                    "columns": [
+                         {
+                            "data": "title",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "description",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddUserGroup('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddUserGroup('${row.id}',true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="DeleteUserGroup('${row.id}');" title="Delete" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+        }
+
+
+        function AddUserGroup(id = 0, isView = false) {
+            
+            $("#modalContent").load(`/ClientAdmin/UserGroup/_AddEditUserGroupType?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        function DeleteUserGroup(id) {
+
+            Integr8ed.Confirm("Delete UserGroup", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/UserGroup/RemoveUserGroup",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindUserGroup("#tblUserGroup");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+    </script>
+}

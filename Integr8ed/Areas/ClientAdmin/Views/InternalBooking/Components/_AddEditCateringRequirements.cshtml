@@ -1,0 +1,444 @@
+﻿@model Integr8ed.Service.Dto.Catering_RequirementsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div class="modal-content">
+    <form id="frmCateringRequirements" asp-action="AddEditCateringRequirements" asp-controller="Internalbooking" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Catering Requirement</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IsView" />
+                <input type="hidden" asp-for="MenuId" />
+                <input type="hidden" asp-for="MenuItem" id="MenuItem" />
+
+                <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+
+                                @if (!ViewBag.IsCatererDetailEmpty)
+                                {
+                                    <label>Select Caterer Name *</label>
+
+                                    @Html.DropDownListFor(x => x.CatererId, ViewBag?.CatererDetail as IEnumerable<SelectListItem>, "Select Caterer Name", new { @class = "form-control form-select", @id = "CatererId", @Name = "CatererId", required = "Select Caterer Name" })
+                                }
+
+                                else
+                                {
+                                    <label style="color:red">Please Add Catering Detail First !</label>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-md-12" id="catReqMenu">
+                            <div class="form-group">
+
+                                <label for="MenuId">Select Description of Food *</label>
+                                <div class="multiselect_dropdown">
+                                    <span id="MenuId" class="autocomplete-select"></span>
+                                    <button type="button" class="btn btn-primary" id="resetAutocomplete">
+                                        <i class="fas fa-sync-alt"></i>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="first-name-column">Time For *</label>
+                                <input type="text" class="form-control" readonly asp-for="TimeFor" name="TimeFor" autocomplete="off" placeholder="Enter Time For here">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="first-name-column">Time Collected *</label>
+                                <input type="text" class="form-control" readonly asp-for="TimeCollected" name="TimeCollected" autocomplete="off" placeholder="Enter Time Collected here">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="first-name-column">Number of People *</label>
+                                <input type="number" class="form-control" asp-for="NumberOfPeople" name="NumberOfPeople" placeholder="Enter Number of People here">
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="first-name-column">Cost Per Person *</label>
+                                <input type="number" class="form-control" readonly asp-for="Cost" name="Cost" placeholder="Enter Cost here">
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label for="exampleFormControlTextarea2">Notes</label>
+                                <textarea class="form-control" asp-for="Notes" name="Notes" id="exampleFormControlTextarea2" placeholder="Enter Notes here" rows="3"></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/bundle.min.js"></script>
+
+<script type="text/javascript">
+    var MenuItemAndCosts = [];
+
+    $(document).ready(function () {
+
+        $(document).on("change", "#CatererId", function () {
+	$("#CatererId-error").html("");
+	$("#CatererId").removeClass("error");
+});
+
+
+      if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+        var multiSelectDropDown;
+
+          $("#catReqMenu").hide();
+         $(document).on("click", "#btnSave", function () {
+                Validate();
+            });
+
+        function Validate() {
+            var menuId = $("#MenuId").val();
+            if (menuId == null) {
+                Integr8ed.messages("Please select menu item !");
+                return false;
+            }
+            return true;
+        }
+
+          if ($("#CatererId").val() != undefined && $("#CatererId").val() != "") {
+
+                 $.ajax({
+                    url: "/ClientAdmin/Internalbooking/GetCatererMenuListByCatererId",
+                    data: { catererId: $("#CatererId").val()  },
+                     type: "GET",
+                     async: false,
+                    success: function (response) {
+
+
+                        AppendMultiselectDropdown(response);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+
+            }
+        function AppendMultiselectDropdown(data) {
+                $("#catReqMenu").show();
+                var data = '@ViewBag.MenuDetail.Value.Data' == 'null' ? data.data : '@ViewBag.MenuDetail.Value.Data';
+                var valId = ($("#MenuId").val() == "") ? [] : ($("#MenuId").val().split(','));
+                var jsonData = JSON.parse(data.replaceAll("&quot;", '"'));
+                var autocomplete = new SelectPure(".autocomplete-select", {
+                    options: jsonData,
+                    value: valId,//["1","2"],
+                    multiple: true,
+                    autocomplete: true,
+                    placeholder: "Select Description of Food",
+                    icon: "fa fa-times",
+                    id: "MenuId",
+                    onChange: value => { GetMenuById(value); /*autocomplete.value.length > 0 ? $("#MenuId").val(JSON.stringify(value)) : "";*/ },
+                    classNames: {
+                        select: "select-pure__select",
+                        dropdownShown: "select-pure__select--opened",
+                        multiselect: "select-pure__select--multiple",
+                        label: "select-pure__label",
+                        placeholder: "select-pure__placeholder",
+                        dropdown: "select-pure__options",
+                        option: "select-pure__option",
+                        optionDisabled: "select-pure__option--disabled",
+                        autocompleteInput: "select-pure__autocomplete",
+                        selectedLabel: "select-pure__selected-label",
+                        selectedOption: "select-pure__option--selected",
+                        placeholderHidden: "select-pure__placeholder--hidden",
+                        optionHidden: "select-pure__option--hidden",
+                    },
+                    disabledOptions: jsonData
+                });
+
+            multiSelectDropDown = autocomplete;
+           // }
+           /*  jQuery(".autocomplete-select").autocomplete("destroy");*/
+        }
+
+        $(document).on("click", "#resetAutocomplete", function () {
+            multiSelectDropDown.reset();
+        });
+
+        $(document).off("change", "#CatererId");
+        $(document).on("change", "#CatererId", function () {
+
+             $(".select-pure__select").remove();
+            if ($("#CatererId").val() != "") {
+
+
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/GetCatererMenuListByCatererId",
+                    data: { catererId: $("#CatererId").val() },
+                    type: "GET",
+                    success: function (response) {
+
+
+                        AppendMultiselectDropdown(response);
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            else {
+                $("#catReqMenu").hide();
+            }
+        });
+
+        $("input[name=TimeFor]").clockpicker({
+            placement: 'bottom',
+            align: 'left',
+            autoclose: true,
+            default: 'now',
+            donetext: "Select"
+        });
+
+        $("input[name=TimeCollected]").clockpicker({
+            placement: 'bottom',
+            align: 'left',
+            autoclose: true,
+            default: 'now',
+            donetext: "Select"
+        });
+
+         jQuery.validator.addMethod("dollarsscents", function (value, element) {
+        return this.optional(element) || /^\d{0,20}(\.\d{0,2})?$/i.test(value);
+         }, "You must include two decimal places");
+
+         jQuery.validator.addMethod("noOnly", function (value, element) {
+        return this.optional(element) || /^\d{0,20}$/i.test(value);
+         }, "You can't enter decimal value");
+
+
+        var validationresult = $("#frmCateringRequirements").validate({
+            onfocusout: false,
+            rules: {
+                "CatererId": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/InternalBooking/CheckCatererName",
+                        type: "GET",
+                        data: { CateringDetailId: $(".CateringDetailId").val(), Id: $("#Id").val() }
+                    },
+                },
+                "MenuId": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                     remote: {
+                        url: "/ClientAdmin/InternalBooking/CheckMenuDesc",
+                        type: "GET",
+                        data: { MenuId: $(".MenuId").val(), Id: $("#Id").val() }
+                    },
+                },
+                "Notes": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "TimeFor": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "TimeCollected": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "NumberOfPeople": {
+                    required: true,
+                    min: 1,
+                    maxlength: 10,
+                    number: true,
+                    noOnly: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Cost": {
+                    required: true,
+                    min: 1,
+                    number: true,
+                    dollarsscents: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+            messages: {
+                "CatererId": {
+                    required: "Please enter a Caterer Name",
+                    min: "Invalid Caterer Name",
+                    maxlength: "More than 5 characters are not allowed !"
+                },
+                "MenuId": {
+                    required: "Please enter a Description of Food",
+                    min: "Invalid Description of Food",
+                    maxlength: "More than 5 characters are not allowed !"
+                },
+                "Notes": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "TimeFor": {
+                    required: "Please enter a Time For"
+                },
+                "TimeCollected": {
+                    required: "Please enter a Time Collected"
+                },
+                "NumberOfPeople": {
+                    required: "Please enter a  Number of People",
+                    min: "Invalid Number of People",
+                    maxlength: "More than 10 digits are not allowed !"
+                },
+                "Cost": {
+                    required: "Please enter a Cost",
+                    min: "Invalid Cost"
+                }
+            },
+            submitHandler: function (form) {
+             // $("#CateringDetailId").val($("#CateringDetailId").val());
+
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblNewCatering");
+                        return false;
+
+                    }
+                });
+
+            }
+        });
+
+
+            if ('@ViewBag.IsCatererDetailEmpty' == "True") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#MenuId").prop("disabled",true);
+            $("#btnSave").hide();
+        }
+
+        @*else if ('@ViewBag.IsmenuEmpty' == "True") {
+
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }*@
+            else {
+              if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"],input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+
+            $("#catReqMenu").html("");
+
+                  $("#catReqMenu").html(""+
+                      "<div class='col-md-12' id = 'catReqMenu' style = '' > "+
+	                  " <div class='form-group'> "+
+		                 "   <label for='MenuId'>Select Description of Food *</label> "+
+		                  "  <div class='multiselect_dropdown'> "+
+			               "     <span id='MenuId' class='autocomplete-select'> "+
+				                 "   <div class='select-pure__select select-pure__select--multiple'> "+
+                      "      <span class='select-pure__label'> " +
+                      $("#MenuItem").val() +
+						           //"         <span class='select-pure__selected-label'> "+
+						           // "        Browne(50) <i class='fa fa-times' data-value='28'></i>"+
+						           //  "       </span>"+
+                 //                  "         <span class='select-pure__selected-label'> "+
+						           // "        Test(10) <i class='fa fa-times' data-value='28'></i> "+
+						           //  "       </span>"+
+					                  "  </span>"+
+				                    "</div>"+
+			                 "   </span>"+
+			               "     <button type='button' class='btn btn-primary' id='resetAutocomplete'>"+
+				            "        <i class='fas fa-sync-alt'></i> "+
+			                 "   </button> "+
+		                   " </div> "+
+	                  "  </div> "+
+                  "  </div> "+
+                   "   ");
+
+
+            $("#CatererId").prop("disabled", true);
+            $("#MenuId").prop("disabled",true);
+            $("#btnSave").hide();
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"],input[type="select"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+        }
+
+        function GetMenuById(value) {
+
+            $("#MenuId").val(value);
+            $.ajax({
+                url: "/ClientAdmin/Internalbooking/GetMenuById",
+                data: { Ids: value.toString() },
+                type: "GET",
+                success: function (response) {
+                    $("#Cost").val(response.cost);
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        }
+
+
+    });
+
+</script>

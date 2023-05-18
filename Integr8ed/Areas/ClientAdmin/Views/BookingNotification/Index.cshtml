@@ -1,0 +1,245 @@
+﻿
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<main class="app-content">
+    <div class="main-content container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-first">
+                <div class="page-title">
+                    <h3>Booking Notification</h3>
+                </div>
+            </div>
+            <div class="col-12 col-md-6 order-md-2 order-last">
+                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                    <ol class="breadcrumb">
+                        @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                        <li class="breadcrumb-item" aria-current="page">ClientAdmin</li>
+                        <li class="breadcrumb-item active" aria-current="page">Booking Notification</li>
+                    </ol>
+                </nav>
+
+            </div>
+        </div>
+        <div class="row pharmacies_form admin_tabel">
+            <!--<ul class="nav nav-tabs" role="tablist" id="myTab1">
+                <li class="nav-item">
+                    <a class="nav-link active" href="#PendingTab" role="tab" data-toggle="tab">New Booking</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#AcceptedTab" role="tab" data-toggle="tab">Accepted Booking</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="#RejectedTab" role="tab" data-toggle="tab">Rejected Booking</a>
+                </li>
+            </ul>
+            <div class="col-12">
+                <div class="tab-content">
+                    <div role="tabpanel" class="tab-pane in active" id="PendingTab">
+                        <div class="tile-body">
+                            <div class="dataTables_wrapper no-footer">
+                                <table class="table table-hover table-bordered dataTable no-footer table_bordered_sec" id="dtPendingRequest" role="grid" aria-describedby="sampleTable_info">
+                                    <thead>
+                                        <tr role="row" class="title_datatable">
+                                            <th>Action</th>
+                                            <th>Email</th>
+                                            <th>Booking Date</th>
+                                            <th>Time</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="AcceptedTab">
+                        <div class="tile-body">
+                            <div class="dataTables_wrapper no-footer">
+                                <table class="table table-hover table-bordered dataTable no-footer table_bordered_sec" id="dtAcceptedRequest" role="grid" aria-describedby="sampleTable_info">
+                                    <thead>
+                                        <tr role="row" class="title_datatable">
+                                            <th>Action</th>
+                                            <th>Email</th>
+                                            <th>Booking Date</th>
+                                            <th>Time</th>
+                                            <th>Cost</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                    <div role="tabpanel" class="tab-pane fade" id="RejectedTab">
+                        <div class="tile-body">
+                            <div class="dataTables_wrapper no-footer">
+                                <table class="table table-hover table-bordered dataTable no-footer table_bordered_sec" id="dtRejectedRequest" role="grid" aria-describedby="sampleTable_info">
+                                    <thead>
+                                        <tr role="row" class="title_datatable">
+                                            <th>Action</th>
+                                            <th>Email</th>
+                                            <th>Booking Date</th>
+                                            <th>Time</th>
+                                            <th>Cost</th>-->
+            @*<th>Address</th>*@
+            <!--</tr>
+                                    </thead>
+                                    <tbody></tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>-->
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+
+                            <div class="col-md-12">
+                                <div class="table-responsive">
+                                    <table class='table table-bordered table-striped' id="tblBookingNotification">
+                                        <thead>
+                                            <tr>
+                                                <th scope="col"> TitleOfMeeting</th>
+                                                <th scope="col"> BookingDate</th>
+                                                <th scope="col"> Cost</th>
+                                                <th scope="col" class="text-center"> No of days before notify</th>
+                                                <th scope="col"> Actions</th>
+                                            </tr>
+                                        </thead>
+                                    </table>
+
+                                </div>
+                            </div>
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+@section Scripts{
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            bindRequest("#tblBookingNotification");
+
+        });
+        function AddNewBooking(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/BookingRequest/_AddEditBookingDetails?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+
+            });
+        }
+
+        function UploadVisitor(id = 0) {
+            $("#modalContent").load(`/ClientAdmin/BookingRequest/_uploadVisitor?id=${id}`, function () {
+                ShowModal();
+
+            });
+        }
+
+        function noOfdays(no) {
+        }
+
+        function bindRequest(TableId) {
+
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblBooking = $("#tblBookingNotification")
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/BookingNotification/GetActiveBookingList",
+                    //"initComplete": function (settings, json) { },
+                    //"rowCallback": function (row, data, index) { debugger },
+                    //"fnRowCallback": function (nRow, aData, iDisplayIndex, iDisplayIndexFull) {
+                    //    debugger
+                    //    //var ddlBstatus1 = '<select id="ddlBookingstatus' + row.id + '" data-id=' + row.id + ' class = "form-control form-select ddlbindstatus" > </select >'
+                    //},
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Requests",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Requests"
+                    },
+                    "columns": [
+                        {
+                            "data": "titleOfMeeting",
+                            //"width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "bookingDate",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true,
+                            render: function (data, type, row) {
+                                
+                                return moment(data, 'YYYY-MM-DD').format('DD-MM-YYYY');
+                            }
+                        },
+                        {
+                            "data": "cost",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true
+                        },
+                        {
+                            "data": "notifyDays",
+                            "className": "details-control text-center",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": true,
+                            "render": function (data, type, row) {
+                                var element = `<input type="number" class="bindnumber table-input-text" value="${data}" data-id="${row.id}">`;
+                                return element;
+                            }
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddNewBooking('${data}');" class="editAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+            $(document).on("change", ".bindnumber", function () {
+                var BNo = $(this).val();
+                var BId = $(this).attr("data-id");
+
+                Integr8ed.Confirm("Change booking notify no", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Warning, "Yes, Change it!", function () {
+                    $.ajax({
+                        url: "/ClientAdmin/BookingNotification/ChangeBookingNotifyNo",
+                        data: { id: BId, no: BNo },
+                        type: "POST",
+                        success: function (response) {
+                            Integr8ed.HandleResponse(response);
+                            closeModal();
+                            bindRequest("#tblBookingNotification");
+                        },
+                        error: function (data) {
+                            console.log(data);
+                        }
+                    });
+                });
+            });
+        };
+
+    </script>
+
+
+}

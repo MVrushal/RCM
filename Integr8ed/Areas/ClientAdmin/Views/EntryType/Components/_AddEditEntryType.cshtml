@@ -1,0 +1,142 @@
+﻿@model Integr8ed.Service.Dto.EntryTypeDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<div class="modal-content">
+    <form id="frmentryType" asp-action="AddEditEntryType" asp-controller="EntryType" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Entry Type</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="IsView" />
+                            <label>Entry Title *</label>
+                            <input type="text" class="form-control" placeholder="Enter Title here" id="Title" asp-for="Title" name="Title">
+                        </div>
+                    </div>
+
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea asp-for="Description" placeholder="Enter Description here" name="Description" class="form-control" id="txtentryNotes" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    if ($("#Id").val() != 0) {
+        $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+    }
+
+    $(document).ready(function () {
+
+        var validationresult = $("#frmentryType").validate({
+            //onkeyup: false,
+            onfocusout: false,
+            rules: {
+                "Title": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/EntryType/CheckEntryTypeTitle",
+                        type: "GET",
+                        data: { Title: $(".Title").val(), Id: $("#Id").val() }
+                    },
+
+                },
+                //"code": {
+                //    required: true,
+                //    normalizer: function (value) {
+                //        return $.trim(value);
+                //    }
+                //},
+                "Description": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+
+            },
+            messages: {
+                "Title": {
+                    required: "Please enter a  Title",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Title already exist !"
+                },
+                //"code": {
+                //    required: "Please enter a  SurName"
+                //},
+                "Description": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+
+            },
+            submitHandler: function (form) {
+
+
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblEntryType");
+                        return false;
+                    }
+                    // window.location.href = `/ClientAdmin/EntryType/Index`;
+                });
+
+            }
+        });
+
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+            $("#btnSave").hide();
+
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+        // if ($("#Id").val() != 0 && $("#IsView").val() == "false") {
+        //    $("#Title").rules("remove", "remote");
+
+        //}
+
+
+    });
+
+
+
+
+</script>

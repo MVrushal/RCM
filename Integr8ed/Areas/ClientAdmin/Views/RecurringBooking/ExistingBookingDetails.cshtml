@@ -1,0 +1,119 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<Integr8ed.Service.Dto.RecurringBookingsList>
+@{
+    ViewData["Title"] = "ExistingBookingDetails";
+    Layout = null;
+}
+<style>
+
+    .tbl_monthly_Dairy td {
+        border: 1px solid #dddddd;
+    }
+
+    .tbl_monthly_Dairy_block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+        .tbl_monthly_Dairy_block textarea {
+            resize: none;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            width: 100%;
+        }
+
+    .tbl_monthly_Dairy td {
+        border: 1px solid #dddddd;
+        padding: 10px;
+    }
+
+    .tbl_monthly_Dairy_block .block_date {
+        font-weight: 700;
+        color: #000;
+    }
+
+    thead, tfoot {
+        display: table-row-group
+    }
+
+    tr {
+        page-break-inside: avoid;
+    }
+
+    html {
+        font-family: 'Segoe UI';
+    }
+
+    .data {
+        font-size: 15px;
+    }
+</style>
+<div class="main-content container-fluid">
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="col-12 col-md-6 order-md-1 order-first">
+                            <div class="page-title">
+                                <h3 style=" text-align:center">@Model.FirstOrDefault().ReportTitle</h3>
+                            </div>
+                        </div>
+
+                        <div class="card-body clearfix mt-5">
+                           
+                            <table width="100%" style="border: 1px solid #000; color: #000;">
+                                <thead>
+                                    <tr style="background : #efefef;">
+                                        @*<th style="padding:5px 10px;">Booking Date</th>*@
+                                        <th style="padding:5px 10px;">Booking Id</th>
+                                        <th style="padding:5px 10px;">Room Name</th>
+                                        <th style="padding:5px 10px;">Booking Date</th>
+                                        <th style="padding:5px 10px;">Booking Status</th>
+                                        <th style="padding:5px 10px;">Time Start</th>
+                                        <th style="padding:5px 10px;">Time End</th>
+                                        @*<th style="padding:5px 10px;">Equipments</th>
+                                            <th style="padding:5px 10px;">Special Requirements</th>
+                                            <th style="padding:5px 10px;">Room Layouts</th>
+                                            <th style="padding:5px 10px;">Technicial Required</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+
+                                        try
+                                        {
+                                            //List<Integr8ed.Service.Dto.PDFDto> Var = new List<Integr8ed.Service.Dto.PDFDto>();
+                                            //Var = Model.ToList();
+                                            @foreach (var item in Model)
+                                            {
+                                               
+                                                    <tr class="data">
+                                                        <td style="padding: 5px 10px; border : 1px solid #000;">@item.Id</td>
+                                                        <td style="padding: 5px 10px; border : 1px solid #000;">@item.RoomTitle</td>
+                                                        <td style="padding: 5px 10px; border : 1px solid #000;">@item.BookingDate</td>
+                                                        <td style="padding: 5px 10px; border : 1px solid #000;">@item.Status</td>
+                                                        <td style="padding: 5px 10px; border : 1px solid #000;">@item.StartTime</td>
+                                                        <td style="padding: 5px 10px; border : 1px solid #000;">@item.FinishTime</td>
+                                                    </tr>
+
+                                                
+
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+
+                                        }
+                                    }
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

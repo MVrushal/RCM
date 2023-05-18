@@ -1,0 +1,130 @@
+﻿/* Please see documentation at https://docs.microsoft.com/aspnet/core/client-side/bundling-and-minification
+for details on configuring this project to bundle and minify static web assets. */
+
+a.navbar-brand {
+  white-space: normal;
+  text-align: center;
+  word-break: break-all;
+}
+
+/* Provide sufficient contrast against white background */
+a {
+  color: #0366d6;
+}
+
+.btn-primary {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+.nav-pills .nav-link.active, .nav-pills .show > .nav-link {
+  color: #fff;
+  background-color: #1b6ec2;
+  border-color: #1861ac;
+}
+
+/* Sticky footer styles
+-------------------------------------------------- */
+html {
+  font-size: 14px;
+}
+@media (min-width: 768px) {
+  html {
+    font-size: 16px;
+  }
+}
+
+.border-top {
+  border-top: 1px solid #e5e5e5;
+}
+.border-bottom {
+  border-bottom: 1px solid #e5e5e5;
+}
+
+.box-shadow {
+  box-shadow: 0 .25rem .75rem rgba(0, 0, 0, .05);
+}
+
+button.accept-policy {
+  font-size: 1rem;
+  line-height: inherit;
+}
+
+.error {
+            color: red !important;
+        }
+
+
+.user_profile_section_f {
+    margin: 0 0 20px 0;
+    padding: 20px 20px 20px 20px;
+    background-color: #f5f5f5;
+    border-radius: 10px;
+}
+
+.custom_profile_upload {
+    position: relative;
+    height: auto;
+    width: 130px;
+}
+
+    .custom_profile_upload .profile-pic {
+        width: 130px;
+        height: 130px;
+        display: block;
+        border-radius: 1000px !important;
+        overflow: hidden;
+        object-fit: cover;
+    }
+
+    .custom_profile_upload .file-upload {
+        display: none;
+    }
+
+    .custom_profile_upload .circle {
+        border-radius: 1000px !important;
+        overflow: hidden;
+        width: 130px;
+        height: 130px;
+        border: 8px solid #dddddd;
+        position: relative;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .custom_profile_upload img {
+        max-width: 100%;
+        height: auto;
+    }
+
+    .custom_profile_upload .p-image {
+        position: absolute;
+        top: 10px;
+        right: 0px;
+        cursor: pointer;
+        line-height: 3px;
+        color: #666666;
+        padding: 8px 8px 9px 8px;
+        border-radius: 30px;
+        border: 1px solid #0071cd;
+        background-color: white;
+        transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+    }
+
+        .custom_profile_upload .p-image:hover {
+            color: #0071cd;
+            transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+        }
+
+    .custom_profile_upload .upload-button {
+        font-size: 1.2em;
+    }
+
+        .custom_profile_upload .upload-button:hover {
+            transition: all .3s cubic-bezier(.175, .885, .32, 1.275);
+            color: #999;
+        }
+
+

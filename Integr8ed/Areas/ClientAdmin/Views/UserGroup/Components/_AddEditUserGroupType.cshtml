@@ -1,0 +1,117 @@
+﻿@model Integr8ed.Service.Dto.UserGroupDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmUserGroup" asp-action="AddEditUserGroup" asp-controller="UserGroup" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") User Group</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="first-name-column" class="form-label">Title *</label>
+                        <input type="text" class="form-control" asp-for="Title" id="Title" name="Title" placeholder="Enter Title here">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                        <textarea class="form-control" asp-for="Description" name="Description" id="exampleFormControlTextarea1" placeholder="Enter Description here" rows="3"></textarea>
+                    </div>
+                </div>
+             
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+          if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        var validationresult = $("#frmUserGroup").validate({
+            onfocusout: false,
+            rules: {
+                "Title": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/UserGroup/CheckUserGroupTitle",
+                        type: "GET",
+                        data: { Title:$(".Title").val(), Id: $("#Id").val() }
+                    },
+                },
+                "Description": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+            messages: {
+                "Title": {
+                    required: "Please enter a Title",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Title already exist !"
+                },
+                "Description": {
+                    maxlength: "More than 200 characters are not allowed !"
+                }
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblUserGroup");
+                        return false;
+
+                    }
+                    //window.location.href = `/ClientAdmin/UserGroup/Index`;
+                });
+
+            }
+        });
+
+
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+            $("#btnSave").hide();
+          
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+    });
+
+</script>

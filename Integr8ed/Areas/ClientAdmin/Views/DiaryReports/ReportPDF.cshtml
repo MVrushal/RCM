@@ -1,0 +1,157 @@
+﻿@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@model List<Integr8ed.Service.Dto.PDFDto>
+@{
+    ViewData["Title"] = "GetMonthlyDiaryReport";
+    Layout = null;
+}
+<style>
+    
+    .tbl_monthly_Dairy td {
+        border: 1px solid #dddddd;
+    }
+
+    .tbl_monthly_Dairy_block {
+        display: flex;
+        flex-direction: column;
+        align-items: flex-end;
+    }
+
+        .tbl_monthly_Dairy_block textarea {
+            resize: none;
+            padding: 10px;
+            border: 1px solid #dddddd;
+            width: 100%;
+            
+        }
+
+    .tbl_monthly_Dairy td {
+        border: 1px solid #dddddd;
+        padding: 10px;
+    }
+
+    .tbl_monthly_Dairy_block .block_date {
+        font-weight: 700;
+        color: #000;
+    }
+
+    thead, tfoot {
+        display: table-row-group
+    }
+
+    tr {
+        page-break-inside: avoid;
+    }
+    html {
+        font-family: 'Segoe UI';
+    }
+    .data{
+        font-size:15px;
+    }
+</style>
+<div class="main-content container-fluid">
+    <div>
+        <h3>@Model.FirstOrDefault().CompanyName</h3>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="col-12 col-md-6 order-md-1 order-first">
+                            <div class="page-title">
+                                <h3 style=" text-align:center">@Model.FirstOrDefault().ReportTitle</h3>
+                            </div>
+                        </div>
+
+                        <div class="card-body clearfix mt-5">
+                            <table style="float: right; border: 1px solid #000; color: #000; margin-bottom: 30px; padding:1px;">
+                                <tbody>
+                                    <tr>
+                                        @if (@Model.FirstOrDefault().ReportTitle == "Daily Booking Report")
+                                        {
+                                            <td style="text-align:left;"><b>Date : </b>@Model.FirstOrDefault().BookingDate </td>
+                                        }
+                                        else
+                                        {
+                                            <td style="text-align:left;"><b>Date : </b><span>@Model.FirstOrDefault().BookingDate </span><span>to  @Model.Last().BookingDate</span> </td>
+                                        }
+
+
+
+                                        @*<tr>
+            <th style="text-align:left;">Current Year : </th>
+            <td style="text-align:left;">@Model.FirstOrDefault().BookingYear</td>
+            <th style="padding:5px 10px;"></th>
+            <td style="padding:5px 10px;"></td>
+        </tr>*@
+</tbody>
+                            </table>
+                            <table width="100%" style="border: 1px solid #000; color: #000;">
+                                <thead>
+                                    <tr style="background : #efefef;">
+                                        @*<th style="padding:5px 10px;">Booking Date</th>*@
+                                        <th width="50%" style="padding:5px 10px;">Booking Date</th>
+                                        <th width="100%" style="padding:5px 10px;">User Group</th>
+                                        <th style="padding:5px 10px;">Contact</th>
+                                        <th  width="100%"style="padding:5px 10px;">Room </th>
+                                        <th style="padding:5px 10px;">Booking Status</th>
+                                        <th  width="100%" style="padding:5px 10px;">Meeting Title</th>
+                                        <th style="padding:5px 10px;">No. Attend</th>
+                                        @*<th style="padding:5px 10px;">Rooms</th>*@
+                                        <th style="padding:5px 10px;">Time Start</th>
+                                        <th style="padding:5px 10px;">Time End</th>
+                                        @*<th style="padding:5px 10px;">Equipments</th>
+                                            <th style="padding:5px 10px;">Special Requirements</th>
+                                            <th style="padding:5px 10px;">Room Layouts</th>
+                                            <th style="padding:5px 10px;">Technicial Required</th>*@
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    @{
+
+                                        try
+                                        {
+                                            //List<Integr8ed.Service.Dto.PDFDto> Var = new List<Integr8ed.Service.Dto.PDFDto>();
+                                            //Var = Model.ToList();
+                                            @foreach (var item in Model)
+                                            {
+                                                @for (int i = 0; i < item.Slot.Split(",").Count(); i++)
+                                                {
+                                                        <tr class="data">
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.BookingDate</td>
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.UserGroup.Split(",%")[i]</td>
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.Contact.Split(",")[i]</td>
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.RoomType.Split(",")[i]</td>
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.BookingStatus.Split(",")[i]</td>
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.MeetingTitle.Split(",%")[i]</td>
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.NumberOfpeople.Split(",")[i]</td>
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.StartTime.Split(",")[i]</td>
+                                                            <td style="padding: 5px 10px; border : 1px solid #000;">@item.FinishTime.Split(",")[i]</td>
+                                                        </tr>
+
+                                                }
+
+                                            }
+                                        }
+                                        catch (Exception ex)
+                                        {
+
+                                        }
+                                    }
+
+                                    @*<td style="padding: 5px 10px; border : 1px solid #000;">10:00</td>
+        <td style="padding: 5px 10px; border : 1px solid #000;">14:00</td>
+        <td style="padding: 5px 10px; border : 1px solid #000;"></td>
+        <td style="padding: 5px 10px; border : 1px solid #000;"></td>
+        <td style="padding: 5px 10px; border : 1px solid #000;"></td>
+        <td style="padding: 5px 10px; border : 1px solid #000;"></td>*@
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+

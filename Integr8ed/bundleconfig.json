@@ -1,0 +1,49 @@
+[
+  {
+    "outputFileName": "wwwroot/Bundle/Integr8ted_Css.css",
+    "inputFiles": [
+      "wwwroot/css/bootstrap.css",
+      "wwwroot/css/site.css",
+      "wwwroot/css/DataTable.min.css",
+      "wwwroot/css/sweetalert.css",
+      "wwwroot/vendors/chartjs/Chart.min.css",
+      "wwwroot/vendors/perfect-scrollbar/perfect-scrollbar.css",
+      "wwwroot/css/app.css",
+      "wwwroot/css/custom-style.css",
+      "wwwroot/css/responsive-custom-style.css",
+      "wwwroot/css/clockpicker.css",
+      "wwwroot/css/jquery-ui.css"
+    ]
+  },
+  {
+    "outputFileName": "wwwroot/Bundle/Integr8ted_Js.js",
+    "inputFiles": [
+      "wwwroot/js/Jqueryv3.5.1.min.js",
+      "wwwroot/js/JQ_UI.js",
+      "wwwroot/js/multidraggable.js",
+      "wwwroot/js/jquery-migrate-3.0.0.min.js",
+      "wwwroot/js/jquery.validate.unobtrusive.min.js",
+      "wwwroot/js/Poper.js",
+      "wwwroot/lib/bootstrap/dist/js/bootstrap.js",
+      "wwwroot/js/jquery.dataTables.min.js",
+      "wwwroot/js/feather-icons/feather.js",
+      "wwwroot/vendors/chartjs/Chart.js",
+      "wwwroot/vendors/apexcharts/apexcharts.min.js",
+      "wwwroot/js/main.js",
+      "wwwroot/js/site.js",
+      "wwwroot/js/jquery-loading-overlay.js",
+      "wwwroot/js/sweetalert.js",
+      "wwwroot/js/moment.js",
+      "wwwroot/js/Mask.js",
+      "wwwroot/js/Common.js",
+      "wwwroot/js/dialogs.js",
+      "wwwroot/js/ToggleScript.js",
+      "wwwroot/js/bootstrap-datetimepicker.min.js",
+      "wwwroot/js/jquery.timepicker.js",
+      "wwwroot/js/bootstrap-datepicker.js",
+      "wwwroot/js/bundle.min.js",
+      "wwwroot/js/clockpicker.js"
+    ]
+  }
+
+]

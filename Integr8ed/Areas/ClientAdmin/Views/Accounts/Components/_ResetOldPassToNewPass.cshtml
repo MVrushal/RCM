@@ -1,0 +1,110 @@
+﻿@model Integr8ed.Service.Dto.UserDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmResetPass" asp-action="ResetOldPassToNewPass" asp-controller="Accounts" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Change Password</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="Password">Old Password *</label>
+                        <input type="password" class="form-control" asp-for="Password" id="Password" name="Password" placeholder="Enter Old Password here ">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="NewPassword">New Password *</label>
+                        <input type="password" class="form-control" asp-for="NewPassword" id="NewPassword" name="NewPassword" placeholder="Enter New Password here ">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="ConfirmPassword">Confirm Password *</label>
+                        <input type="password" class="form-control" id="ConfirmPassword" name="ConfirmPassword" placeholder="Enter Confirm Password here ">
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#frmResetPass").validate({
+            rules: {
+                "Password": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/Accounts/CheckUserPassword",
+                        type: "GET",
+                    },
+                },
+                "NewPassword": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "ConfirmPassword": {
+                    required: true,
+                    maxlength: 50,
+                    equalTo: "#NewPassword",
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+            messages: {
+                "Password": {
+                    required: "Please enter a Old Password",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Invalid Password !"
+                },
+                "NewPassword": {
+                    required: "Please enter a New Password",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "ConfirmPassword": {
+                    required: "Please enter a Confirm Password",
+                    maxlength: "More than 50 characters are not allowed !",
+                    equalTo: "Password & Confirm password doesn't match !"
+                }
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    //Integr8ed.HandleResponse(response.messages);
+                    //if (response.status === 1) {
+                        closeModal();
+                    //}
+                    window.location.href = `/ClientAdmin/Dashboard/index`;
+
+                });
+
+            }
+        });
+    });
+</script>

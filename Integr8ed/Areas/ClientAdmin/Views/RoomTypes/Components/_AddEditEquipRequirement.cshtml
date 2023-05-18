@@ -1,0 +1,174 @@
+﻿@model Integr8ed.Service.Dto.EquiptDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<div class="modal-content">
+    <form id="frmEquipment" asp-action="AddEditEquipType" asp-controller="RoomTypes" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Equipment</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <input type="hidden" asp-for="Id" />
+                    <input type="hidden" asp-for="IsView" />
+                    <input type="hidden" asp-for="EquipId" />
+                    @*<div class="col-md-4">
+                            <div class="form-group">
+                                <input type="hidden" asp-for="Id" />
+                                <label>Equipment Code</label>
+                                <input type="text" class="form-control" placeholder="Equipment Code" asp-for="Title" name="Title">
+                            </div>
+                        </div>*@
+
+                    <div class="form-group ">
+                        @if (!ViewBag.IsRoomEmpty)
+                        {
+                            <label>Select Standard Equipment *</label>
+
+                            @Html.DropDownListFor(x => x.EquipId, ViewBag?.EquipList as IEnumerable<SelectListItem>, "Select Standard Equipment", new { @class = "form-control form-select", @id = "EquipId1", @Name = "StandardEquipment", required = "Select Standard Equipment" })
+                        }
+                        else
+                        {
+                            <label style="color:red">Please Add Standard Equipment First !</label>
+                        }
+                    </div>
+                    <div class="col-md-4">
+                        <div class="form-group">
+                            <label>No. of Items *</label>
+                            <input type="number" class="form-control" placeholder="0" asp-for="Title" name="Title">
+                        </div>
+                    </div>
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea asp-for="Description" name="Description" class="form-control" rows="3"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        $(document).on("change", "#EquipId1", function () {
+            $("#EquipId1-error").html("");
+            $("#EquipId1").removeClass("error");
+        });
+
+        var validationresult = $("#frmEquipment").validate({
+            onfocusout: false,
+            rules: {
+                "Title": {
+                    required: true,
+                    maxlength: 50,
+                    min: 1,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "EquipId": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Description": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+
+            },
+            messages: {
+                "Title": {
+                    required: "Please enter a No. of Items",
+                    maxlength: "More than 3 digits are not allowed !"
+                },
+                //"code": {
+                //    required: "Please enter a  SurName"
+                //},
+                "Description": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+
+            },
+            submitHandler: function (form) {
+                $("#EquipId").val($("#EquipId1").val());
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblEquipDetail");
+                        return false;
+                    }
+                });
+
+            }
+        });
+
+        
+
+        if ('@ViewBag.IsRoomEmpty' == "True") {
+            var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        } else {
+
+            if ($("#IsView").val() == "true") {
+                var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", true);
+                });
+                $("#EquipId1").prop("disabled", true);
+                $("#btnSave").hide();
+                //$.each(allElement, function (key, value) {
+                //    $("#" + value.id).prop("disabled", true);
+                //});
+                //$("#btnSave").hide();
+            }
+            else {
+                var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", false);
+                });
+                $("#EquipId1").prop("disabled", false);
+                $("#btnSave").show();
+            }
+        }
+
+
+
+
+
+
+    });
+
+
+
+
+</script>

@@ -1,0 +1,95 @@
+﻿@model Integr8ed.Service.Dto.CallLogsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmCallLog" asp-action="AddEditCallLog" asp-controller="Catering" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.Comments == null ? "Add New" : "Edit") Comment</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            <input type="hidden" asp-for="Subject" />
+            <input type="hidden" asp-for="EntryType" />
+            <input type="hidden" asp-for="DateOfentry" />
+            <input type="hidden" asp-for="Time" />
+            <input type="hidden" asp-for="Contact" />
+            <input type="hidden" asp-for="Address" />
+            <input type="hidden" asp-for="PostCode" />
+            <input type="hidden" asp-for="TakenBy" />
+            <input type="hidden" asp-for="TakenFor" />
+            <input type="hidden" asp-for="NextContactDate" />
+            <input type="hidden" asp-for="EntryDate" />
+            <input type="hidden" asp-for="NextconDate" />
+            <input type="hidden" asp-for="ISCompleted" />
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea2">Comments</label>
+                        <textarea class="form-control" asp-for="Comments" name="Comments" id="exampleFormControlTextarea2" placeholder="Enter Comments here" rows="3"></textarea>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+
+        var validationresult = $("#frmCallLog").validate({
+            onfocusout: false,
+            rules: {
+                "Comments": {
+                    required: false,
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+            messages: {
+                "Comments": {
+                    required: "Please enter a  Comments",
+                    maxlength: "More than 200 characters are not allowed !"
+                }
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        CustomModalClose("modalContentCustom", "divModalCustom");
+                        CustomModalClose("ModalContentForCatererMenu","divModalForCatererMenu");
+                        refreshDatatable("#tblCallLog");
+                        refreshDatatable("#tblCallLogForReminder");
+                        return false;
+                    }
+                });
+
+            }
+        });
+
+        function CustomModalClose(modelContent, divmodal) {
+            $("#" + modelContent).html("");
+            $("#" + divmodal).modal("hide");
+
+        }
+
+    });
+</script>

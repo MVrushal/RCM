@@ -1,0 +1,258 @@
+﻿@model Integr8ed.Service.Dto.UserDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="modal-content">
+    <form id="frmUser" asp-action="AddUser" asp-controller="UserAccess" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLabel">@(Model.ID != 0 ? "Edit" : "Add  New")  User</h5>
+
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body">
+            <div class="form-body">
+                <div class="row" id="IsLoad">
+
+                    @Html.AntiForgeryToken()
+                    <input type="hidden" asp-for="ID" />
+                    <input type="hidden" asp-for="IsView" />
+                    <input type="hidden" asp-for="IsEmailEdit" />
+
+                    @*<div class="col-md-4">
+                        <div class="form-group">
+                            <div class="checkbox">
+                                <input type="checkbox" asp-for="IsAdmin" class="form-check-input">
+                                <label for="IsAdmin">
+                                    Make a Admin
+                                </label>
+                            </div>
+                        </div>
+                    </div>*@
+                    @if (Model.IsEmailEdit == false)
+                    {
+
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label asp-for="FirstName">First Name *</label>
+                                <input type="text" asp-for="FirstName" placeholder="Enter First Name here" name="FirstName" class="form-control">
+
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="LastName">Last Name *</label>
+                                <input type="text" asp-for="LastName" name="LastName" placeholder="Enter Last Name here" class="form-control">
+
+                            </div>
+                        </div>
+
+                        @if (Model.ID == 0)
+                        {
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="Email">Email *</label>
+                                    <input type="text" asp-for="Email" name="Email" id="Email" placeholder="Enter Email here" class="form-control" autocomplete="off">
+
+                                </div>
+                            </div>
+
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="Password">Password *</label>
+                                    <input type="password" asp-for="Password" name="Password" placeholder="Enter Password here" class="form-control" autocomplete="off">
+                                </div>
+                            </div>
+                        }
+
+                        else
+                        {
+                            <div class="col-6">
+                                <div class="form-group">
+                                    <label asp-for="Email">Email *</label>
+                                    <input type="text" asp-for="Email" readonly name="Email" id="Email" placeholder="Enter Email here" class="form-control" autocomplete="off">
+
+                                </div>
+                            </div>
+                        }
+                        <div class="col-6">
+                            <div class="form-group">
+                                <label asp-for="MobileNumber">Mobile Number *</label>
+                                <input type="text" class="form-control" placeholder="Enter Mobile Number here" name="MobileNumber" asp-for="MobileNumber">
+                            </div>
+                        </div>
+                        <div class="col-12">
+                            <div class="form-group">
+                                <label asp-for="AddressLine1">Address *</label>
+                                <textarea class="form-control" name="AddressLine1" placeholder="Enter Address here" asp-for="AddressLine1" rows="3"></textarea>
+                            </div>
+                        </div>
+
+
+                    }
+                    else
+                    {
+                        <div class="col-md-12">
+                            <div class="form-group">
+                                <label asp-for="Email">Email *</label>
+                                <input type="text" asp-for="Email" name="Email" id="Email" placeholder="Enter Email here" class="form-control" autocomplete="off">
+
+                            </div>
+                        </div>
+                    }
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    //$(document).on("load", "#IsLoad", function () {
+    //    debugger;
+    //    if ($("#ID").val() != 0 && $("#IsEmailEdit").val() == "false") {
+    //        debugger;
+    //        $("#Email").prop("disabled", true);
+    //    }
+    //    else {
+    //        debugger;
+    //        $("#Email").prop("disabled", false);
+    //    }
+    //});
+
+    jQuery.validator.addMethod("nameAndno", function (value, element) {
+        return this.optional(element) || /^([a-zA-Z ]*)$/i.test(value);
+    }, "Please Enter a Valid Name");
+
+    $(document).ready(function () {
+
+        var validationresult = $("#frmUser").validate({
+            onfocusout: false,
+            rules: {
+                "FirstName": {
+                    maxlength: 50,
+                    required: true,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "LastName": {
+                    maxlength: 50,
+                    required: true,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Email": {
+                    required: true,
+                    maxlength: 50,
+                    email: true,
+                    remote: {
+                        url: "/ClientAdmin/UserAccess/CheckForEmail",
+                        type: "GET",
+                        data: { Email: $(".Email").val(), ID: $("#ID").val() }
+                    },
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Password": {
+                    minlength: 8,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "AddressLine1": {
+                    maxlength: 100,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "MobileNumber": {
+                    maxlength: 12,
+                    minlength: 10,
+                    number: true,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+
+
+            },
+            messages: {
+                "FirstName": {
+                    required: "Please enter a First Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "LastName": {
+                    required: "Please enter a Last Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Email": {
+                    required: "Please enter a Email",
+                    remote: "Email is already taken",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Password": {
+                    required: "Please enter a Password",
+                    minlength: "Minimum 8 characters are required !"
+                },
+                "AddressLine1": {
+                    required: "Please enter a Address",
+                    maxlength: "More than 100 characters are not allowed !"
+                },
+                "MobileNumber": {
+                    required: "Please enter a Mobile Number",
+                    maxlength: "More than 12 digits are not allowed !",
+                    minlength: "Minimum 10 digits are required !"
+                },
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblUserDetail");
+                        return false;
+                    }
+                });
+
+            }
+        });
+
+        //If($("#IsEmailEdit").val() == 'true')
+        //{
+
+        //}else {
+        //    $("#Email").prop()
+
+        //}
+
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+            $("#btnSave").hide();
+            $("#exampleModalLabel").html("View User");
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+    });
+
+</script>

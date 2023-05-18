@@ -1,0 +1,389 @@
+﻿@model Integr8ed.Service.Dto.ReportsDTO
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+@{
+    ViewData["Title"] = "Room Availability";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+<link href="~/css/bootstrap.css" rel="stylesheet" media="screen">
+<link rel="stylesheet" href="~/css/bootstrap-datetimepicker.min.css" />
+<link href="~/css/jquery.timepicker.css" rel="stylesheet" />
+<link href="~/css/bootstrap-datepicker.css" rel="stylesheet" />
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Reports</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Bookings</li>
+                    <li class="breadcrumb-item active" aria-current="page">Reports</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="panel-body">
+                                    <div class="form-body">
+
+                                        @Html.AntiForgeryToken()
+
+                                        <div class="row">
+
+                                            @*  *@
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-column" class="form-label">Room type</label>
+                                                    @Html.DropDownListFor(x => x.roomTypeId, ViewBag?.RoomType as IEnumerable<SelectListItem>, "Select Room Type", new { @class = "form-control form-select", @id = "roomTypeId", @Name = "roomTypeId", required = "Select Room Type" })
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+
+                                                <div class="form-group input-append date form_datetime">
+                                                    <label for="first-name-column">Start Date *</label>
+                                                    <div class="input-group date form_date col-md-5" data-date="startDate" data-date-format="dd MM yyyy" data-link-field="startDate" data-link-format="dd/mm/yyyy">
+                                                        <input class="form-control" size="16" asp-for="startDate" autocomplete="off" name="startDate" id="startDate" type="text" readonly placeholder="Enter startDate Date here">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="form-group input-append date form_datetime">
+                                                    <label for="first-name-column">End Date *</label>
+                                                    <div class="input-group date form_date col-md-5" data-date="endDate" data-date-format="dd MM yyyy" data-link-field="endDate" data-link-format="dd/mm/yyyy">
+                                                        <input class="form-control" size="16" asp-for="endDate" autocomplete="off" name="endDate" id="endDate" type="text" readonly placeholder="Enter endDate  here">
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                        <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            @*<div class="col-lg-3 col-md-4 col-sm-6">
+            <div class="form-group">
+                <label for="first-name-column" class="form-label">Max. Persons</label>
+                <input type="text" class="form-control" asp-for="maxPerson" name="maxPerson" placeholder="Enter Max. Persons here">
+            </div>
+        </div>*@
+                                            @*  *@
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Booking Status</label>
+                                                    @Html.DropDownListFor(x => x.BookingStatus, ViewBag?.BookingStatus as IEnumerable<SelectListItem>, "Select Booking Status", new { @class = "form-control form-select", @id = "BookingStatus", @Name = "BookingStatus", required = "Select Booking Status" })
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-column">User group</label>
+                                                    @Html.DropDownListFor(x => x.userGroupID, ViewBag?.UserGroup as IEnumerable<SelectListItem>, "Select User Group", new { @class = "form-control form-select", @id = "userGroup", @Name = "userGroup", required = "Select User Group" })
+                                                </div>
+                                            </div>
+                                            @* == *@
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-column" class="form-label">Start Time *</label>
+                                                    <input type="text" autocomplete="off" class="time form-control" asp-for="TimeStart" name="StartTime" id="TimeStart" placeholder="Enter Time Start here">
+                                                </div>
+                                            </div>
+                                            <div class="col-lg-3 col-md-4 col-sm-6">
+                                                <div class="form-group">
+                                                    <label for="first-name-column" class="form-label">End Time *</label>
+                                                    <input type="text" class="time form-control" autocomplete="off" asp-for="TimeEnd" name="FinishTime" id="TimeEnd" placeholder="Enter End Time  here">
+                                                </div>
+                                            </div>
+                                            @* == *@
+
+
+                                        </div>
+                                        <div class="row">
+
+
+
+                                            <div class="col-12 d-flex justify-content-end mb-3">
+                                                <button type="button" id="btnSearch" class="btn btn-primary mr-3">
+                                                    search
+                                                </button>
+                                                <button type="button" id="btnClear" class="btn btn-primary mr-3">
+                                                    Clear
+                                                </button>
+                                                <button type="button" id="btnDownloadExcel"  class="btn btn-primary">
+                                                    Download
+                                                </button>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-md-12">
+
+                                    <div class="table-responsive user_customs_group">
+                                        <table class='table table-bordered table-striped' id="tblReport">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"> Booking Number</th>
+                                                    <th scope="col"> Booking Date</th>
+                                                    <th scope="col"> UserGroup</th>
+                                                    <th scope="col"> Meeting Title</th>
+                                                    <th scope="col"> RoomType</th>
+                                                    <th scope="col"> Time start</th>
+                                                    <th scope="col"> Time End</th>
+                                                    <th scope="col"> Booking Status</th>
+                                                    <th scope="col"> Booking Type</th>
+                                                    @*<th scope="col"> Booking Date</th>
+        <th scope="col"> Day</th>
+        <th scope="col" class="user_title_s"> Time Start</th>
+        <th scope="col"> Time End</th>
+        <th scope="col" style="display:none"> Action</th>*@
+
+                                                </tr>
+                                            </thead>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+    </section>
+</div>
+
+@section Scripts
+{
+    <script src="~/js/jquery.timepicker.js"></script>
+    <script src="~/js/bootstrap-datepicker.js"></script>
+    <script>
+
+        $(document).ready(function (e) {
+            var ReportList = [];
+            /*BindtblReport("#tblReport");*/
+            var d = new Date();
+            var currMonth = d.getMonth();
+            var currYear = d.getFullYear();
+            var currDate = d.getDate();
+
+            var startDate = new Date(currYear, currMonth, currDate);
+
+            $('.form_date').datetimepicker({
+                language: 'en',
+                weekStart: 1,
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0,
+                pickerPosition: "bottom-left"
+            });
+
+            if ($("#startDate").val() == "") {
+                $(".form_date").datetimepicker("setDate", startDate);
+            }
+
+            if ($("#endDate").val() == "") {
+                $(".form_date").datetimepicker("setDate", startDate);
+            }
+
+
+            $('#TimeStart').timepicker({
+                'show2400': true,
+                'timeFormat': 'H:i',
+                'step': 60,
+                'disableTextInput': true,
+                'minTime': '1:00',
+                'maxTime': '23:00'
+            });
+
+            $('#TimeEnd').on("change", function () {
+                $("#btnSearch").show();
+            });
+
+            $("#TimeStart").on("changeTime", function () {
+                $("#btnSearch").show();
+
+                $('#TimeEnd').timepicker({
+                    'show2400': true,
+                    'timeFormat': 'H:i',
+                    'step': 60,
+                    'disableTextInput': true,
+                    'minTime': $("#TimeStart").val(),
+                    'maxTime': '24:00',
+                    'showDuration': true
+                });
+
+            })
+
+            $(document).off("click", "#btnSearch");
+            $(document).on("click", "#btnSearch", function () {
+                BindtblReport("#tblReport");
+
+            })
+            function BindtblReport(TableId) {
+                if ($.fn.DataTable.isDataTable(TableId)) {
+                    $(TableId).dataTable().fnDestroy();
+                }
+                var tblRmAvl = $(TableId)
+                    .DataTable({
+                        "bProcessing": true,
+                        "bServerSide": true,
+                        "sAjaxSource": "/ClientAdmin/Reports/GetBookingsReportList",
+                        "initComplete": function (settings, json) { },
+                        "fnServerParams": function (aoData) {
+                            var roomTypeId = $("#roomTypeId").val();
+                           /* var ClientId = $("#ClientId").val();*/
+                            var maxPerson = $("#maxPerson").val();
+                            var NumberOfAttending = $("#NumberOfAttending").val();
+                            var BookingStatus = $("#BookingStatus").val();
+                            var startDate = $("#startDate").val();
+                            var endDate = $("#endDate").val();
+                            var userGroup = $("#userGroup").val();
+                            var TimeStart = $("#TimeStart").val();
+                            var TimeEnd = $("#TimeEnd").val();
+                          
+
+                            aoData.push(
+                                { "name": "roomTypeId", "value": roomTypeId },
+                               /* { "name": "ClientId", "value": ClientId },*/
+                                { "name": "bookingStatus", "value": BookingStatus },
+                                { "name": "startDate", "value": startDate },
+                                { "name": "endDate", "value": endDate },
+                                { "name": "userGroupID", "value": userGroup },
+                                { "name": "timeStart", "value": TimeStart },
+                                { "name": "timeEnd", "value": TimeEnd },
+                                
+                            
+                            );
+                        },
+                        //"rowCallback": function (row, data, index) {
+
+                        //    roomAvailiblitiesLST.push(data);
+                        //},
+                        "fnDrawCallback": function (oSettings) {
+                            if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                                $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                                $("#tblRmAvl_info").hide();
+                            } else {
+                                $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                                $("#tblRmAvl_info").show();
+                            }
+                        },
+                        //"order": [[1, ""]],
+                        "language": {
+                            "info": "Showing _START_ to _END_ of _TOTAL_Rooms",
+                            "sInfoEmpty": "Showing 0 to 0 of 0 Rooms"
+                        },
+                        "columns": [
+                            {
+                                "data": "bookingNumber",
+                                "searchable": true,
+                                "orderable": true
+
+                            },
+                            {
+                                "data": "stringBookingDate",
+                                "searchable": true,
+                                "orderable": true
+
+                            },
+                            {
+                                "data": "userGroupName",
+                                "searchable": true,
+                                "orderable": true
+
+                            },
+                            {
+                                "data": "meetingTitle",
+                                "searchable": true,
+                                "orderable": true
+
+                            },
+                            {
+                                "data": "roomType",
+                                "searchable": true,
+                                "orderable": true
+
+                            },
+                            {
+                                "data": "startTime",
+                                "searchable": true,
+                                "orderable": true
+
+                            },
+                            {
+                                "data": "finishTime",
+                                "searchable": true,
+                                "orderable": true
+
+                            },
+                            {
+                                "data": "bookingStatus",
+                                "searchable": true,
+                                "orderable": true
+
+                            }
+                            ,
+                            {
+                                "data": "bookingType",
+                                "render": function (data, type, row) {
+                                    if (data == 0) {
+                                        return "I";
+                                    } else {
+                                        return "E";
+                                    }
+                                },
+                                "searchable": true,
+                                "orderable": true
+
+                            }
+                           
+                        ]
+                    });
+            };
+
+
+            $("#btnDownloadExcel").on("click", function () {
+               
+                //var roomTypeId = $("#roomTypeId").val();
+                //var ClientId = $("#ClientId").val();
+                //var maxPerson = $("#maxPerson").val();
+                //var NumberOfAttending = $("#NumberOfAttending").val();
+                //var BookingStatus = $("#BookingStatus").val();
+                //var startDate = $("#startDate").val();
+                //var endDate = $("#endDate").val();
+                //var userGroup = $("#userGroup").val();
+                //var TimeStart = $("#TimeStart").val();
+                //var TimeEnd = $("#TimeEnd").val();
+                model = {
+                    RoomTypeId: $("#roomTypeId").val(), 
+                    StartDate: $("#startDate").val(),
+                    EndDate: $("#endDate").val(),
+                    UserGroupID: $("#userGroup").val(),
+                    BookingStatus: $("#BookingStatus").val(),
+                    TimeStart: $("#TimeStart").val(),
+                    TimeEnd: $("#TimeEnd").val()
+
+                }
+
+                
+                
+                window.location.href = `/ClientAdmin/Reports/DownloadExcel?jsonString=${JSON.stringify(model)}`;
+                return false;
+                
+            })
+        })
+    </script>
+}

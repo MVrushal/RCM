@@ -1,0 +1,143 @@
+﻿@model Integr8ed.Service.Dto.MeetingTypeDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<div class="modal-content">
+    <form id="frmMeetingType" asp-action="AddEditMeetingType" asp-controller="MeetingType" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Meeting-Type</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Title *</label>
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="IsView" />
+                            @*<input type="text" class="form-control" placeholder="Meeting Type Code">*@
+                            <input type="text" class="form-control" asp-for="Title" id="Title" name="Title" placeholder="Enter Title here ">
+                        </div>
+                    </div>
+                    @*<div class="col-md-6">
+                        <div class="form-group">
+                            <label>code</label>
+                            <input type="text" class="form-control" placeholder="Event Title" asp-for="code" name="code">
+                        </div>
+                    </div>*@
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <label>Description</label>
+                            <textarea class="form-control" id="exampleFormControlTextarea1" rows="3" asp-for="Description" name="Description" placeholder="Enter Description here"></textarea>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+<script type="text/javascript">
+
+    
+
+    $(document).ready(function () {
+
+          if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        var frmMeetingType = $("#frmMeetingType").validate({
+            onfocusout: false,
+            rules: {
+                "Title": {
+                    required: true,
+                   maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/MeetingType/CheckMeetingTitle",
+                        type: "GET", 
+                        data: { Title:$(".Title").val(), Id: $("#Id").val() }
+                    },
+                },
+                //"code": {
+                //    required: true,
+                //    normalizer: function (value) {
+                //        return $.trim(value);
+                //    }
+                //},
+                "Description": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+              
+            },
+            messages: {
+                "Title": {
+                    required: "Please enter a  Title",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote:"Title already exist !"
+                },
+                //"code": {
+                //    required: "Please enter a  Code"
+                //},
+                "Description": {
+                         maxlength: "More than 200 characters are not allowed !" 
+                },
+               
+            },
+            submitHandler: function (form) {
+
+                
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblMeetingDetail");
+                        return false;
+                    }
+                    //window.location.href = `/ClientAdmin/MeetingType/Index`;
+                });
+
+            }
+        });
+      
+
+
+        if ( $("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+            $("#btnSave").hide();
+           
+        }
+        else {
+             var allElement = $(document).find('input[type="text"],textarea,input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+    });
+
+
+
+
+</script>

@@ -1,0 +1,786 @@
+﻿@using Microsoft.AspNetCore.Http
+@inject IHttpContextAccessor HttpContextAccessor
+
+@{
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+
+}
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Dashbord</h3>
+            </div>
+        </div>
+        @*<div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>
+
+                </ol>
+            </nav>
+        </div>*@
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                          
+                                <div class="dashbord_panel">
+
+                                    <div class="row">
+                                     
+                                        <div class="cust_col">
+
+                                            <div class="form-group input-append date form_datetime">
+                                                <label for="first-name-column">Booking Type * </label>
+                                                
+
+                                                <div class="input-group   col-md-5">
+                                                    
+                                                    <select class="form-control form-select" data-val="true" id="BookingTypeId" name="BookingTypeId">
+
+                                                        <option value="1">Internal</option>
+                                                        <option value="2">External</option>
+                                                    </select>
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="cust_col">
+
+                                            <div class="form-group input-append date form_datetime">
+                                                <label for="first-name-column">Start Date *</label>
+                                                @{
+                                                    var startdateFormate = DateTime.Now.Year.ToString() + "-01-01";
+                                                    var enddateFormate =  DateTime.Now.Year.ToString() +"-12-31";
+                                                }
+
+                                                <div class="input-group date form_date col-md-5" data-date="txtdsstartDate" data-link-field="txtdsstartDate" data-link-format="yyyy-mm-dd">
+                                                    @Html.TextBox("StartDate", startdateFormate, new { @class = "form-control", @type = "text", placeholder = "Enter date", @id = "txtdsstartDate" })
+                                                    @*<input class="form-control" size="16" asp-for="txtdsstartDate" autocomplete="off" name="txtdsstartDate" id="txtdsstartDate" type="text" readonly placeholder="Enter start Date here">*@
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+
+
+                                            </div>
+
+                                        </div>
+                                        <div class="cust_col">
+                                            <div class="form-group input-append date form_datetime">
+                                                <label for="first-name-column">End Date *</label>
+                                                <div class="input-group date form_date col-md-5" data-date="txtdsEndDate" data-link-field="txtdsEndDate" data-link-format="yyyy-mm-dd">
+                                                    @Html.TextBox("EndDate", enddateFormate, new { @class = "form-control", @type = "text", placeholder = "Enter date", @id = "txtdsEndDate" })
+                                                    @*   <input class="form-control" size="16" asp-for="txtdsEndDate" autocomplete="off" name="txtdsEndDate" id="txtdsEndDate" type="text" readonly placeholder="Enter End Date here">*@
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                                    <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="cust_col_btn">
+                                            <button type="button" class="btn btn-primary" id="btnsearchdashboard">Search</button>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            
+                            <div id="divForPartial"></div>
+
+                            @* Chart End *@
+
+                            <div class="col-md-12">
+                                @* Table Start *@
+                                <div class="dashbord_chart_sec">
+                                    <div class="chart_info">
+                                        <label>Call Log Reminder</label>
+                                    </div>
+                                    <div class="table-responsive">
+                                        <table class='table table-bordered table-striped ' id="tblCallLogForReminder">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col">Subject</th>
+                                                    @*<th scope="col">Entry Type</th>*@
+                                                    <th scope="col">Entry Date</th>
+                                                    <th scope="col">Contact</th>
+                                                    <th scope="col">Taken For</th>
+                                                    <th scope="col">Taken By</th>
+                                                    <th scope="col">Next Contact</th>
+                                                    <th scope="col">Is Completed</th>
+                                                    <th scope="col">Edit</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                    @* Table End *@
+                                </div>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<div class="modal fade admin_modelpop" id="divModalCustom" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true" data-backdrop="static">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div class="modal-content">
+            <div id="modalContentCustom"></div>
+        </div>
+    </div>
+</div>
+@section Scripts{
+
+    <script type="text/javascript">
+
+        var LabelToolTipdata = "", ToolTipValue = "";
+
+        var Month = ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December']
+        function GetToolTipWithDetail(RoomType) {
+            var Labeldata;
+            $.ajax({
+                url: "/ClientAdmin/Dashboard/BookingCountToolTip",
+                data: { RoomName: RoomType, BookingType: $("#BookingTypeId").val() },
+                type: "GET",
+                async: false,
+                success: function (response) {
+
+                    Labeldata = response.data;
+                },
+                error: function (data) {
+                    $("#ErrorMsg").html("Email & Company Code doesn't match!");
+                }
+            });
+            return Labeldata;
+
+
+
+        }
+
+       
+
+        $(document).ready(function () {
+
+          
+
+            bindCallLog("#tblCallLogForReminder");
+
+            var d = new Date();
+            var currMonth = d.getMonth();
+            var currYear = d.getFullYear();
+            var currDate = d.getDate();
+
+            var startDate = new Date(currYear, currMonth, currDate);
+
+            $('.form_date').datetimepicker({
+                language: 'en',
+                format: 'yyyy-mm-dd',
+                todayBtn: 1,
+                autoclose: 1,
+                todayHighlight: 1,
+                startView: 2,
+                minView: 2,
+                forceParse: 0,
+                pickerPosition: "bottom-left"
+            });
+
+
+            if ($("#txtdsEndDate").val() == "") {
+                $(".form_date").datetimepicker("setDate", startDate);
+            }
+
+
+            //$('.form_date').datetimepicker({
+            //    language: 'en',
+            //    weekStart: 1,
+            //    todayBtn: 1,
+            //    autoclose: 1,
+            //    todayHighlight: 1,
+            //    startView: 2,
+            //    minView: 2,
+            //    forceParse: 0,
+            //    pickerPosition: "bottom-left",
+            //    format: 'dd-mm-yyyy'
+            //});
+
+            //    $(".form_date").datetimepicker("setDate", startDate);
+            $(document).off("click", "#btnsearchdashboard");
+            $(document).on("click", "#btnsearchdashboard", function (e) {
+                //GetdashboardDetail();
+                CheckDateValidation();
+            });
+                GetdashboardDetail();
+
+          @*if (@HttpContextAccessor.HttpContext.Session.GetInt32("IsAdmin") == 1)
+            {
+            }*@
+
+          });
+
+        function CheckDateValidation() {
+
+            GetdashboardDetail();
+            return true;
+
+            //if ($("#txtdsstartDate").val() > $("#txtdsEndDate").val()) {
+            //    Integr8ed.HandleResponse({ status: 0, message: "End Date is not minimum than Start Date !", data: null });
+            //    return false;
+            //}
+            //else {
+            //    GetdashboardDetail();
+            //    return true;
+                
+            //}
+        }
+
+        function GetdashboardDetail() {
+            //var sDateValue = moment($("#txtdsstartDate").val(), "yyyy-mm-dd").format("YYYY-MM-DD");
+            //var eDateValue = moment($("#txtdsEndDate").val(), "yyyy-mm-dd").format("YYYY-MM-DD");
+
+            var sDateValue = $("#txtdsstartDate").val();
+            var eDateValue = $("#txtdsEndDate").val();
+
+            $.ajax({
+                url: "/ClientAdmin/Dashboard/_DashboardDetails",
+                type: "POST",
+                data: { startDate: sDateValue, Enddate: eDateValue, BookingType: $("#BookingTypeId").val() },
+                success: function (response) {
+                    $("#divForPartial").html('');
+                    $("#divForPartial").html(response);
+                }
+            });
+        }
+
+
+        function DrowmyMonthWiseBookingChart() {
+
+            var ToolTipLineData = [];
+
+            var ctx = document.getElementById('myMonthWiseBookingChart');
+
+
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                legend: {
+                    display: false,
+                    boxWidth: 30
+                },
+                data: {
+                    labels: MonthList,
+                    datasets: [{
+                        label: new Date().getFullYear() ,
+                        data: MonthListCount,
+                        fill: false,
+                        borderColor: '#2196f3',
+
+
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: false
+                    },
+                    //tooltips: {
+                    //    callbacks: {
+                    //        label: function (tooltipItem, data) {
+
+
+
+                    //
+                    //            if (ToolTipLineData.length == 0 || tooltipItem.label != ToolTipValue) {
+                    //                ToolTipLineData = [];
+                    //                ToolTipValue = tooltipItem.label;
+                    //                $.ajax({
+                    //                    url: "/ClientAdmin/Dashboard/MeetingBookingCountToolTip",
+                    //                    data: { MeetingName: tooltipItem.label },
+                    //                    type: "GET",
+                    //                    async: false,
+                    //                    success: function (response) {
+                    //                        LabelToolTipdata = "";
+                    //
+                    //                        $.each(response.data, function (i, item) {
+
+
+                    //                            ToolTipLineData.push("Meeting Detail : " + item.bookingDate);
+
+                    //                        });
+
+
+
+
+                    //
+                    //                    },
+                    //                    error: function (data) {
+                    //                        $("#ErrorMsg").html("Email & Company Code doesn't match!");
+                    //                    }
+                    //                });
+
+                    //            }
+                    //            return ToolTipLineData;
+
+
+                    //        }
+                    //    }
+                    //},
+
+                    scales: {
+                        xAxes: [{
+
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Month',
+                                fontStyle: 'bold'
+                            },
+
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Booking Count',
+                                
+                                fontStyle: 'bold'
+                            },
+                            ticks: {
+                                beginAtZero: true,
+                                stacked: true
+                            }
+                        }]
+                    }
+                }
+            });
+        }
+        function DrowPieChart() {
+
+
+
+
+            var ctx = document.getElementById("mypieChart").getContext("2d");
+
+            var myPieChart = new Chart(ctx, {
+                type: 'doughnut',
+                animateRotate: true,
+
+
+                data: {
+                    labels: BookingStatus,
+                    datasets: [{
+
+                        //   backgroundColor: ["#FFADAD", "#FFD6A5", "#FDFFB6", "#CAFFBF", "#9BF6FF", "#A0C4FF", "#BDB2FF", "#FFC6FF"],
+                        backgroundColor: ["#e63946", "#f1faee", "#a8dadc", "#457b9d", "#1d3557", "#A0C4FF", "#BDB2FF", "#FFC6FF"],
+                        data: BookingstatusCount
+                    }]
+                },
+                options: {
+                    // hoverBackgroundColor:  "#fff",
+                    cutoutPercentage: 40,
+                    animation: {
+                        animateRotate: true,
+                        animateScale: true,
+                    },
+                    legend: {
+                        display: true,
+                        position: "bottom",
+                        fullWidth: true,
+                        align: 'center',
+                        labels: {
+                            boxWidth: 8,
+                            fontSize: 12,
+                            fontFamily: 'Poppins , sans- serif',
+                            usePointStyle: true,
+                            fontColor: '#333333',
+                            fontWeight: 500,
+                            fillStyle: '#e63946',
+                        }
+                    },
+                    //title: {
+                    //    display: true,
+                    //    text: 'BookingStatus'
+                    //}
+                }
+            })
+
+
+        }
+
+        function DrowBarChart() {
+            
+
+
+            var ToolTipData = [];
+            var ctx = document.getElementById('myChart');
+
+
+            var myChart = new Chart(ctx, {
+                type: 'bar',
+
+                legend: {
+                    display: false,
+                    boxWidth: 30
+                },
+                data: {
+                    labels: RoomTypeList,
+                    datasets: [{
+                        data: BookingCount,
+
+                        backgroundColor: "rgba(54, 162, 235, 1)",
+                        borderColor: "rgba(54, 162, 235, 1)",
+                        strokeColor: "brown",
+                        borderWidth: 1,
+
+                    }]
+                },
+                options: {
+                    legend: {
+                        display: false,
+                        position: "botom",
+                        fullWidth: true,
+                        align: 'center',
+                        labels: {
+                            boxWidth: 10,
+                            fontSize: 14,
+                            fontFamily: 'Poppins , sans- serif',
+                            usePointStyle: true,
+                            fontColor: '#333333',
+                            fontWeight: 500,
+                        }
+                    },
+
+                    scales: {
+                       
+                        xAxes: [{
+
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Month',
+                                fontStyle: 'bold'
+                            },
+
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Booking Count',
+
+                                fontStyle: 'bold'
+                            },
+                            ticks: {
+                                beginAtZero: true
+                            }
+                        }]
+                    }
+                }
+
+
+
+            });
+
+
+
+        }
+
+
+        function DrowLineChart() {
+
+            var ToolTipLineData = [];
+            var datasetdata = [];
+            var colors = ['#2685CB', '#4AD95A', '#FEC81B', '#FD8D14', '#CE00E6', '#4B4AD3', '#FC3026', '#B8CCE3', '#6ADC88', '#FEE45F'];
+            for (var i = 0; i < RoomTypeCountMonth.length; i++) {
+
+
+
+                datasetdata[i] = {
+                    label: RoomTypeName[i],
+                    data: RoomTypeCountMonth[i].split(","),
+                    borderColor: colors[i],
+                    fill: false,
+                    pointRadius: [i] * 2
+
+                }
+
+            }
+
+            var ctx = document.getElementById('linearChart');
+
+
+            var myChart = new Chart(ctx, {
+                type: 'line',
+                legend: {
+                    display: false,
+                    boxWidth: 30
+                },
+
+
+
+                data: {
+                    labels: Month,
+                    datasets: datasetdata,
+
+
+                },
+                options: {
+                    responsive: true,
+                    tooltips: {
+                        mode: 'index'
+                    },
+                    //tooltips: {
+                    //    callbacks: {
+                    //        label: function (tooltipItem, data) {
+
+
+
+                    //
+                    //            if (ToolTipLineData.length == 0 || tooltipItem.label != ToolTipValue) {
+                    //                ToolTipLineData = [];
+                    //                ToolTipValue = tooltipItem.label;
+                    //                $.ajax({
+                    //                    url: "/ClientAdmin/Dashboard/MeetingBookingCountToolTip",
+                    //                    data: { MeetingName: tooltipItem.label },
+                    //                    type: "GET",
+                    //                    async: false,
+                    //                    success: function (response) {
+                    //                        LabelToolTipdata = "";
+                    //
+                    //                        $.each(response.data, function (i, item) {
+                    //
+                    //                            if (i == 3) {
+
+                    //                                var a = document.createElement('a');
+
+
+                    //                                var link = document.createTextNode("This is link");
+
+
+                    //                                a.appendChild(link);
+
+
+                    //                                a.title = "This is Link";
+
+
+                    //                                a.href = "https://www.geeksforgeeks.org";
+                    //                                ToolTipLineData.push(a);
+                    //                                return false;
+                    //                            }
+                    //                            ToolTipLineData.push("Meeting Detail : " + item.bookingDate);
+
+                    //                        });
+
+
+
+
+
+                    //                    },
+                    //                    error: function (data) {
+                    //                        $("#ErrorMsg").html("Email & Company Code doesn't match!");
+                    //                    }
+                    //                });
+
+                    //            }
+                    //            return ToolTipLineData;
+
+
+                    //        }
+                    //    }
+                    //},
+
+                    scales: {
+                        xAxes: [{
+
+                            display: true,
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Room Type',
+                                fontStyle: 'bold'
+                            },
+
+                        }],
+                        yAxes: [{
+                            scaleLabel: {
+                                display: true,
+                                labelString: 'Booking Count',
+
+                                fontStyle: 'bold'
+                            },
+                            //  stacked: true,
+                            ticks: {
+                                beginAtZero: true,
+                                //  stacked: true
+                            }
+                        }],
+
+
+                    },
+                    legend: {
+                        display: true,
+                        position: "top",
+                        fullWidth: true,
+                        align: 'center',
+                        labels: {
+                            boxWidth: 10,
+                            fontSize: 14,
+                            fontFamily: 'Poppins , sans- serif',
+                            usePointStyle: true,
+                            fontColor: '#333333',
+                            fontWeight: 500,
+                        }
+                    },
+                }
+            });
+        }
+
+
+        function AddCallLog(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/Catering/_AddEditCallLog?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        function bindCallLog(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblCallLog = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Dashboard/GetCallLogsListForReminder",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblCallLogForReminder_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblCallLogForReminder_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_CallLog",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 CallLog"
+                    },
+                    "columns": [
+                        {
+                            "data": "subject",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        //{
+                        //    "data": "entryTypeTitle",
+                        //    "width": "5%",
+                        //    "searchable": false,
+                        //    "orderable": true,
+
+                        //},
+                        {
+                            "data": "entryDate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                            "render": function (data, type, row) {
+                                
+                                return moment(row.entryDate, 'yyyy-MM-DD').format('DD-MM-YYYY') + "(" + row.time + ")";
+                            }
+
+                        },
+                        //{
+                        //    "data": "time",
+                        //    "width": "5%",
+                        //    "searchable": false,
+                        //    "orderable": true,
+
+                        //},
+                        {
+                            "data": "contact",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                         {
+                            "data": "takenFor",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "takenBy",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "nextconDate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                            "render": function (data, type, row) {
+                                return moment(data, 'yyyy-MM-DD').format('DD-MM-YYYY');
+                            }
+
+                        },
+                        {
+                            "data": "isCompleted",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                            "className": "admin_toggle",
+                            "render": function (data, type, row) {
+                                return statusToggle(row.id, row.isCompleted);
+                            }
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddCallLog('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> `;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+
+         
+            $('#tblCallLogForReminder').on("change", ".admin_toggle", function (e) {
+                const current = $(e.currentTarget).find("input");
+                const id = $(current).data("id");
+
+                $.ajax({
+                    url: "/ClientAdmin/Catering/ManageCallLogIsCompleted",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        //Integr8ed.HandleResponse(response);
+                        $("#modalContentCustom").html(response);
+                        $("#divModalCustom").modal('show');
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            });
+        }
+
+
+    </script>
+}
+

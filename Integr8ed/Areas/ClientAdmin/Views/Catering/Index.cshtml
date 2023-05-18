@@ -1,0 +1,771 @@
+﻿
+@{
+    ViewData["Title"] = "Catering Details";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+<style>
+    td.details-control {
+      
+        cursor: pointer;
+    }
+
+    tr.shown td.details-control {
+      
+    }
+</style>
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Catering Details</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Catering Menu</li>
+                    <li class="breadcrumb-item active" aria-current="page">Catering Details</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+
+                            <div class="form_tab_section custom_tabs">
+                                <div class="container">
+                                    <div class="row">
+                                        <div class="col-xs-12 p-0">
+                                            <nav>
+                                                <div class="nav nav-tabs nav-fill" id="nav-tab" role="tablist">
+                                                    <a class="nav-item nav-link active" id="catering-detail-tab" data-toggle="tab" href="#catering-detail" role="tab" aria-controls="catering-detail" aria-selected="true">Caterer Detail</a>
+                                                    <a class="nav-item nav-link" id="menu-tab" data-toggle="tab" href="#menu" role="tab" aria-controls="menu" aria-selected="false">Menu</a>
+                                                    <a class="nav-item nav-link" id="call-logging-tab" data-toggle="tab" href="#call-logging" role="tab" aria-controls="call-logging" aria-selected="false">Call Logging</a>
+                                                    <a class="nav-item nav-link" id="Caterer-Menu-tab" data-toggle="tab" href="#Caterer-Menu" role="tab" aria-controls="Caterer-Menu" aria-selected="false">Caterer Menu</a>
+                                                </div>
+                                            </nav>
+                                            <div class="tab-content" id="nav-tabContent">
+                                                <div class="tab-pane fade active show" id="catering-detail" role="tabpanel" aria-labelledby="room-type-detail-tab">
+                                                    <div class="row">
+                                                        <div class="col-12 d-flex justify-content-end mb-2">
+                                                            <button type="button" class="btn btn-primary" id="AddCatering">
+                                                                New Caterer Detail
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-12">
+                                                        @* Table Start *@
+                                                        <div class="table-responsive">
+                                                            <table class='table table-bordered table-striped' id="tblCateringDetail">
+                                                                <thead>
+                                                                    <tr>
+                                                                        <th scope="col"> Caterer Name</th>
+                                                                        <th scope="col"> Contact Name</th>
+                                                                        <th scope="col"> Mobile Number</th>
+                                                                        <th scope="col"> Email</th>
+                                                                        <th scope="col"> Address</th>
+                                                                        <th scope="col">Actions</th>
+                                                                    </tr>
+                                                                </thead>
+                                                            </table>
+
+                                                        </div>
+                                                        @* Table End *@
+                                                    </div>
+
+                                                </div>
+                                                <div class="tab-pane fade" id="menu" role="tabpanel" aria-labelledby="menu-tab">
+                                                    <div class="row">
+                                                        <div class="col-12 d-flex justify-content-end mb-3">
+                                                            <button type="button" id="AddMenu" class="btn btn-primary">
+                                                                New menu
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            @* Table Start *@
+                                                            <div class="table-responsive">
+                                                                <table class='table table-bordered table-striped' id="tblMenu">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Description of Food</th>
+                                                                            <th scope="col">Notes</th>
+                                                                            <th scope="col">Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+
+                                                            </div>
+                                                            @* Table End *@
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-pane fade" id="call-logging" role="tabpanel" aria-labelledby="call-logging-tab">
+                                                    <div class="row">
+                                                        <div class="col-12 d-flex justify-content-end mb-3">
+                                                            <button type="button" id="AddCallLog" class="btn btn-primary">
+                                                                New Call Log
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            @* Table Start *@
+                                                            <div class="table-responsive">
+                                                                <table class='table table-bordered table-striped' id="tblCallLog">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th scope="col">Subject</th>
+                                                                            @*<th scope="col">Entry Type</th>*@
+                                                                            <th scope="col">Entry Date</th>
+                                                                            <th scope="col">Contact</th>
+                                                                            <th scope="col">Taken For</th>
+                                                                            <th scope="col">Taken By</th>
+                                                                            <th scope="col">Next Contact</th>
+                                                                            <th scope="col">Is Completed</th>
+                                                                            <th scope="col">Actions</th>
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+
+                                                            </div>
+                                                            @* Table End *@
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                                <div class="tab-pane fade" id="Caterer-Menu" role="tabpanel" aria-labelledby="Caterer-Menu-tab">
+                                                    <div class="row">
+                                                        <div class="col-12 d-flex justify-content-end mb-3">
+                                                            <button type="button" id="AddCatererMenu" class="btn btn-primary">
+                                                                New Caterer Menu
+                                                            </button>
+                                                        </div>
+                                                        <div class="col-md-12">
+                                                            @* Table Start *@
+                                                            <div class="table-responsive">
+                                                                <table class='table table-bordered table-striped' id="CatMenu">
+                                                                    <thead>
+                                                                        <tr>
+                                                                            <th class="th-100" scope="col">Expand</th>
+                                                                            <th scope="col">Caterer Name</th>
+                                                                            <th scope="col">Action</th>
+
+                                                                        </tr>
+                                                                    </thead>
+                                                                </table>
+
+                                                            </div>
+                                                            @* Table End *@
+                                                        </div>
+
+                                                    </div>
+                                                </div>
+
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@* New new_add_roomtype Popup Start *@
+<div class="modal fade" id="new_add_catering" tabindex="-1" role="dialog" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+        <div class="modal-content">
+
+        </div>
+    </div>
+</div>
+<div class="modal fade" tabindex="-1" role="dialog" id="divModalForCatererMenu" aria-labelledby="exampleModalCenterTitle" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-md" role="document">
+        <div id="ModalContentForCatererMenu" class="modal-content">
+
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        // isActive Toggle
+        function statusToggle(id, status, isDisabled = false) {
+
+            var content = `<label class="switch">
+              <input type="checkbox" id="ck${id}" {checked} {disabled} data-id="{id}">
+              <span class="slider round"></span>
+              </label>`;
+            content = content.replace("{id}", id);
+            content = content.replace("{checked}", status === true ? "checked" : "");
+            content = content.replace("{disabled}", isDisabled === true ? "disabled" : "");
+            return content;
+        }
+
+        $(document).ready(function () {
+            bindCateringDetail("#tblCateringDetail");
+            bindMenu("#tblMenu");
+            bindCallLog("#tblCallLog");
+            bindCateMenu("#CatMenu");
+        });
+
+        function bindCateringDetail(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblCateringDetail = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Catering/GetCateringDetailList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblCateringDetail_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblCateringDetail_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_CateringDetail",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 CateringDetail"
+                    },
+                    "columns": [
+
+                        {
+                            "data": "catererName",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "contactName",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "telephone",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "email",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "address",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddCateringDetail('${row.id}', false, true);" title="Edit Email" class="editAsset icon_cust_button"><i class="fa fa-envelope" aria-hidden="true"></i></a>
+|<a onclick="AddCateringDetail('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddCateringDetail('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveCateringDetail('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+        }
+
+        $(document).on("click", "#AddCatering", function () {
+            AddCateringDetail();
+        });
+
+        function AddCateringDetail(id = 0, isView = false,IsEmailEdit = false) {
+            $("#modalContent").load(`/ClientAdmin/Catering/_AddEditCateringDetail?id=${id}&isView=${isView}&IsEmailEdit=${IsEmailEdit}`, function () {
+                //ShowModal();
+                ShowModal();    
+            });
+        }
+
+        function RemoveCateringDetail(id) {
+
+            Integr8ed.Confirm("Delete Catering Detail", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Catering/RemoveCateringDetail",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindCateringDetail("#tblCateringDetail");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+        function bindMenu(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblMenu = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Catering/GetMenuList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblMenu_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblMenu_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_Menu",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Menu"
+                    },
+                    "columns": [
+
+                        {
+                            "data": "descriptionOFFood",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "notes",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddMenu('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddMenu('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveMenu('${row.id}');" title="Delete" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+        }
+
+        $(document).on("click", "#AddMenu", function () {
+            AddMenu();
+        });
+
+        function AddMenu(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/Catering/_AddEditMenu?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        function RemoveMenu(id) {
+
+            Integr8ed.Confirm("Delete Menu", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Catering/RemoveMenu",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindMenu("#tblMenu");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+        function bindCallLog(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblCallLog = $(TableId)
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Catering/GetCallLogList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblCallLog_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblCallLog_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_CallLog",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 CallLog"
+                    },
+                    "columns": [
+                        {
+                            "data": "subject",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        //{
+                        //    "data": "entryTypeTitle",
+                        //    "width": "5%",
+                        //    "searchable": false,
+                        //    "orderable": true,
+
+                        //},
+                        {
+                            "data": "entryDate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                            "render": function (data, type, row) {
+                                return moment(new Date(row.entryDate)).format("MM-DD-yyyy") + "(" + row.time + ")";
+                            }
+
+                        },
+                        //{
+                        //    "data": "time",
+                        //    "width": "5%",
+                        //    "searchable": false,
+                        //    "orderable": true,
+
+                        //},
+                        {
+                            "data": "contact",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "takenFor",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "takenBy",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                        },
+                        {
+                            "data": "nextconDate",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "isCompleted",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                            "className": "admin_toggle",
+                            "render": function (data, type, row) {
+                                return statusToggle(row.id, row.isCompleted);
+                            }
+                        },
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddCallLog('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddCallLog('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveCallLog('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+            $('#tblCallLog').on("change", ".admin_toggle", function (e) {
+                
+                const current = $(e.currentTarget).find("input");
+                const id = $(current).data("id");
+
+                $.ajax({
+                    url: "/ClientAdmin/Catering/ManageCallLogIsCompleted",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        $("#ModalContentForCatererMenu").html(response);
+                        $("#divModalForCatererMenu").modal('show');
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            });
+        }
+
+        function AddCatererMenu(id = 0, isView = false) {
+            //$("#ModalContentForCatererMenu").load(`/ClientAdmin/Catering/_AddEditCatererMenu?id=${id}&isView=${isView}`, function () {
+            //    $("#divModalForCatererMenu").modal('show');
+            //});
+
+            $("#modalContent").load(`/ClientAdmin/Catering/_AddEditCatererMenu?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        
+        function RemoveCatererMenu(id) {
+            
+            Integr8ed.Confirm("Delete caterer menu", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                
+                $.ajax({
+                    url: "/ClientAdmin/Catering/DeleteCatererMenu",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindCateMenu("#CatMenu");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+        $(document).on("click", "#AddCatererMenu", function () {
+            AddCatererMenu();
+        });
+
+        $(document).on("click", "#AddCallLog", function () {
+            AddCallLog();
+        });
+
+        function AddCallLog(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/Catering/_AddEditCallLog?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+        function RemoveCallLog(id) {
+
+            Integr8ed.Confirm("Delete Call Log", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/Catering/RemoveCallLog",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindCallLog("#tblCallLog");
+
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+
+
+
+
+
+
+
+        function format(d) {
+            
+            // `d` is the original data object for the row
+            var table = `<table class="w-100 test" cellpadding="5" cellspacing="0" border="0"">
+                            <thead>
+ <tr class="hightsecond">
+                                <th class="text-left">Description of food</th>
+                                <th class="text-left" >Cost</th>
+</tr>
+                          </thead>
+                           <tbody>
+                            {row}
+                            </tbody>
+                    </table>`;
+         
+            var allRows = "";
+            for (let i = 0; i <d.length; i++)
+            {
+                var row = `
+                     <tr  class="hightsecond">
+                    <td style="padding: 14px 18px !important;" class="text-left">{d.menuName}</td>
+                    <td style="padding: 14px 18px !important;" class="text-left">{d.cost}</td>
+                    </tr>
+                 `;
+                row = row.replace("{d.menuName}", d[i].descriptionOFFood);            
+                row = row.replace("{d.cost}", d[i].cost); 
+                allRows += row;          
+            }
+            table=table.replace("{row}", allRows);
+            allRows = "";
+            return table;
+        }
+
+
+
+
+
+
+
+
+        function bindCateMenu(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblMenu = $(TableId)
+                .dataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/Catering/GetCatMenuList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { }, "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#CatMenu_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#CatMenu_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_ Caterer Menu",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Caterer Menu"
+                    },
+                    "columns": [
+                        {
+                            "data": "id",
+                            "className": 'details-control',
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a class="rowDetails" data-id="${JSON.stringify(row)}"><i class="fa fa-plus"></i></a>`;
+                                return element;
+                            }
+                        },
+                        {
+                            "data": "catererName",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true
+
+                        },
+                        {
+                            "data": "catererId",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                
+                                var element = `<a onclick="AddCatererMenu('${data}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddCatererMenu('${data}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="RemoveCatererMenu('${data}');" title="Delete" class="deleteAsset icon_cust_button"><i class="far fa-trash-alt"></i></a>`;
+                                return element;
+                            }
+                        }
+                    ]
+                });
+
+            $(TableId).off("click", ".details-control");
+            $(TableId).on("click", ".details-control", function (e) {
+                var nRow = $(this).parents('tr')[0];
+                var row = tblMenu.fnGetData(nRow);
+                var tr = $(this).closest('tr');
+                var rowObj = $("#CatMenu").DataTable().row(tr);
+
+                if (rowObj.child.isShown()) {
+                    // This row is already open - close it
+                    rowObj.child.hide();
+                    tr.removeClass('shown');
+                    tr.removeClass('highlight_td');
+                    $(tr.find(".fa-minus")).addClass("fa-plus");
+                    $(tr.find(".fa-minus")).removeClass("fa-minus");
+                }
+                else {
+
+                    //GetMenuList
+                    $(tr.find(".fa-plus")).addClass("fa-minus");
+                    $(tr.find(".fa-plus")).removeClass("fa-plus");
+                    tr.addClass('highlight_td');
+                    $.ajax({
+                        url: "/ClientAdmin/Catering/GetMenu",
+                        type:"GET",
+                        data: { CatererId: row.catererId},
+                        success: function (response) {
+
+                            // Open this row
+                            rowObj.child(format(response.data)).show();
+                            tr.addClass('shown');
+                            $(".test").parent().addClass("hightsecond");
+                        }
+                    })
+                }
+
+            })
+
+
+        }
+
+
+
+
+    </script>
+
+}

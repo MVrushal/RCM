@@ -1,0 +1,281 @@
+﻿@model Integr8ed.Service.Dto.CateringDetailsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmCateringDetail" asp-action="AddEditCateringDetail" asp-controller="Catering" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Caterer Detail</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="IsView" />
+            <input type="hidden" asp-for="IsEmailEdit" />
+            @if (Model.IsEmailEdit == false)
+            {
+        <div class="row">
+            @*<div class="col-md-6">
+            <div class="form-group">
+                <label for="first-name-column">Title * </label>
+                <input type="text" asp-for="Title" name="Title" id="Title" class="form-control" placeholder="Enter Title here">
+            </div>
+        </div>*@
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column">Caterer Name *</label>
+                    <input type="text" asp-for="CatererName" id="CatererName" name="CatererName" class="form-control" placeholder="Enter Caterer Name here">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column">Contact Name *</label>
+                    <input type="text" asp-for="ContactName" name="ContactName" class="form-control" placeholder="Enter Contact Name here">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column">Mobile Number *</label>
+                    <input type="number" asp-for="Telephone" name="Telephone" class="form-control" placeholder="Enter Mobile Number here">
+                </div>
+            </div>
+            @if (Model.Id == 0)
+            {
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Email *</label>
+                        <input type="email" asp-for="Email" name="Email" id="Email" class="form-control" placeholder="Enter Email here">
+                    </div>
+                </div>
+            }
+            else
+            {
+                <div class="col-md-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Email *</label>
+                        <input type="email" asp-for="Email" readonly name="Email" id="Email" class="form-control" placeholder="Enter Email here">
+                    </div>
+                </div>
+            }
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column">Fax Number</label>
+                    <input type="number" asp-for="FaxNumber" name="FaxNumber" class="form-control" placeholder="Enter Fax Number here">
+                </div>
+            </div>
+            <div class="col-md-6">
+                <div class="form-group">
+                    <label for="first-name-column">PostCode *</label>
+                    <input type="text" asp-for="PostCode" name="PostCode" class="form-control" placeholder="Enter PostCode here">
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="form-group">
+                    <label for="exampleFormControlTextarea2" class="form-label">Address *</label>
+                    <textarea class="form-control" asp-for="Address" name="Address" id="exampleFormControlTextarea2" placeholder="Enter Address here" rows="3"></textarea>
+                </div>
+            </div>
+            @*<div class="col-md-12">
+            <div class="form-group">
+                <label for="exampleFormControlTextarea1" class="form-label">Description</label>
+                <textarea class="form-control" asp-for="Description" name="Description" id="exampleFormControlTextarea1" placeholder="Enter Description here" rows="3"></textarea>
+            </div>
+        </div>*@
+        </div>
+            }
+            else
+            {
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="first-name-column">Email *</label>
+                        <input type="email" asp-for="Email" name="Email" id="Email" class="form-control" placeholder="Enter Email here">
+                    </div>
+                </div>
+            }
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        jQuery.validator.addMethod("nameAndno", function (value, element) {
+        return this.optional(element) || /^([a-zA-Z ]*)$/i.test(value);
+         }, "Please Enter a Valid Name");
+
+
+        var validationresult = $("#frmCateringDetail").validate({
+            onfocusout: false,
+            rules: {
+                //"Title": {
+                //    required: true,
+                //    maxlength: 50,
+                //    normalizer: function (value) {
+                //        return $.trim(value);
+                //    },
+                //    remote: {
+                //        url: "/ClientAdmin/Catering/CheckCateringTitle",
+                //        type: "GET",
+                //        data: { Title:$(".Title").val(), Id: $("#Id").val() }
+                //    },
+                //},
+                //"Description": {
+                //     maxlength: 200,
+                //    normalizer: function (value) {
+                //        return $.trim(value);
+                //    }
+                //},
+                "CatererName": {
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/Catering/CheckCatererName",
+                        type: "GET",
+                        data: { CatererName:$(".CatererName").val(), Id: $("#Id").val() }
+                    },
+                },
+                "ContactName": {
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Telephone": {
+                    required: true,
+                    maxlength: 12,
+                    min: 10,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Email": {
+                    required: true,
+                    maxlength: 50,
+                    email: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/Catering/CheckCatererEmail",
+                        type: "GET",
+                        data: { Email:$(".Email").val(), Id: $("#Id").val() }
+                    },
+                },
+                "FaxNumber": {
+                    maxlength: 7,
+                    min:1,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                 "Address": {
+                    required: true,
+                     maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "PostCode": {
+                    required: true,
+                    maxlength: 10,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+
+            },
+            messages: {
+                "CatererName": {
+                    required: "Please enter a Caterer Name",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Caterer Name already exist !"
+                },
+                "ContactName": {
+                    required: "Please enter a Contact Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Telephone": {
+                    required: "Please enter a Mobile Number",
+                    min: "Invalid Mobile Number",
+                    maxlength: "More than 12 digits are not allowed !"
+                },
+                "Email": {
+                    required: "Please enter a Email",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Email already taken !"
+                },
+                "FaxNumber": {
+                    min: "Invalid FaxNumber",
+                    maxlength: "More than 7 digits are not allowed !"
+                },
+                 "Address": {
+                    required: "Please enter a Address",
+                     maxlength: "More than 200 characters are not allowed !"
+                },
+                "PostCode": {
+                    required: "Please enter a PostCode",
+                    maxlength: "More than 10 characters are not allowed !"
+
+                },
+               
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                        closeModal();
+                        refreshDatatable("#tblCateringDetail");
+                        return false;
+
+                    }
+                    //window.location.href = `/ClientAdmin/Catering/Index`;
+                });
+
+            }
+        });
+
+         if ( $("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"], input[type="email"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+
+            $("#btnSave").hide();
+        }
+        else {
+             var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"], input[type="email"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+        //if ($("#Id").val() != 0 && $("#IsView").val() == "false") {
+
+        //    $("#RoomTitle").rules("remove","remote");
+        //}
+
+    });
+
+</script>

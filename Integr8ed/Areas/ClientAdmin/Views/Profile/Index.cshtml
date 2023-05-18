@@ -1,0 +1,344 @@
+﻿
+@model Integr8ed.Service.Dto.UserDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Profile";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+<form id="frmProfile" asp-action="EditUser" asp-controller="Profile" asp-area="ClientAdmin" method="post">
+    <div class="main-content container-fluid">
+        <div class="row">
+            <div class="col-12 col-md-6 order-md-1 order-first">
+                <div class="page-title">
+                    <h3>Profile</h3>
+                </div>
+            </div>
+            @*<div class="col-12 col-md-6 order-md-2 order-last">
+                <nav aria-label="breadcrumb" class="breadcrumb-header">
+                    <ol class="breadcrumb">
+                       <li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>
+                    <li class="breadcrumb-item"><a href="/ClientAdmin/Profile/index">Profile</a></li>
+                    </ol>
+                    </nav>
+                </div>*@
+        </div>
+        <section id="multiple-column-form" class="">
+            <div class="row match-height">
+                <div class="col-12">
+                    <div class="card">
+                        <div class="card-content">
+                            <div class="card-body">
+
+                                <div class="form-body">
+
+                                    @Html.AntiForgeryToken()
+                                    <div class="row">
+                                        <input type="hidden" asp-for="ID" />
+                                        <div class="col-md-12 col-12">
+
+                                            <div class="user_profile_section_f">
+                                                <div class="custom_profile_upload">
+
+                                                    <div class="circle">
+                                                        @*<img class="profile-pic" src="">*@
+                                                        @if (Model.ID != 0 && !String.IsNullOrWhiteSpace(Model.UserImage) || !String.IsNullOrEmpty(Model.UserImage))
+                                                        {
+
+                                                            <img class="profile-pic" src="~/UploadedFiles/@(Model.UserImage)">
+                                                        }
+                                                        else
+                                                        {
+                                                            <img class="profile-pic" id="profile-pic_View" src="~/UploadedFiles/User-637431111822545152.png">
+                                                        }
+                                                    </div>
+                                                    <div class="p-image">
+                                                        <i class="fa fa-camera upload-button"></i>
+                                                        <input class="file-upload" asp-for="UserImageFile" name="UserImageFile" id="UserImageFile" type="file" accept="image/*" />
+                                                    </div>
+
+
+                                                    @*
+                                                        <div class="form-group col-md-6">
+                                                                <center> <img src="~/UploadedFiles/@(Model.UserImage)" style="width:100px" /></center>
+                                                            </div>*@
+
+                                                    @*<div class="circle">
+                                                            @if (Model.ID != 0 && !String.IsNullOrWhiteSpace(Model.UserImage) || !String.IsNullOrEmpty(Model.UserImage))
+                                                            {
+
+                                                                <img class="profile-pic" src="~/UploadedFiles/@(Model.UserImage)">
+                                                            }
+                                                            <div class="p-image">
+                                                                <i class="fa fa-pencil upload-button" aria-hidden="true">
+                                                                    <input class="form-control" asp-for="UserImageFile" name="UserImageFile" id="UserImageFile" type="file" accept="image/*" />
+                                                                </i>
+                                                            </div>
+                                                        </div>*@
+
+
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Company Code</label>
+                                                <input readonly type="text" class="form-control" name="CompanyCode" asp-for="CompanyCode">
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="first-name-column">User Name </label>
+                                                    <input type="text" readonly class="form-control" name="UserName" asp-for="UserName" placeholder="Enter User Name here">
+                                                </div>
+                                            </div>*@
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Email </label>
+                                                <input type="email" class="form-control" name="Email" asp-for="Email" placeholder="Enter Email here" readonly>
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="first-name-column" class="form-label">Password *</label>
+                                                    <input type="password" class="form-control" value="@Model.Password" id="Password" name="Password" asp-for="Password" placeholder="Enter Password here" />
+                                                </div>
+                                            </div>*@
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Mobile Number *</label>
+                                                <input type="text" class="form-control" asp-for="MobileNumber" name="MobileNumber" placeholder="Enter Mobile Number here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">First Name *</label>
+                                                <input type="text" class="form-control" asp-for="FirstName" name="FirstName" placeholder="Enter First Name here">
+                                            </div>
+                                        </div>
+                                        @*<div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label for="first-name-column">Middle Name *</label>
+                                                    <input type="text" class="form-control" asp-for="MiddleName" name="MiddleName" placeholder="Enter Middle Name here">
+                                                </div>
+                                            </div>*@
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Last Name</label>
+                                                <input type="text" class="form-control" asp-for="LastName" name="LastName" placeholder="Enter Last Name here">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Telephone Number </label>
+                                                <input type="text" class="form-control" asp-for="TelephoneNumber" name="TelephoneNumber" placeholder="Enter Telephone Number here">
+                                            </div>
+                                        </div>
+
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Address Line1 *</label>
+                                                <input type="text" class="form-control" asp-for="AddressLine1" name="AddressLine1" placeholder="Enter Address Line1 here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Address Line2 </label>
+                                                <input type="text" class="form-control" asp-for="AddressLine2" name="AddressLine2" placeholder="Enter Address Line2 here">
+                                            </div>
+                                        </div>
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label for="first-name-column">Notes</label>
+                                                <textarea rows="1" class="form-control" asp-for="Notes" name="Notes" placeholder="Enter Notes here"></textarea>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="submit" id="btnSave" class="btn btn-primary">Update Profile</button>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+</form>
+
+@section Scripts{
+
+    <script type="text/javascript">
+
+        var validationresult = $("#frmProfile").validate({
+            rules: {
+                "UserName": {
+                    required: true,
+                    maxlength: 20,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Password": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Email": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "FirstName": {
+                    required: true,
+                    maxlength: 20,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "LastName": {
+                    maxlength: 20,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "MobileNumber": {
+                    required: true,
+                    maxlength: 12,
+                    min: 10,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "TelephoneNumber": {
+                    maxlength: 12,
+                    min: 10,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Notes": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "AddressLine1": {
+                    required: true,
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+            messages: {
+                "UserName": {
+                    required: "Please enter a User Name",
+                    maxlength: "More than 20 characters are not allowed !"
+                },
+                "Password": {
+                    required: "Please enter a Password",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Email": {
+                    required: "Please enter a Email",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "FirstName": {
+                    required: "Please enter a First Name",
+                    maxlength: "More than 20 characters are not allowed !"
+                },
+                "LastName": {
+                    maxlength: "More than 20 characters are not allowed !"
+                },
+                "MobileNumber": {
+                    required: "Please enter a Mobile Number",
+                    maxlength: "More than 12 digits are not allowed !",
+                    min: "Minimum 10 digits are required !"
+                },
+                "TelephoneNumber": {
+                    maxlength: "More than 12 digits are not allowed !",
+                    min: "Minimum 10 digits are required !"
+                },
+                "Notes": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "AddressLine1": {
+                    required: "Please enter a Address Line1",
+                    maxlength: "More than 50 characters are not allowed !"
+                }
+            },
+            submitHandler: function (form) {
+
+                let post_url = form.action;
+
+                var frm = $("#frmProfile");
+                var formData = new FormData();
+                var userImageFile = $("#UserImageFile").get(0).files;
+                formData.append("UserImageFile", userImageFile[0]);
+
+                $.each(frm.serializeArray(), function (key, input) {
+                    formData.append(input.name, input.value);
+                });
+
+                //console.log("before ajax called")
+                $.ajax({
+                    type: "POST",
+                    contentType: false,
+                    processData: false,
+                    url: post_url,
+                    dataType: "JSON",
+                    traditional: true,
+                    data: formData,
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        window.location.href = `/ClientAdmin/Dashboard/index`;
+                        //if (response.status === 1) {
+                        //}
+
+                    }
+                });
+
+            }
+        });
+        $(document).ready(function () {
+
+
+            var readURL = function (input) {
+                if (input.files && input.files[0]) {
+                    
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        $('#profile-pic_View').attr('src', e.target.result);
+                    }
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+
+
+            $(".file-upload").on('change', function () {
+                readURL(this);
+            });
+
+            $(".upload-button").on('click', function () {
+                $(".file-upload").click();
+            });
+
+        });
+    </script>
+
+}

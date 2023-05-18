@@ -1,0 +1,227 @@
+﻿@model Integr8ed.Service.Dto.EquipmentRequiredForBookingDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+
+<div class="modal-content">
+    <form id="frmEquReqForBooking" asp-action="AddEditEquipmentRequirements" asp-controller="Internalbooking" asp-area="ClientAdmin" method="post">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Equipment Requirement</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                @Html.AntiForgeryToken()
+                <input type="hidden" asp-for="Id" />
+                <input type="hidden" asp-for="IsView" />
+
+                <div class="tab-pane fade active show" id="nav-home" role="tabpanel" aria-labelledby="nav-home-tab">
+                    <div class="row">
+                        <div class="col-md-12">
+                            <div class="form-group">
+
+                                @if (!ViewBag.IsEquipEmpty)
+                                {
+                                    <label>Select Equipment *</label>
+
+                                    @Html.DropDownListFor(x => x.EquipmentRequiredId, ViewBag?.EquipList as IEnumerable<SelectListItem>, "Select Equipment", new { @class = "form-control form-select", @id = "EquipmentRequiredId", @Name = "EquipmentRequiredId", required = "Select Equipment" })
+                                }
+
+                                else
+                                {
+                                    <label style="color:red">Please Add Equipment First !</label>
+                                }
+
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label for="first-name-column">No. of Item *</label>
+                                <input type="hidden" class="form-control" value="" id="txtAvalableNoOFIteam">
+                                <input type="number" class="form-control" asp-for="NoofItem" name="NoofItem" placeholder="Enter No of Item here" id="txtNoofIteam">
+
+                                <span style="color:red" id="spnerrormsg"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+</div>
+
+<script src="~/js/bundle.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+    $(document).on("change", "#EquipmentRequiredId", function () {
+	    $("#EquipmentRequiredId-error").html("");
+	    $("#EquipmentRequiredId").removeClass("error");
+    });
+
+          if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        GetAvalableitem();
+        var valid = false;
+         jQuery.validator.addMethod("noOnly", function (value, element) {
+        return this.optional(element) || /^\d{0,20}$/i.test(value);
+         }, "You can't enter decimal value");
+
+        $("#txtNoofIteam").keyup(function (e) {
+
+            if (parseInt($("#txtNoofIteam").val()) <= parseInt($("#txtAvalableNoOFIteam").val())) {
+                valid = true;
+            } else {
+
+                $("#spnerrormsg").text($("#EquipmentRequiredId option:selected").text() + " Equipment is only available " + $("#txtAvalableNoOFIteam").val());
+            }
+            if (!valid) {
+                //Stop the form from submitting
+                e.preventDefault();
+            }
+        });
+
+
+        function GetAvalableitem() {
+
+
+                $.ajax({
+                    url: "/ClientAdmin/Internalbooking/CheckEquipmentAvailable",
+                    data: { EquipmentID: $("#EquipmentRequiredId").val() },
+                    type: "GET",
+                    success: function (response) {
+                    
+                        if (response.data > 0) {
+
+                            $("#txtAvalableNoOFIteam").val(response.data);
+                        }
+                        else {
+                            $("#txtAvalableNoOFIteam").val(0);
+                        }
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+
+
+
+        }
+    $(document).off('change', '#EquipmentRequiredId');
+
+        $(document).on('change', '#EquipmentRequiredId', function () {
+
+            GetAvalableitem()
+        })
+
+
+
+
+        var validationresult = $("#frmEquReqForBooking").validate({
+            onfocusout: false,
+            rules: {
+                "EquipmentRequiredId": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/InternalBooking/CheckEquipmentRequirement",
+                        type: "GET",
+                        data: { EquipmentRequiredId: $(".EquipmentRequiredId").val(), Id: $("#Id").val() }
+                    },
+                },
+                "NoofItem": {
+                    required: true,
+                    min: 1,
+                    maxlength: 10,
+                    number: true,
+                    noOnly: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+            },
+            messages: {
+                "EquipmentRequiredId": {
+                    required: "Please enter a Equipment",
+                    min: "Invalid Equipment",
+                    maxlength: "More than 5 characters are not allowed !",
+                    remote: "Equipment already exist !"
+                },
+                "NoofItem": {
+                    required: "Please enter a No of Item",
+                    min: "Invalid No of Item",
+                    maxlength: "More than 10 digits are not allowed !"
+                }
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+              
+              if (parseInt($("#txtNoofIteam").val()) <= parseInt($("#txtAvalableNoOFIteam").val())) {
+                  valid = true;
+                     $.post(post_url, form_data, function (response) {
+
+                        Integr8ed.HandleResponse(response);
+                        if (response.status === 1) {
+                            closeModal();
+                            refreshDatatable("#tblNewEquipment");
+                            return false;
+
+                        }
+                    });
+            } else {
+
+                $("#spnerrormsg").text($("#EquipmentRequiredId option:selected").text() + " Equipment is only available " + $("#txtAvalableNoOFIteam").val());
+            }
+
+
+
+            }
+        });
+
+
+            if ('@ViewBag.IsEquipEmpty' == "True") {
+                var allElement = $(document).find('input[type="number"],textarea,input[type="checkbox"],input[type="select"]');
+                $.each(allElement, function (key, value) {
+                    $(value).prop("disabled", true);
+                });
+
+                $("#btnSave").hide();
+            }
+            else {
+                if ($("#IsView").val() == "true") {
+                    var allElement = $(document).find('input[type="text"],textarea,input[type="number"],input[type="number"], input[type="checkbox"]');
+                    $.each(allElement, function (key, value) {
+                        $(value).prop("disabled", true);
+                    });
+                    $("#EquipmentRequiredId").prop("disabled", true);
+                    $("#btnSave").hide();
+                }
+                else {
+                    var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"],input[type="select"]');
+                    $.each(allElement, function (key, value) {
+                        $(value).prop("disabled", false);
+                    });
+                    $("#btnSave").show();
+                }
+        }
+
+    });
+
+</script>

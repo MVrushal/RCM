@@ -1,0 +1,232 @@
+﻿@model Integr8ed.Service.Dto.InvoiceDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+@{
+    ViewData["Title"] = "Invoice Item";
+    Layout = "~/Areas/ClientAdmin/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="main-content container-fluid">
+    <div class="row">
+        <div class="col-12 col-md-6 order-md-1 order-first">
+            <div class="page-title">
+                <h3>Invoice Item</h3>
+            </div>
+        </div>
+        <div class="col-12 col-md-6 order-md-2 order-last">
+            <nav aria-label="breadcrumb" class="breadcrumb-header">
+                <ol class="breadcrumb">
+                    @*<li class="breadcrumb-item"><a href="/ClientAdmin/Dashboard/index">Dashboard</a></li>*@
+                    <li class="breadcrumb-item" aria-current="page">Datatable Menu</li>
+                    <li class="breadcrumb-item active" aria-current="page">Invoice Item</li>
+                </ol>
+            </nav>
+        </div>
+    </div>
+    <section id="multiple-column-form" class="">
+        <div class="row match-height">
+            <div class="col-12">
+                <div class="card">
+                    <div class="card-content">
+                        <div class="card-body">
+                            <div class="row">
+                                <div class="col-12 d-flex justify-content-end mb-2">
+                                    <button type="button" class="btn btn-primary" id="btnAddnewInvoice">
+                                        New Invoice Item
+                                    </button>
+                                </div>
+                                <div>
+                                    <div class="table-responsive">
+                                        <table class='table table-bordered table-striped' id="tblInvoice">
+                                            <thead>
+                                                <tr>
+                                                    <th scope="col"> Title</th>
+                                                    <th scope="col"> Vat Rate</th>
+                                                    <th scope="col"> Item Cost</th>
+                                                    <th scope="col"> Budget Code</th>
+                                                    @*<th scope="col" style="display:none"> Description</th>*@
+                                                    <th scope="col"> Item Vatable</th>
+                                                    <th scope="col">Actions</th>
+                                                </tr>
+                                            </thead>
+                                        </table>
+
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+
+@section Scripts{
+    <script type="text/javascript">
+
+        // isActive Toggle
+        function statusToggle(id, status, isDisabled = false) {
+
+            var content = `<label class="switch">
+      <input type="checkbox" id="ck${id}" {checked} {disabled} data-id="{id}">
+      <span class="slider round"></span>
+      </label>`;
+            content = content.replace("{id}", id);
+            content = content.replace("{checked}", status === true ? "checked" : "");
+            content = content.replace("{disabled}", isDisabled === true ? "disabled" : "");
+            return content;
+        }
+
+
+        $(document).ready(function () {
+            bindInvoice("#tblInvoice");
+
+        });
+
+        $(document).on("click", "#btnAddnewInvoice", function () {
+            AddInvoice();
+        });
+
+
+        function AddInvoice(id = 0, isView = false) {
+            $("#modalContent").load(`/ClientAdmin/InvoiceItem/_AddEditInvoice?id=${id}&isView=${isView}`, function () {
+                ShowModal();
+            });
+        }
+
+
+        function DeleteInvoice(id) {
+
+            Integr8ed.Confirm("Delete InvoiceItem", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+                $.ajax({
+                    url: "/ClientAdmin/InvoiceItem/RemoveInvoice",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                        closeModal();
+
+                        bindInvoice("#tblInvoice");
+                    },
+                    error: function (data) {
+                        console.log(data);
+                    }
+                });
+            }
+            );
+
+        }
+
+
+
+        function bindInvoice(TableId) {
+            if ($.fn.DataTable.isDataTable(TableId)) {
+                $(TableId).dataTable().fnDestroy();
+            }
+            var tblMeetingDetail = $("#tblInvoice")
+                .DataTable({
+                    "bProcessing": true,
+                    "bServerSide": true,
+                    "sAjaxSource": "/ClientAdmin/InvoiceItem/GetInvoiceList",
+                    "initComplete": function (settings, json) { },
+                    "rowCallback": function (row, data, index) { },
+                    "fnDrawCallback": function (oSettings) {
+                        if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                            $("#tblInvoice_info").hide();
+                        } else {
+                            $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                            $("#tblInvoice_info").show();
+                        }
+                    },
+                    "order": [[1, ""]],
+                    "language": {
+                        "info": "Showing _START_ to _END_ of _TOTAL_Invoice_Item",
+                        "sInfoEmpty": "Showing 0 to 0 of 0 Invoice Item"
+                    },
+                    "columns": [
+                        {
+                            "data": "title",
+                            "width": "5%",
+                            "searchable": true,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "vate",
+                            "width": "5%",
+                            "searchable": true,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "iteamCost",
+                            "width": "5%",
+                            "searchable": true,
+                            "orderable": true,
+
+                        },
+                        {
+                            "data": "budgetRate",
+                            "width": "5%",
+                            "searchable": true,
+                            "orderable": true,
+
+                        },
+                        
+                        //{
+                        //    "data": "description",
+                        //    "width": "5%",
+                        //    "visible":false,
+                        //    "searchable": false,
+                        //    "orderable": true,
+
+                        //},
+                        {
+                            "data": "isIteamVatable",
+                            "width": "5%",
+                            "searchable": false,
+                            "orderable": true,
+                            "className": "admin_toggle",
+                            "render": function (data, type, row) {
+                                return statusToggle(row.id, data);
+                            }
+                        },
+                        
+                        {
+                            "data": "id",
+                            "autoWidth": true,
+                            "searchable": false,
+                            "orderable": false,
+                            "render": function (data, type, row) {
+                                var element = `<a onclick="AddInvoice('${row.id}');" class="editAsset icon_cust_button" title="Edit"><i class="far fa-edit"></i></a> | <a onclick="AddInvoice('${row.id}', true);" class="detailsAsset icon_cust_button" title="View"><i class="far fa-eye"></i></a> | <a onclick="DeleteInvoice('${row.id}');" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a>`;
+                                return element; //statusToggle(row.id);
+                            }
+                        }
+                    ]
+                });
+            $('#tblInvoice').on("change", ".admin_toggle", function (e) {
+                
+                const current = $(e.currentTarget).find("input");
+                const id = $(current).data("id");
+
+                $.ajax({
+                    url: "/ClientAdmin/InvoiceItem/ManageInvoiceIsIteamVatable",
+                    data: { id: id },
+                    type: "POST",
+                    success: function (response) {
+                        Integr8ed.HandleResponse(response);
+                    },
+                    error: function (data) {
+
+                    }
+                });
+            });
+
+        };
+
+    </script>
+}

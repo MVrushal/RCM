@@ -1,0 +1,172 @@
+﻿@model Integr8ed.Service.Dto.BookingDetailsDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="frmBooking" asp-action="CopyBookingDetail" asp-controller="BookingDiary" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Copy Booking</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id" />
+            <input type="hidden" asp-for="StartTime" />
+            <input type="hidden" asp-for="FinishTime" />
+
+            <div class="row">
+                <div class="col-sm-6">
+                    <div class="form-group">
+                        @if (!ViewBag.IsRoomTypeEmpty)
+                        {
+                            <label>Room Type *</label>
+
+                            @Html.DropDownListFor(x => x.RoomTypeId, ViewBag?.RoomType as IEnumerable<SelectListItem>, "Select Room Type", new { @class = "form-control form-select", @id = "RoomTypeId", @Name = "RoomTypeId", required = "Select Room Type" })
+
+                        }
+                        else
+                        {
+                            <label style="color:red">Please Add Room Type First !</label>
+                        }
+
+                    </div>
+                </div>
+                <div class="col-sm-6">
+                    <div class="form-group">
+                            <label>Max Person </label>
+                            <label style="color:red" id="lblMaxPerson" class="form-control"></label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-sm-12">
+
+                    <div class="form-group input-append date form_datetime">
+                        <label for="first-name-column">Booking Date *</label>
+
+                        <div class="input-group date form_date col-md-5">
+                            <input class="form-control" size="16" asp-for="BookingDateForDisplay" autocomplete="off" name="BookingDateForDisplay" type="text" readonly placeholder="Select Booking Date here" />
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                            <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                        </div>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        var validationresult = $("#frmBooking").validate({
+            onfocusout: false,
+            rules: {
+                "RoomTypeId": {
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "BookingDateForDisplay": {
+                    required: true,
+                }
+            },
+            messages: {
+                "RoomTypeId": {
+                    maxlength: "Room type is required"
+                },
+                "BookingDateForDisplay": {
+                    required: "Booking date is required",
+                }
+            },
+
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+                    if (response.status === 1) {
+                        Integr8ed.HandleResponse(response);
+                    } else {
+                        Integr8ed.Warning(response.message);
+                    }
+
+                    closeModal();
+                    //refreshDatatable("#tblVisitor");
+                    /*location.reload()*/
+                    executeColorization();
+                    return false;
+                });
+            }
+        });
+
+
+        if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        jQuery.validator.addMethod("nameAndno", function (value, element) {
+            return this.optional(element) || /^([a-zA-Z ]*)$/i.test(value);
+        }, "Please Enter a Valid Name");
+
+   
+        if ($("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+            $("#btnSave").hide();
+
+        }
+        else {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+        $('.form_date').datetimepicker({
+            language: 'en',
+            format: 'dd-mm-yyyy',
+            todayBtn: 1,
+            autoclose: 1,
+            todayHighlight: 1,
+            startView: 2,
+            minView: 2,
+            forceParse: 0,
+            pickerPosition: "bottom-left"
+        });
+        var startDate = new Date(currYear, currMonth, currDate);
+        $(".form_date").datetimepicker("setDate", startDate);
+      
+
+    });
+
+    $('#frmBooking').submit(function () {
+        $("#BookingDateForDisplay").val(moment($("#BookingDateForDisplay").val(), 'DD-MM-YYYY').format('YYYY-MM-DD'));
+        return false;
+    });
+
+    function SetMaxPerson() {
+        $.get(`/ClientAdmin/BookingDiary/GetCapacity`, { rId: $('#RoomTypeId').val() }, function (res) {
+            $("#lblMaxPerson").html(res);
+        });
+    };
+
+    SetMaxPerson();
+    $(document).off('change', '#RoomTypeId');
+    $(document).on('change', '#RoomTypeId', function () {
+        SetMaxPerson();
+    })
+
+    
+</script>

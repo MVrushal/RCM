@@ -1,0 +1,613 @@
+﻿@model Integr8ed.Service.Dto.InvoiceDetailDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<div class="modal-content">
+
+    <form class="form" asp-action="AddEditInvoiceDetail" asp-controller="InternalBooking" asp-area="ClientAdmin" method="post" id="frmInvoiceDetail">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Invoice Details</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+        <div class="modal-body model_scroll_custom">
+            <div class="form-body">
+                <section id="multiple-column-form" class="">
+                    <div class="row match-height">
+                        <div class="col-12 d-flex justify-content-end mb-2">
+                            <button type="button" class="btn btn-primary" id="btnAddnewInvoiceItem">
+                                Add New Invoice Item
+                            </button>
+                        </div>
+                        <div class="col-12 mb-3">
+                            <div class="table-responsive">
+                                <table class='table table-bordered table-striped' id="InvoiceItemTable">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col"> Title</th>
+                                            <th scope="col"> Vat Rate</th>
+                                            <th scope="col"> Apply Vat</th>
+                                            <th scope="col"> Nett Amount</th>
+                                            <th scope="col"> Budget Code</th>
+                                            <th scope="col"> Quantity</th>
+                                            <th scope="col"> Actions</th>
+                                            @*<th scope="col" id="invoiceItemAction" style="display:@(Model.IsView?"none":"block")"> Actions</th>*@
+                                        </tr>
+                                    </thead>
+                                    @*@if (Model.Id == 0 && ViewBag.InvoiceItem != null) {
+                                            <tbody>
+                                                @foreach(var item in ViewBag?.InvoiceItem)
+                                                {
+                                                <tr>
+                                                    <td>@item.Title</td>
+                                                    <td>@item.Vate</td>
+                                                    <td>@item.IsIteamVatable</td>
+                                                    <td>@item.IteamCost</td>
+                                                    <td>@item.BudgetRate</td>
+                                                    <td>@item.code</td>
+                                                    <td>1</td>
+                                                </tr>
+                                                }
+                                            </tbody>
+                                        }*@
+                                </table>
+
+                            </div>
+                        </div>
+                    </div>
+                </section>
+
+                <div class="row">
+                    <div class="col-md-12">
+
+                        <div class="section_formd">
+                            <h4 class="section_formd_title"> Invoice Details </h4>
+
+                            @Html.AntiForgeryToken()
+                            <input type="hidden" asp-for="Id" />
+                            <input type="hidden" asp-for="IsView" />
+
+                            <div class="row">
+                                <div class="col-md-12">
+                                    <div class="form-group">
+                                        <label for="InvoiceAddress" class="form-label">Invoice Address *</label>
+                                        <textarea class="form-control" asp-for="InvoiceAddress" name="InvoiceAddress" id="InvoiceAddress" placeholder="Enter Invoice Address here" rows="1"></textarea>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="first-name-column">Invoice PostCode *</label>
+                                        <input type="text" class="form-control" asp-for="InvoicePostCode" name="InvoicePostCode" placeholder="Enter Invoice PostCode here">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="first-name-column">Contact Name *</label>
+                                        <input type="text" class="form-control" asp-for="ContactName" placeholder="Enter Contact Name here" name="ContactName">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="first-name-column">Invoice To *</label>
+                                        <input type="text" class="form-control" asp-for="InvoiceTo" placeholder="Enter Invoice To here" name="InvoiceTo">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="first-name-column">Mobile Number *</label>
+                                        <input type="number" class="form-control" asp-for="Mobile" name="Mobile" placeholder="Enter Mobile Number here">
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="first-name-column">Email *</label>
+                                        <input type="text" class="form-control" asp-for="Email" name="Email" placeholder="Enter Email here">
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="form-group">
+                                        <label for="first-name-column">Fax</label>
+                                        <input type="number" class="form-control" asp-for="Fax" name="Fax" placeholder="Enter Fax here">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group input-append date form_datetime">
+                            <label for="first-name-column">Invoice Request Date *</label>
+                            <div class="input-group date form_date col-md-5" data-date="DateOfentry" data-date-format="dd MM yyyy" data-link-field="DateOfentry" data-link-format="yyyy-mm-dd">
+                                <input class="form-control" size="16" asp-for="InvoiceRequestDate" type="text" placeholder="Enter Invoice Request Date here" name="InvoiceRequestDate" readonly>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-remove"></span></span>
+                                <span class="input-group-addon"><span class="glyphicon glyphicon-calendar"></span></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Hire of Facilities</label>
+                            <input type="number" class="form-control" asp-for="HireofFacilities" placeholder="Enter Hire of Facilities here" name="HireofFacilities">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Cost Centre Code</label>
+                            <input type="text" class="form-control" asp-for="CostCentreCode" placeholder="Enter Cost Centre Code here" name="CostCentreCode">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Budget Code</label>
+                            <input type="text" class="form-control" asp-for="BudgetCode" name="BudgetCode" placeholder="Enter Budget Code here">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Vat Rate</label>
+                            <input type="number" class="form-control" asp-for="VatRate" name="VatRate" placeholder="Enter Vat Rate here">
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Profit Value</label>
+                            <input type="number" class="form-control" asp-for="ProfitValue" placeholder="Enter Profit Value here" name="ProfitValue">
+                        </div>
+                    </div>
+
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Invoice Amount</label>
+                            <input type="number" class="form-control" asp-for="InvoiceAmount" name="InvoiceAmount" placeholder="Enter Invoice Amount here" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Vat Amount</label>
+                            <input type="number" class="form-control" asp-for="VatAmount" name="VatAmount" placeholder="Enter Vat Amount here" readonly>
+                        </div>
+                    </div>
+                    <div class="col-md-3">
+                        <div class="form-group">
+                            <label for="first-name-column">Gross Amount</label>
+                            <input type="number" class="form-control" asp-for="GrossAmount" placeholder="Enter Gross Amount here" name="GrossAmount" readonly>
+                        </div>
+                    </div>
+
+                    <div class="col-md-9">
+                        <div class="form-group">
+                            <label for="InvoiceNotes">Invoice Notes</label>
+                            <textarea class="form-control" asp-for="InvoiceNotes" name="InvoiceNotes" id="InvoiceNotes" placeholder="Enter Invoice Notes here" rows="1"></textarea>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+        </div>
+    </form>
+
+</div>
+<script type="text/javascript">
+
+    var invoiceTable = "";
+    var invItemform_data = "";
+    var invoiceItem = [];
+    var modelData = {
+        id: 0,
+        invoiceAddress: "",
+        invoicePostCode: "",
+        invoiceAddress: "",
+        contactName: "",
+        invoiceTo: "",
+        mobile: "",
+        fax: "",
+        email: "",
+        hireofFacilities: "",
+        costCentreCode: "",
+        budgetCode: "",
+        vatRate: "",
+        profitValue: "",
+        invoiceNotes: "",
+        invoiceAmount: "",
+        vatAmount: "",
+        grossAmount: "",
+        invoiceRequestDate: "",
+        isView: "",
+        invoices: []
+    };
+
+    var invoiceAmount = 0;
+    var vatAmount = 0;
+    var grossAmount = 0;
+
+       $("#InvoiceItemTable_info").html("");
+
+    function CustomModalClose(modelContent, divmodal) {
+        $("#" + modelContent).html("");
+        $("#" + divmodal).modal("hide");
+
+    }
+
+    $(document).on("click", "#btnAddnewInvoiceItem", function () {
+
+        AddNewInvoiceItem();
+    });
+
+
+    $(document).ready(function () {
+
+          if ($("#Id").val() != 0) {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        //$("#InvoiceAmount").val(invoiceAmount);
+        //$("#VatAmount").val(vatAmount);
+        //$("#GrossAmount").val(grossAmount);
+
+        // if ($("#Id").val() != "") {
+        bindInvoiceItem("#InvoiceItemTable");
+        //}
+        $("#InvoiceItemTable_length").html("");
+        $("#InvoiceItemTable_filter").html("");
+        $("#InvoiceItemTable_info").html("");
+        $("#InvoiceItemTable_paginate").html("");
+
+        jQuery.validator.addMethod("nameAndno", function (value, element) {
+        return this.optional(element) || /^([a-zA-Z ]*)$/i.test(value);
+         }, "Please Enter a Valid Name");
+
+        var validationresult = $("#frmInvoiceDetail").validate({
+
+            onfocusout: false,
+            rules: {
+                "InvoiceAddress": {
+                    required: true,
+                    maxlength: 200,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "InvoiceNotes": {
+                    required: false,
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "InvoicePostCode": {
+                    required: true,
+                    maxlength: 10,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "ContactName": {
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "InvoiceTo": {
+                    required: true,
+                    maxlength: 50,
+                    nameAndno: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Mobile": {
+                    maxlength: 12,
+                    minlength: 10,
+                    number: true,
+                    required: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Fax": {
+                    maxlength: 7,
+                    min: 1,
+                    number: true,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Email": {
+                    required: true,
+                    email: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/InternalBooking/CheckInvoiceDetailEmail",
+                        type: "GET",
+                        data: { Email: $(".Email").val(), Id: $("#Id").val() }
+                    },
+                },
+            },
+            messages: {
+                "InvoiceAddress": {
+                    required: "Please enter a Invoice Address",
+                    maxlength: "More than 100 characters are not allowed !"
+                },
+                "InvoiceNotes": {
+                    maxlength: "More than 100 characters are not allowed !"
+                },
+                "InvoicePostCode": {
+                    required: "Please enter a Invoice PostCode",
+                    maxlength: "More than 10 characters are not allowed !"
+                },
+                "ContactName": {
+                    required: "Please enter a Contact Name",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "InvoiceTo": {
+                    required: "Please enter a Invoice To",
+                    maxlength: "More than 50 characters are not allowed !"
+                },
+                "Mobile": {
+                    required: "Please enter a Mobile Number",
+                    maxlength: "More than 12 digits are not allowed !",
+                    minlength: "Minimum 10 digits are required !"
+                },
+                "Fax": {
+                    min: "Invalid Fax",
+                    maxlength: "More than 7 digits are not allowed !"
+                },
+                "Email": {
+                    required: "Please enter a Email",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Email already taken !"
+                },
+            },
+            submitHandler: function (form) {
+                
+                if (invoiceItem == "") {
+                    Integr8ed.HandleResponse({ status: 0, message: "Please select Invoice Item First !" });
+                    return false;
+                }
+                let post_url = form.action;
+                // let form_data = $(form).serialize();
+                // form_data += modal;
+
+                modelData.id = $("#Id").val();
+                modelData.invoiceAddress = $("#InvoiceAddress").val();
+                modelData.invoicePostCode = $("#InvoicePostCode").val();
+                modelData.contactName = $("#ContactName").val();
+                modelData.invoiceTo = $("#InvoiceTo").val();
+                modelData.mobile = $("#Mobile").val();
+                modelData.fax = $("#Fax").val();
+                modelData.email = $("#Email").val();
+                modelData.hireofFacilities = $("#HireofFacilities").val();
+                modelData.costCentreCode = $("#CostCentreCode").val();
+                modelData.budgetCode = $("#BudgetCode").val();
+                modelData.vatRate = $("#VatRate").val();
+                modelData.profitValue = $("#ProfitValue").val();
+                modelData.invoiceNotes = $("#InvoiceNotes").val();
+                modelData.invoiceAmount = $("#InvoiceAmount").val();
+                modelData.vatAmount = $("#VatAmount").val();
+                modelData.grossAmount = $("#GrossAmount").val();
+                modelData.invoiceRequestDate = $("#InvoiceRequestDate").val();
+                modelData.isView = $("#IsView").val();
+                //$.ajax({
+                //    url: "",
+                //    type: "POST",
+                //    data: {model: model},
+                //    success: function (response) { },
+                //    error: function (response) { }
+                //});
+
+                $.post(post_url, modelData, function (response) {
+                    CustomModalClose("modalContentCustom", "divModalCustom");
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+
+                        refreshDatatable("#tblNewInvoiceDetail");
+                        return false;
+                    }
+                    // window.location.href = `/ClientAdmin/InvoiceItem/Index`;
+                });
+
+            }
+        });
+
+    });
+
+    function AddNewInvoiceItem(id = 0, isView = false) {
+        $("#modalContent").load(`/ClientAdmin/InternalBooking/_AddEditInvoiceItem?id=${id}&isView=${isView}&invoiceDetailId=${$("#Id").val()}`, function () {
+            ShowModal();
+
+        });
+    }
+
+    function statusContain(id, status, isDisabled = false) {
+        var content;
+        if (status == true)
+            content = 'Y';
+        else
+            content = 'N';
+        return content;
+    }
+
+    function bindInvoiceItem(TableId) {
+        //if ($.fn.datatable.isdatatable(TableId)) {
+        //    $(TableId).datatable().fndestroy();
+        //}
+
+
+
+        invoiceTable = $(TableId)
+            .DataTable({
+                "bProcessing": true,
+                "bServerSide": true,
+                "sAjaxSource": "/ClientAdmin/Internalbooking/GetInvoiceItemList",
+                "fnServerParams": function (aoData) {
+                    aoData.push(
+                        { "name": "invoiceDetailId", "value": $("#Id").val() }
+
+                    );
+                },
+                //"initComplete": function (settings, json) {
+                //    if (json.iTotalRecords == 0) {
+                //        var allElement = $(document).find('input[type="text"],textarea,input[type="number"],input[type="number"], input[type="checkbox"]');
+                //        $.each(allElement, function (key, value) {
+                //            $(value).prop("disabled", true);
+                //        });
+                //     //   $("#btnSave").hide();
+                //    }
+                //},
+                "rowCallback": function (row, data, index) {}, "fnDrawCallback": function (oSettings) {
+                    if (oSettings._iDisplayLength > oSettings.fnRecordsDisplay()) {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').hide();
+                        $("#tblNewInvoiceItem_info").hide();
+                    } else {
+                        $(oSettings.nTableWrapper).find('.dataTables_paginate').show();
+                        $("#tblNewInvoiceItem_info").show();
+                    }
+                },
+                "order": [[1, ""]],
+                //"language": {
+                //    "info": "Showing _START_ to _END_ of _TOTAL_ Invoice Items",
+                //    "sInfoEmpty": "Showing 0 to 0 of 0 Invoice Items"
+                //},
+                "columns": [
+                    {
+                        "data": "title",
+                        "orderable": false
+
+                    },
+                    {
+                        "data": "vate",
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            return row.vate + " %";
+                        }
+                    },
+                    {
+                        "data": "isIteamVatable",
+                        //"width": "5%",
+                        //"searchable": false,
+                        "orderable": false,
+                        ////"className": "admin_toggle",
+                        "render": function (data, type, row) {
+                            return statusContain(row.id, data);
+                        }
+                    },
+                    {
+                        "data": "iteamCost",
+                        //"width": "5%",
+                        //"searchable": false,
+                        "orderable": false
+
+                    },
+                    {
+                        "data": "budgetRate",
+                        //"width": "5%",
+                        //"searchable": false,
+                        "orderable": false
+
+                    },
+
+                    {
+                        "data": "quantity",
+                        //"width": "5%",
+                        //"searchable": false,
+                        "orderable": false
+
+                    },
+                    {
+                        "data": "id",
+                        "autoWidth": true,
+                        "visible": $("#IsView").val() == "false" ? true : false,
+                        //"searchable": false,
+                        "orderable": false,
+                        "render": function (data, type, row) {
+                            var element = `<span id="invoiceItemAction"><a onclick="RemoveInvoiceItem('${row.id}');" id="DeleteInvoiceItem" class="deleteAsset icon_cust_button" title="Delete"><i class="far fa-trash-alt"></i></a></span>`;
+                            return element; //statusToggle(row.id);
+
+                        }
+                    }
+                ]
+            });
+    }
+
+
+
+
+
+
+
+
+
+
+
+    function RemoveInvoiceItem(id) {
+
+        Integr8ed.Confirm("Delete Invoice Item", Integr8ed.typeModel.Warning, "Are you sure?", Integr8ed.typeModel.Danger, "Yes, delete it!", function () {
+            $.ajax({
+                url: "/ClientAdmin/Internalbooking/RemoveInvoiceItem",
+                data: { id: id },
+                type: "POST",
+                success: function (response) {
+                    Integr8ed.HandleResponse(response);
+                    closeModal();
+                    refreshDatatable("#InvoiceItemTable");
+
+                },
+                error: function (data) {
+                    console.log(data);
+                }
+            });
+        });
+    }
+
+    var d = new Date();
+    var currMonth = d.getMonth();
+    var currYear = d.getFullYear();
+    var currDate = d.getDate();
+
+    var startDate = new Date(currYear, currMonth, currDate);
+
+
+    $('.form_date').datetimepicker({
+        language: 'en',
+        weekStart: 1,
+        todayBtn: 1,
+        autoclose: 1,
+        todayHighlight: 1,
+        startView: 2,
+        minView: 2,
+        forceParse: 0,
+        pickerPosition: "bottom-left"
+    });
+    if ($("#InvoiceRequestDate").val() == "") {
+        $(".form_date").datetimepicker("setDate", startDate);
+    }
+
+    if ($("#IsView").val() == "true") {
+        var allElement = $(document).find('input[type="text"],textarea,input[type="number"],input[type="number"], input[type="checkbox"]');
+        $.each(allElement, function (key, value) {
+            $(value).prop("disabled", true);
+        });
+
+        $("#btnAddnewInvoiceItem").hide();
+        $("#btnSave").hide();
+    }
+    else {
+        var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"],input[type="select"]');
+        $.each(allElement, function (key, value) {
+            $(value).prop("disabled", false);
+        });
+        $("#btnAddnewInvoiceItem").show();
+        $("#btnSave").show();
+    }
+
+</script>
+

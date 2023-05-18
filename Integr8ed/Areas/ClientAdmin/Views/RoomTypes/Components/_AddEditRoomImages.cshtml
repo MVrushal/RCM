@@ -1,0 +1,305 @@
+﻿@model Integr8ed.Service.Dto.RoomTypeImageDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<style>
+    body {
+        background-color: #f5f5f5;
+    }
+    .form-body {
+        margin-top: 30px;
+    }
+    .upload-default-img {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        width:100%;
+        height:162px;
+        overflow:hidden;
+    }
+    .static-upload-img{
+        height: auto;
+        max-width: 35%;
+        width: 100%;
+    }
+        .upload-default-img img {
+            height:162px;
+            align-self:center;
+        }
+    .imagePreview {
+        width: 100%;
+        height: auto;
+        background-position: center center;
+        background: url(http://cliquecities.com/assets/no-image-e3699ae23f866f6cbdf8ba2443ee5c4e.jpg);
+        background-color: #fff;
+        background-size: cover;
+        background-repeat: no-repeat;
+        position: relative;
+        display: inline-block;
+        box-shadow: 0px -3px 6px 2px rgba(0,0,0,0.2);
+    }
+
+    .btn-primary,.btn-secondary {
+        display: block;
+        border-radius: 0px;
+        box-shadow: 0px 4px 6px 2px rgba(0,0,0,0.2);
+        margin-top: -5px;
+    }
+    .imgUp .btn-primary {
+        padding: 8px 15px;
+        font-size: 16px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .imgUp {
+        margin-bottom: 30px;
+    }
+
+    .del {
+        position: absolute;
+        top: 0px;
+        right: 15px;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+        background-color: rgba(255,255,255,0.6);
+        cursor: pointer;
+    }
+    .delete-img {
+        height: 25px;
+        width: 25px;
+        border: 1px solid #ddd;
+        padding: 20px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        background: rgba(0,0,0,.75);
+        color: #fff;
+        position: absolute;
+        top: 15px;
+        right: 25px;
+        cursor:pointer;
+        transition:.3s all;
+    }
+        .delete-img:hover {
+            background:rgba(255, 0, 0,.75)
+        }
+        /* .imgAdd {
+        width: 30px;
+        height: 30px;
+        border-radius: 50%;
+        background-color: #4bd7ef;
+        color: #fff;
+        box-shadow: 0px 0px 2px 1px rgba(0,0,0,0.2);
+        text-align: center;
+        line-height: 30px;
+        margin-top: 0px;
+        cursor: pointer;
+        font-size: 15px;
+    }*/
+        .modal-dialog {
+        max-width: 1140px;
+        width:100%;
+    }
+</style>
+<form id="frmRoomImages" asp-action="AddEditRoomImages" asp-controller="RoomTypes" asp-area="ClientAdmin" method="post" enctype="multipart/form-data">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">Room Images</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="RoomId" />
+
+            
+              @if (Model.roomImagesList.Count() <= 3)
+              { 
+                    <div class="row">
+                        @*<div class="col-md-3 col-lg-3 col-sm-6 imgUp position-relative">
+                            <div class="imagePreview">
+                                <div class="upload-default-img">
+                                    <img src="~/images/upload-picture.png" class="img-fluid" />
+                                </div>
+                                <div class="delete-img">
+                                    <i class="far fa-trash-alt"></i>
+                                </div>
+                            </div>
+                            <label class="btn btn-primary">
+                                Upload Picture<input type="file" class="uploadFile img" value="Upload Photo" style="width: 0px;height: 0px;overflow: hidden;">
+                            </label>
+                        </div>*@
+                        <div class="col-md-3 col-lg-3 col-sm-6 imgUp">
+                            <div class="imagePreview">
+                                <div class="upload-default-img">
+                                    <img src="~/images/upload-picture.png" class="img-fluid static-upload-img h-auto" />
+                                </div>
+                            </div>
+                            <label class="btn btn-primary imgAdd">
+                                Add Picture
+                            </label>
+                        </div>
+    
+    <!-- col-2 -->
+                        @*<i class="fa fa-plus imgAdd"></i>*@
+                    </div>
+              }
+               
+
+            
+
+            <div class="row">
+                
+    @foreach (var item in Model.roomImagesList)
+    {
+                <div class="col-md-3 col-lg-3 col-sm-6 imgUp roomimgDiv">
+                    <div class="imagePreview">
+                        <div class="upload-default-img">
+                            <img src="~/UploadedFiles/RoomImages/@item" class="img-fluid w-100" />
+                        </div>
+                        <div class="delete-img" id="deleteImage" data-id="@Model.RoomId" data-room="@item">
+                            <i class="far fa-trash-alt"></i>
+                        </div>
+                    </div>
+                    @*<label class="btn btn-primary imgAdd">
+                        Update Picture
+                    </label>*@
+                    <label class="btn btn-primary">Select Photo<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label>
+                </div>
+
+
+
+        @*<div class="roomimgDiv">
+
+            <div class="col-sm-2">
+                <input type="image" src="~/UploadedFiles/RoomImages/@item" style="height:100px;width:100px" />
+            </div>
+            <div class="col-sm-2">
+                <button id="deleteImage" data-id="@Model.RoomId" data-room="@item">Delete</button>
+            </div>
+        </div>*@
+    }
+<!-- container -->
+
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="button" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+<script type="text/javascript">
+
+
+    $(document).off("click", "#deleteImage");
+    $(document).on("click", "#deleteImage", function () {
+        $.get(`/ClientAdmin/RoomTypes/DeleteImage`, { id: $(this).data('id'), rimg: $(this).data('room') });
+        //deleteImage($(this).data('id'), $(this).data('room'));
+        $(this).parent().parent().remove();
+    });
+
+
+    function deleteImage(id,rimg) {
+        $.ajax({
+            url: `/ClientAdmin/RoomTypes/DeleteImage`,
+            type: 'GET',
+            data: { id: id, rimg: rimg },
+            success: function (response) {
+               
+                //Integr8ed.HandleResponse(response);
+                //return false;
+
+            },
+            error: function () { }
+        })
+    }
+
+    $(document).ready(function () {
+
+      
+
+        $(".imgAdd").click(function () {
+        //    $($(this).closest(".row").children()[0]).before(`<div class="col-lg-4 col-md-4 col-sm-12 imgUp"><div class="imagePreview"></div><label class="btn btn-primary">Upload<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label>  <div class="delete-img">
+        //        <i class= "far fa-trash-alt" ></i ></div ></div > `);
+        //});
+
+
+            $($(this).closest(".row").children()[0]).before(`<div class="col-lg-3 col-md-3 col-sm-12 imgUp"> <div class="imagePreview">
+            <div class="upload-default-img">
+                <img src="/images/upload-picture.png" class="img-fluid static-upload-img h-auto " />
+            </div>
+            <div class="delete-img">
+                <i class="far fa-trash-alt"></i>
+            </div>
+        </div><label class="btn btn-primary">Select Photo<input type="file" class="uploadFile img" value="Upload Photo" style="width:0px;height:0px;overflow:hidden;"></label></div>`);
+    });
+
+        $(document).on("click", "i.del", function () {
+            $(this).parent().remove();
+        });
+        $(function () {
+            $(document).on("change", ".uploadFile", function () {
+                var uploadFile = $(this);
+                var files = !!this.files ? this.files : [];
+                if (!files.length || !window.FileReader) return; // no file selected, or no FileReader support
+                if (/^image/.test(files[0].type)) { // only image file
+                    var reader = new FileReader(); // instance of the FileReader
+                    reader.readAsDataURL(files[0]); // read the local file
+
+                    reader.onloadend = function () { // set image data as background of div
+                        //alert(uploadFile.closest(".upimage").find('.imagePreview').length);
+                        uploadFile.closest(".imgUp").find('.imagePreview').css("background-image", "url(" + this.result + ")");
+                    }
+                }
+
+            });
+        });
+    });
+
+    $(document).off("click", "#btnSave");
+    $(document).on("click", "#btnSave", function () {
+        submitData();
+    });
+
+    function submitData() {
+       
+        
+        var Data = new FormData();
+        $(".uploadFile").each(function () {
+            var type = $(this).attr("type");
+            if (type == "file") {
+                var FileData = $(this).get(0).files[0];
+                Data.append("roomImage", FileData);
+    }
+            });
+
+        $.ajax({
+            url: '/ClientAdmin/RoomTypes/AddEditRoomImages?id=' + $("#RoomId").val(),
+            data: Data,
+            type: "POST",
+            contentType: false,
+            processData: false,
+            success: function (data) {
+                closeModal();
+                Integr8ed.HandleResponse(data);
+            }
+        });
+
+        //$.ajax({
+        //    type: "POST",
+        //    contentType: false,
+        //    processData: false,
+        //    url: "/ClientAdmin/RoomTypes/AddEditRoomImages",
+            
+        //    data: roomimg
+        //});
+       
+    }
+
+</script>

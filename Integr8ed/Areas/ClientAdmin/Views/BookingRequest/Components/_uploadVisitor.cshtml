@@ -1,0 +1,53 @@
+﻿@model Integr8ed.Service.Dto.BranchDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+<div class="modal-content">
+    <form id="frmvisitorUpload" enctype="multipart/form-data">
+        <div class="modal-header">
+            <h5 class="modal-title" id="exampleModalLongTitle">Upload Visitors</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                <span aria-hidden="true">&times;</span>
+            </button>
+        </div>
+
+        <div class="modal-body">
+            <div class="form-body">
+
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="form-group">
+                            <input class="form-control" type="file" name="postedFile" />
+                            <input class="form-control" type="hidden" asp-for="Id" />
+                            @*<input class="form-control" type="submit" value="Import" />*@
+                        </div>
+                    </div>
+
+
+                </div>
+
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+            <button type="submit" id="btnsave" class="btn btn-primary">save</button>
+        </div>
+    </form>
+</div>
+<script>
+    $(document).ready(function () {
+        $("#frmvisitorUpload").on('submit', function (e) {
+            e.preventDefault();
+            $.ajax({
+                type: 'POST',
+                url: '/ClientAdmin/Internalbooking/UploadExcelFile',
+                data: new FormData(this),
+                dataType: 'json',
+                contentType: false,
+                cache: false,
+                processData: false,
+                success: function (response){ //console.log(response);
+                    Integr8ed.HandleResponse(response);
+                }
+            });
+        });
+    });
+</script>

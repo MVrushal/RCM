@@ -1,0 +1,248 @@
+﻿@model Integr8ed.Service.Dto.Room_TypeDto
+@addTagHelper *, Microsoft.AspNetCore.Mvc.TagHelpers
+
+<form id="FormRoom" asp-action="AddEditRoomTypes" asp-controller="RoomTypes" asp-area="ClientAdmin" method="post">
+    <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLongTitle">@(Model.IsView ? "View" : "Add New") Room Type</h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>
+
+    <div class="modal-body">
+        <div class="form-body">
+
+            @Html.AntiForgeryToken()
+            <input type="hidden" asp-for="Id"/>
+            <input type="hidden" asp-for="IsView" />
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="first-name-column">Room Title * </label>
+                        <input type="text" asp-for="RoomTitle" name="RoomTitle" id="RoomTitle" class="form-control" placeholder="Enter Title here">
+                    </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Floor *</label>
+                        <input type="number" asp-for="Floor" name="Floor" class="form-control" placeholder="Floor">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Hourly Rate *</label>
+                        <input type="number" asp-for="HourlyRate" name="HourlyRate" class="form-control" placeholder="hourly rate">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Sunday Rate *</label>
+                        <input type="number" asp-for="SundayRate" name="SundayRate" class="form-control" placeholder="Sunday rate">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Saturday Rate *</label>
+                        <input type="number" asp-for="SaturdayRate" name="SaturdayRate" class="form-control" placeholder="Saturday Rate">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Max Person  *</label>
+                        <input type="number" asp-for="Maxperson" name="Maxperson" class="form-control" placeholder="Max person">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6">
+                    <div class="form-group">
+                        <label for="first-name-column">Room Order *</label>
+                        <input type="number" asp-for="RoomOrder" name="RoomOrder" class="form-control" placeholder="Room Order">
+                    </div>
+                </div>
+                <div class="col-md-12">
+                    <div class="form-group">
+                        <label for="exampleFormControlTextarea1" class="form-label">Notes</label>
+                        <textarea class="form-control" asp-for="Notes" name="Notes" id="exampleFormControlTextarea1" placeholder="Enter Notes here" rows="3"></textarea>
+                    </div>
+                </div>
+                <div class="col-md-6 check_box_center p-0">
+                    <div class="checkbox">
+                        <input type="checkbox" id="activeRoom" asp-for="IsActive" class="form-check-input" checked="@(Model.IsActive)">
+                        <label for="activeRoom">
+                            Active/Inactive
+                            @*Include Room In Room Booking*@
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+        <button type="submit" id="btnSave" class="btn btn-primary">Save</button>
+    </div>
+</form>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        if ($("#Id").val() != 0)
+        {
+            $("#exampleModalLongTitle").html($("#exampleModalLongTitle").html().replace("Add New", "Edit"));
+        }
+
+        var validationresult = $("#FormRoom").validate({
+            onfocusout: false,
+            rules: {
+                "RoomTitle": {
+                    required: true,
+                    maxlength: 50,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    },
+                    remote: {
+                        url: "/ClientAdmin/RoomTypes/CheckTitle",
+                        type: "GET",
+                        data: { RoomTitle:$(".RoomTitle").val(), Id: $("#Id").val() }
+                    },
+                },
+                "Notes": {
+                    maxlength: 500,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Floor": {
+                    required: true,
+                    maxlength: 3,
+                    min: 0,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "HourlyRate": {
+                    required: true,
+                    maxlength: 10,
+                    min: 0,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "SundayRate": {
+                    required: true,
+                    maxlength: 10,
+                    min: 0,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "SaturdayRate": {
+                    required: true,
+                    maxlength: 10,
+                    min: 0,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "Maxperson": {
+                    required: true,
+                    maxlength: 6,
+                    min: 1,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                },
+                "RoomOrder": {
+                    required: true,
+                    min: 1,
+                    normalizer: function (value) {
+                        return $.trim(value);
+                    }
+                }
+
+            },
+            messages: {
+                "RoomTitle": {
+                    required: "Please enter a  Room Title",
+                    maxlength: "More than 50 characters are not allowed !",
+                    remote: "Title already exist !"
+                },
+                "Notes": {
+                    maxlength: "More than 200 characters are not allowed !"
+                },
+                "Floor": {
+                    required: "Please enter a  Floor",
+                    min: "Invalid Floor",
+                    maxlength: "More than 3 digits are not allowed !"
+
+                },
+                "HourlyRate": {
+                    required: "Please enter a  HourlyRate",
+                    min: "Invalid Hourly Rate",
+                    maxlength: "More than 10 digits are not allowed !"
+                },
+                "SundayRate": {
+                    required: "Please enter a  SundayRate",
+                    min: "Invalid Sunday Rate",
+                    maxlength: "More than 10 digits are not allowed !"
+                },
+                "SaturdayRate": {
+                    required: "Please enter a  SaturdayRate",
+                    min: "Invalid Saturday Rate",
+                    maxlength: "More than 10 digits are not allowed !"
+                },
+                "Maxperson": {
+                    required: "Please enter a  Maxperson",
+                    min: "Invalid Maxperson",
+                    maxlength: "More than 3 digits are not allowed !"
+                },
+                "RoomOrder": {
+                    required: "Please enter a  Room Order",
+                    min: "Invalid Room Order",
+                }
+            },
+            submitHandler: function (form) {
+                let post_url = form.action;
+                let form_data = $(form).serialize();
+                $.post(post_url, form_data, function (response) {
+                    
+                    Integr8ed.HandleResponse(response);
+                    if (response.status === 1) {
+                    closeModal();
+                    refreshDatatable("#tblRoomTypes");
+                        return false;  
+                    }
+                    
+                //    window.location.href = `/ClientAdmin/RoomTypes/Index`;
+                });
+
+            }
+        });
+
+         if ( $("#IsView").val() == "true") {
+            var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", true);
+            });
+           
+            $("#btnSave").hide();
+        }
+        else {
+             var allElement = $(document).find('input[type="text"],textarea,input[type="number"], input[type="checkbox"]');
+            $.each(allElement, function (key, value) {
+                $(value).prop("disabled", false);
+            });
+            $("#btnSave").show();
+        }
+
+        //if ($("#Id").val() != 0 && $("#IsView").val() == "false") {
+
+        //    $("#RoomTitle").rules("remove","remote");
+        //}  
+   
+          
+   
+        
+    });
+
+</script>
